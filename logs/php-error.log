@@ -1,0 +1,66 @@
+[16-Feb-2026 12:49:02 Europe/Berlin] PHP Fatal error:  Uncaught mysqli_sql_exception: A connection attempt failed because the connected party did not properly respond after a period of time, or established connection failed because connected host has failed to respond in D:\SMAKZIE\PRODUKTIF\XAMPP\htdocs\instagi\db.php:20
+Stack trace:
+#0 D:\SMAKZIE\PRODUKTIF\XAMPP\htdocs\instagi\db.php(20): mysqli->__construct('sql306.iceiy.co...', 'icei_41170677', Object(SensitiveParameterValue))
+#1 D:\SMAKZIE\PRODUKTIF\XAMPP\htdocs\instagi\kalkulator.php(6): require_once('D:\\SMAKZIE\\PROD...')
+#2 {main}
+  thrown in D:\SMAKZIE\PRODUKTIF\XAMPP\htdocs\instagi\db.php on line 20
+[16-Feb-2026 12:49:33 Europe/Berlin] PHP Fatal error:  Uncaught mysqli_sql_exception: A connection attempt failed because the connected party did not properly respond after a period of time, or established connection failed because connected host has failed to respond in D:\SMAKZIE\PRODUKTIF\XAMPP\htdocs\instagi\db.php:20
+Stack trace:
+#0 D:\SMAKZIE\PRODUKTIF\XAMPP\htdocs\instagi\db.php(20): mysqli->__construct('sql306.iceiy.co...', 'icei_41170677', Object(SensitiveParameterValue))
+#1 D:\SMAKZIE\PRODUKTIF\XAMPP\htdocs\instagi\kalkulator.php(6): require_once('D:\\SMAKZIE\\PROD...')
+#2 {main}
+  thrown in D:\SMAKZIE\PRODUKTIF\XAMPP\htdocs\instagi\db.php on line 20
+[16-Feb-2026 12:51:45 Europe/Berlin] PHP Fatal error:  Uncaught mysqli_sql_exception: A connection attempt failed because the connected party did not properly respond after a period of time, or established connection failed because connected host has failed to respond in D:\SMAKZIE\PRODUKTIF\XAMPP\htdocs\instagi\db.php:20
+Stack trace:
+#0 D:\SMAKZIE\PRODUKTIF\XAMPP\htdocs\instagi\db.php(20): mysqli->__construct('sql306.iceiy.co...', 'icei_41170677', Object(SensitiveParameterValue))
+#1 D:\SMAKZIE\PRODUKTIF\XAMPP\htdocs\instagi\kalkulator.php(6): require_once('D:\\SMAKZIE\\PROD...')
+#2 {main}
+  thrown in D:\SMAKZIE\PRODUKTIF\XAMPP\htdocs\instagi\db.php on line 20
+[16-Feb-2026 12:52:12 Europe/Berlin] PHP Fatal error:  Uncaught mysqli_sql_exception: A connection attempt failed because the connected party did not properly respond after a period of time, or established connection failed because connected host has failed to respond in D:\SMAKZIE\PRODUKTIF\XAMPP\htdocs\instagi\db.php:20
+Stack trace:
+#0 D:\SMAKZIE\PRODUKTIF\XAMPP\htdocs\instagi\db.php(20): mysqli->__construct('sql306.iceiy.co...', 'icei_41170677', Object(SensitiveParameterValue))
+#1 D:\SMAKZIE\PRODUKTIF\XAMPP\htdocs\instagi\admin.php(12): require_once('D:\\SMAKZIE\\PROD...')
+#2 {main}
+  thrown in D:\SMAKZIE\PRODUKTIF\XAMPP\htdocs\instagi\db.php on line 20
+[17-Feb-2026 08:23:26 Europe/Berlin] PHP Warning:  mysqli::__construct(): php_network_getaddresses: getaddrinfo for root failed: No such host is known.  in D:\SMAKZIE\PRODUKTIF\XAMPP\htdocs\instagi\db.php on line 24
+[17-Feb-2026 08:23:26 Europe/Berlin] PHP Fatal error:  Uncaught mysqli_sql_exception: php_network_getaddresses: getaddrinfo for root failed: No such host is known.  in D:\SMAKZIE\PRODUKTIF\XAMPP\htdocs\instagi\db.php:24
+Stack trace:
+#0 D:\SMAKZIE\PRODUKTIF\XAMPP\htdocs\instagi\db.php(24): mysqli->__construct('root', 'localhost', Object(SensitiveParameterValue))
+#1 D:\SMAKZIE\PRODUKTIF\XAMPP\htdocs\instagi\kalkulator.php(6): require_once('D:\\SMAKZIE\\PROD...')
+#2 {main}
+  thrown in D:\SMAKZIE\PRODUKTIF\XAMPP\htdocs\instagi\db.php on line 24
+[17-Feb-2026 08:23:35 Europe/Berlin] PHP Warning:  mysqli::__construct(): php_network_getaddresses: getaddrinfo for root failed: No such host is known.  in D:\SMAKZIE\PRODUKTIF\XAMPP\htdocs\instagi\db.php on line 24
+[17-Feb-2026 08:23:35 Europe/Berlin] PHP Fatal error:  Uncaught mysqli_sql_exception: php_network_getaddresses: getaddrinfo for root failed: No such host is known.  in D:\SMAKZIE\PRODUKTIF\XAMPP\htdocs\instagi\db.php:24
+Stack trace:
+#0 D:\SMAKZIE\PRODUKTIF\XAMPP\htdocs\instagi\db.php(24): mysqli->__construct('root', 'localhost', Object(SensitiveParameterValue))
+#1 D:\SMAKZIE\PRODUKTIF\XAMPP\htdocs\instagi\kalkulator.php(6): require_once('D:\\SMAKZIE\\PROD...')
+#2 {main}
+  thrown in D:\SMAKZIE\PRODUKTIF\XAMPP\htdocs\instagi\db.php on line 24
+[17-Feb-2026 08:23:45 Europe/Berlin] PHP Warning:  mysqli::__construct(): php_network_getaddresses: getaddrinfo for root failed: No such host is known.  in D:\SMAKZIE\PRODUKTIF\XAMPP\htdocs\instagi\db.php on line 24
+[17-Feb-2026 08:23:45 Europe/Berlin] PHP Fatal error:  Uncaught mysqli_sql_exception: php_network_getaddresses: getaddrinfo for root failed: No such host is known.  in D:\SMAKZIE\PRODUKTIF\XAMPP\htdocs\instagi\db.php:24
+Stack trace:
+#0 D:\SMAKZIE\PRODUKTIF\XAMPP\htdocs\instagi\db.php(24): mysqli->__construct('root', 'localhost', Object(SensitiveParameterValue))
+#1 D:\SMAKZIE\PRODUKTIF\XAMPP\htdocs\instagi\kalkulator.php(6): require_once('D:\\SMAKZIE\\PROD...')
+#2 {main}
+  thrown in D:\SMAKZIE\PRODUKTIF\XAMPP\htdocs\instagi\db.php on line 24
+[17-Feb-2026 08:24:58 Europe/Berlin] PHP Warning:  mysqli::__construct(): php_network_getaddresses: getaddrinfo for root failed: No such host is known.  in D:\SMAKZIE\PRODUKTIF\XAMPP\htdocs\instagi\db.php on line 24
+[17-Feb-2026 08:24:58 Europe/Berlin] PHP Fatal error:  Uncaught mysqli_sql_exception: php_network_getaddresses: getaddrinfo for root failed: No such host is known.  in D:\SMAKZIE\PRODUKTIF\XAMPP\htdocs\instagi\db.php:24
+Stack trace:
+#0 D:\SMAKZIE\PRODUKTIF\XAMPP\htdocs\instagi\db.php(24): mysqli->__construct('root', 'localhost', Object(SensitiveParameterValue))
+#1 D:\SMAKZIE\PRODUKTIF\XAMPP\htdocs\instagi\kalkulator.php(6): require_once('D:\\SMAKZIE\\PROD...')
+#2 {main}
+  thrown in D:\SMAKZIE\PRODUKTIF\XAMPP\htdocs\instagi\db.php on line 24
+[17-Feb-2026 08:25:05 Europe/Berlin] PHP Warning:  mysqli::__construct(): php_network_getaddresses: getaddrinfo for root failed: No such host is known.  in D:\SMAKZIE\PRODUKTIF\XAMPP\htdocs\instagi\db.php on line 24
+[17-Feb-2026 08:25:05 Europe/Berlin] PHP Fatal error:  Uncaught mysqli_sql_exception: php_network_getaddresses: getaddrinfo for root failed: No such host is known.  in D:\SMAKZIE\PRODUKTIF\XAMPP\htdocs\instagi\db.php:24
+Stack trace:
+#0 D:\SMAKZIE\PRODUKTIF\XAMPP\htdocs\instagi\db.php(24): mysqli->__construct('root', 'localhost', Object(SensitiveParameterValue))
+#1 D:\SMAKZIE\PRODUKTIF\XAMPP\htdocs\instagi\kalkulator.php(6): require_once('D:\\SMAKZIE\\PROD...')
+#2 {main}
+  thrown in D:\SMAKZIE\PRODUKTIF\XAMPP\htdocs\instagi\db.php on line 24
+[17-Feb-2026 08:25:28 Europe/Berlin] PHP Warning:  mysqli::__construct(): php_network_getaddresses: getaddrinfo for root failed: No such host is known.  in D:\SMAKZIE\PRODUKTIF\XAMPP\htdocs\instagi\db.php on line 24
+[17-Feb-2026 08:25:28 Europe/Berlin] PHP Fatal error:  Uncaught mysqli_sql_exception: php_network_getaddresses: getaddrinfo for root failed: No such host is known.  in D:\SMAKZIE\PRODUKTIF\XAMPP\htdocs\instagi\db.php:24
+Stack trace:
+#0 D:\SMAKZIE\PRODUKTIF\XAMPP\htdocs\instagi\db.php(24): mysqli->__construct('root', 'localhost', Object(SensitiveParameterValue))
+#1 D:\SMAKZIE\PRODUKTIF\XAMPP\htdocs\instagi\kalkulator.php(6): require_once('D:\\SMAKZIE\\PROD...')
+#2 {main}
+  thrown in D:\SMAKZIE\PRODUKTIF\XAMPP\htdocs\instagi\db.php on line 24
