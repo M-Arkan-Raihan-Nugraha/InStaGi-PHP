@@ -3,8 +3,8 @@
   <h1>🏥 InStaGi (Informasi Status Gizi)</h1>
   <p><strong>Proyek Digital Monitoring Status Gizi - Lomba Rotinspark (HUT RS Paru dr.H.A. Rotinsulu ke-91)</strong></p>
   
-  <img src="https://img.shields.io/badge/PHP-00000f?style=for-the-badge&logo=php" />
-  <img src="https://img.shields.io/badge/MySQL-00000f?style=for-the-badge&logo=mysql" />
+  <img src="https://img.shields.io/static/v1?message=PHP&logo=php&label=&color=777BB1&logoColor=white&style=for-the-badge" height="25" alt="php logo"/>
+  <img src="https://img.shields.io/static/v1?message=MySQL&logo=mysql&label=&color=4479A1&logoColor=white&style=for-the-badge" height="25" alt="mysql logo"/>
 </div>
 
 ---
@@ -30,4 +30,5 @@ Aplikasi ini dibangun menggunakan teknologi yang ringan dan stabil:
 
 ### ⚙️ Cara Menjalankan Aplikasi
 1. **Buka tautan: https://instagi.iceiy.com**
-2. **Scan QR:** <img width="300" height="300" alt="instagi_qr" src="https://github.com/user-attachments/assets/6d32819c-c1aa-4034-9abd-b099c0fd402f" />
+2. **Scan QR:**
+<img width="250" height="250" alt="instagi_qr" src="https://github.com/user-attachments/assets/6d32819c-c1aa-4034-9abd-b099c0fd402f" />
