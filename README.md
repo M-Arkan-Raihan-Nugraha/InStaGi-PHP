@@ -29,6 +29,7 @@ Aplikasi ini dibangun menggunakan teknologi yang ringan dan stabil:
 - **Hosting:** AeonFree
 
 ### ⚙️ Cara Menjalankan Aplikasi
-1. **Buka tautan: https://instagi.iceiy.com**
-2. **Scan QR:**
+1. **Buka link: https://instagi.iceiy.com**
+   **Atau**
+2. **Scan QR Code:**
 <img width="250" height="250" alt="instagi_qr" src="https://github.com/user-attachments/assets/6d32819c-c1aa-4034-9abd-b099c0fd402f" />
