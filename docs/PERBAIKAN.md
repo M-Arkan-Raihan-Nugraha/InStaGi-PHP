@@ -25,7 +25,7 @@ Folder V3 adalah salinan dari **V2 PHP Native** yang disiapkan khusus untuk perb
 
 | # | Masalah | Perbaikan |
 |---|---------|-----------|
-| 5 | Kalori di `bmi.php` dibulatkan ke ratusan, tapi di `api/update_record.php` tidak → **edit data mengubah nilai kalori**; teks `saran` juga berbeda | Dibuat `includes/gizi.php` sebagai satu sumber kebenaran, dipakai kedua file |
+| 5 | Kalori di `imt.php` dibulatkan ke ratusan, tapi di `api/update_record.php` tidak → **edit data mengubah nilai kalori**; teks `saran` juga berbeda | Dibuat `includes/gizi.php` sebagai satu sumber kebenaran, dipakai kedua file |
 | 6 | Input di-`htmlspecialchars` **sebelum disimpan** → `A & B` tersimpan `A &amp; B` (rusak & makin rusak saat ditampilkan) | Data disimpan mentah; escaping hanya saat menampilkan. Data lama yang sudah rusak perlu diperbaiki manual bila diperlukan |
 | 7 | Redirect `login.php` di `api/export_csv.php` salah (→ `api/login.php`, 404) | Diperbaiki menjadi `../login.php` |
 | 8 | `fputcsv()` memicu deprecation di PHP 8.4+; CSV tanpa BOM tampil rusak di Excel | Parameter eksplisit + BOM UTF-8 + proteksi CSV injection (cell berawalan `= + - @`) |
@@ -73,21 +73,43 @@ Bagian ini juga berada di luar `#printable-area`, jadi tidak ikut ke dalam PDF h
 Memperbarui DBMP cukup dengan mengganti `assets/dbmp/dbmp-lengkap.pdf`
 (dan `dbmp-cover.jpg`) — tidak perlu mengubah kode.
 
+**Tombol "Lihat PDF"** membuka pratinjau **di dalam halaman** (lightbox berisi `<iframe>`),
+bukan langsung mengunduh. Ini disengaja: sebagian peramban/situs tidak punya penampil PDF
+bawaan sehingga PDF "Lihat" akan terunduh. Tombol **Unduh PDF** tetap mengunduh berkas.
+Agar server tidak memaksa unduh, `.htaccess` mengirim `Content-Disposition: inline` untuk `.pdf`.
+
+### Tata letak hasil (`result.php`)
+
+Urutan blok di halaman hasil:
+
+1. Kartu ringkasan hasil + saran (di dalam `#printable-area`)
+2. **Tiga tombol aksi:** Hubungi WhatsApp · Simpan ke PDF · Hitung Ulang / Kembali
+3. **Leaflet Informasi Gizi** (galeri, ringkas)
+4. **DBMP — Daftar Bahan Makanan Penukar** (satu berkas PDF)
+
+Leaflet & DBMP sengaja diletakkan **setelah** tombol aksi dan **di luar** `#printable-area`,
+supaya tombol "Simpan ke PDF" hanya mencetak kartu hasil — bukan leaflet/DBMP.
+Keduanya juga disembunyikan saat mencetak lewat aturan `@media print` di `css/result.css`.
+
+Agar halaman tidak memanjang ke bawah, kartu leaflet memakai thumbnail pendek
+(180 px; 140 px di tablet, 120 px di ponsel) dan deskripsi dibatasi **maksimal 2 baris**
+(`-webkit-line-clamp: 2`).
+
 ---
 
 ## 2. Paket Keamanan P0
 
 Semua perbaikan di bawah ini **tidak mengubah satu pun rumus perhitungan**
-(`includes/gizi.php` tidak disentuh; `bmi.php` & `api/update_record.php` tetap
+(`includes/gizi.php` tidak disentuh; `imt.php` & `api/update_record.php` tetap
 memakai `instagi_hitung_semua()` apa adanya).
 
 | # | Masalah sebelumnya | Perbaikan |
 |---|--------------------|-----------|
-| S1 | **CSRF tidak ada** pada delete/update/export/form input | `includes/session.php` menyediakan `instagi_csrf_token()` / `instagi_csrf_check()`. Token diverifikasi di `api/delete_record.php`, `api/update_record.php` (**HTTP 403** bila tidak sah), `login.php`, dan form publik `bmi.php`. `admin.php` mengirim token otomatis lewat `$.ajaxSetup` (`X-CSRF-Token`) |
+| S1 | **CSRF tidak ada** pada delete/update/export/form input | `includes/session.php` menyediakan `instagi_csrf_token()` / `instagi_csrf_check()`. Token diverifikasi di `api/delete_record.php`, `api/update_record.php` (**HTTP 403** bila tidak sah), `login.php`, dan form publik `imt.php`. `admin.php` mengirim token otomatis lewat `$.ajaxSetup` (`X-CSRF-Token`) |
 | S2 | Session fixation | `session_regenerate_id(true)` dipanggil tepat setelah login berhasil |
 | S3 | Cookie session tanpa proteksi | Cookie sesi kini `HttpOnly` + `SameSite=Lax` + `Secure` (otomatis bila HTTPS), `use_strict_mode=1`, nama khusus `INSTAGISESSID`. Diatur terpusat di `includes/session.php` |
 | S4 | Brute force bebas | Pembatas percobaan login: maks. 5 gagal → jeda 15 menit (berbasis sesi). Sisa percobaan ditampilkan ke pengguna |
-| S5 | **Detail error SQL bocor ke klien** (`$stmt->error`) | Detail hanya masuk `error_log` server; klien menerima pesan umum. Berlaku di `bmi.php`, `api/delete_record.php`, `api/update_record.php` |
+| S5 | **Detail error SQL bocor ke klien** (`$stmt->error`) | Detail hanya masuk `error_log` server; klien menerima pesan umum. Berlaku di `imt.php`, `api/delete_record.php`, `api/update_record.php` |
 | S6 | `login.php` sukses redirect **tanpa `exit`** | Ditambahkan `exit` (dan pesan error kini di-escape) |
 | S7 | Respons API selalu **HTTP 200** | Status benar: **401** (belum login), **403** (CSRF), **405** (metode salah), **500** (gagal query), **503** (DB tak terjangkau) |
 | S8 | Cek login dilakukan **setelah** koneksi DB | Login/CSRF diperiksa lebih dulu → permintaan tak sah tidak menyentuh database |
@@ -96,6 +118,8 @@ memakai `instagi_hitung_semua()` apa adanya).
 | S11 | Tanpa security header | `.htaccess` root menambahkan `X-Frame-Options`, `X-Content-Type-Options`, `Referrer-Policy`, `Permissions-Policy`, `Options -Indexes` |
 | S12 | Escaping ganda pada pesan WhatsApp & nama file PDF | Pesan WA memakai nilai **mentah** + `http_build_query()` (`A & B` tidak lagi jadi `A &amp; B`); nama file PDF dibersihkan dari karakter ilegal |
 | S13 | Empty-state tabel `colspan="11"` padahal 14 kolom | Diperbaiki menjadi `colspan="14"` |
+| S14 | Folder **`.git/` bisa diakses publik** (`.git/config` → HTTP 200) sehingga riwayat & konfigurasi repo berpotensi terbaca bila folder ikut ter-upload | `.htaccess` menambahkan `RedirectMatch 404` untuk `.git`, `.svn`, `.hg` (aturan `<FilesMatch "^\.">` saja tidak cukup, karena berkas di dalam `.git/` tidak berawalan titik) |
+| S15 | PDF DBMP **terunduh** padahal diminta "Lihat" | `.htaccess` mengirim `Content-Disposition: inline` untuk `.pdf`; tampilan memakai lightbox `<iframe>` sehingga tidak bergantung pada penampil PDF peramban |
 
 ---
 
@@ -112,10 +136,10 @@ nama teknis **sengaja dipertahankan** agar data & URL yang sudah beredar tidak r
 | Kunci session (`$_SESSION['imt_result']`) | **IMT** | Internal, aman diganti |
 | Nama file unduhan CSV (`data_responden_imt_*.csv`) | **IMT** | Yang dilihat pengguna |
 | Tabel database `bmi_history` | **tetap** | Berisi data produksi; rename = berisiko (perlu memindahkan data) |
-| File `bmi.php`, `css/bmi.css` | **tetap** | Sudah dipakai di URL/bookmark & tautan internal |
+| File `imt.php`, `css/imt.css` | **IMT** | Sudah di-rename; nama lama `bmi.php`/`css/bmi.css` dialihkan otomatis (301) agar tautan/bookmark lama tidak rusak |
 | Rumus & ambang batas di `includes/gizi.php` | **tidak disentuh** | Sesuai permintaan; hanya teks saran yang dirapikan |
 
-> Bila kelak ingin menuntaskan rename, lakukan sebagai langkah terpisah:
+> Bila kelak ingin menuntaskan rename tabel, lakukan sebagai langkah terpisah:
 > buat tabel `imt_history` → salin data → tambahkan view/alias → baru ubah kode.
 
 ### Inkonsistensi lain yang ikut dirapikan

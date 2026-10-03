@@ -95,7 +95,7 @@ php -r "echo password_hash('PasswordBaruAnda', PASSWORD_DEFAULT);"
 2. cPanel → **File Manager** → masuk ke **`htdocs`** (atau folder root
    subdomain/domain Anda).
 3. Upload `.zip` → klik kanan → **Extract**.
-4. Pastikan `index.html`, `bmi.php`, `login.php`, dll. berada **langsung** di dalam
+4. Pastikan `index.html`, `imt.php`, `login.php`, dll. berada **langsung** di dalam
    `htdocs/`, bukan di dalam subfolder ekstra seperti `htdocs/V3 PHP Native/`.
 
 **Cara B — FTP (disarankan, lebih andal untuk file besar):**
@@ -119,7 +119,7 @@ terputus, gunakan FTP.
 
 Tidak ada langkah migrasi manual. Cukup buka:
 
-1. **`https://<domain-anda>/bmi.php`** — saat request pertama, `includes/db.php`
+1. **`https://<domain-anda>/imt.php`** — saat request pertama, `includes/db.php`
    otomatis membuat tabel `bmi_history` bila belum ada (aman diulang).
 2. Bila kredensial di `includes/db_credentials.php` salah, akan muncul halaman
    **"Layanan sedang tidak tersedia" (503)** — perbaiki kredensial lalu muat ulang.
@@ -137,7 +137,7 @@ Tidak ada langkah migrasi manual. Cukup buka:
 | Halaman | Yang diharapkan |
 |---------|-----------------|
 | `/` | Landing page tampil, logo & tombol berfungsi |
-| `/bmi.php` | Form bisa diisi & dihitung, hasil tersimpan, redirect ke `result.php` |
+| `/imt.php` | Form bisa diisi & dihitung, hasil tersimpan, redirect ke `result.php` |
 | `/result.php` | Hasil IMT, bar IMT, saran, tombol WhatsApp, galeri leaflet, tombol PDF |
 | `/login.php` | Login admin berhasil |
 | `/admin.php` | Tabel data tampil, edit & hapus berfungsi |

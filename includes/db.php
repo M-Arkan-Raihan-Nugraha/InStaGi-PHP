@@ -190,7 +190,7 @@ try {
     // --- Akhir setup otomatis ----------------------------------------------
 
     // Mode error mysqli dibiarkan OFF (non-exception) untuk seluruh request.
-    // Alasannya: seluruh kode aplikasi (bmi.php, api/*.php) sudah memeriksa
+    // Alasannya: seluruh kode aplikasi (imt.php, api/*.php) sudah memeriksa
     // nilai kembalian ($stmt->execute(), $koneksi->query()) dan menampilkan
     // pesan error-nya sendiri. Dengan mode exception (default PHP 8.1+),
     // kegagalan query apa pun akan melempar exception yang tidak tertangkap

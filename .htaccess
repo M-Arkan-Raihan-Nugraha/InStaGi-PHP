@@ -10,9 +10,14 @@
 # (mis. www.) — berakhir di SATU alamat resmi: https://instagi.iceiy.com/
 # Ditaruh paling atas supaya berlaku sebelum aturan lain.
 # Jalur/query dipertahankan lewat %{REQUEST_URI}, jadi
-#   http://instagi.iceiy.com/bmi.php?id=1  ->  https://instagi.iceiy.com/bmi.php?id=1
+#   http://instagi.iceiy.com/result.php?id=1  ->  https://instagi.iceiy.com/result.php?id=1
+# (Khusus bmi.php ada aturan tambahan di bagian 0b di bawah.)
 <IfModule mod_rewrite.c>
     RewriteEngine On
+    # RewriteBase wajib: tanpa ini, substitusi relatif (mis. imt.php) bisa
+    # disusun dari PATH FISIK server sehingga menghasilkan alamat rusak.
+    # Situs ini berada di akar domain, jadi basis-nya "/".
+    RewriteBase /
 
     # (a) Host bukan domain resmi (mis. www.instagi.iceiy.com) -> alihkan ke domain resmi.
     RewriteCond %{HTTP_HOST} !^instagi\.iceiy\.com(:[0-9]+)?$ [NC]
@@ -24,6 +29,19 @@
     RewriteCond %{HTTPS} !=on
     RewriteCond %{HTTP:X-Forwarded-Proto} !=https
     RewriteRule ^ https://instagi.iceiy.com%{REQUEST_URI} [R=301,L]
+</IfModule>
+
+# --- 0b. Alihkan nama berkas lama bmi.php -> imt.php -------------------------
+# Nama lama (bmi.php) masih dipakai di bookmark/tautan lama agar tidak rusak.
+# Path & query tetap dipertahankan, jadi
+#   /bmi.php?id=1  ->  /imt.php?id=1
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteBase /
+    # Tujuan ditulis ABSOLUT (https) supaya langsung sekali alih, tidak lewat
+    # http dulu. Path & query tetap dipertahankan.
+    RewriteRule ^bmi\.php$ https://instagi.iceiy.com/imt.php [R=301,L,QSA]
+    RewriteRule ^css/bmi\.css$ https://instagi.iceiy.com/css/imt.css [R=301,L]
 </IfModule>
 
 # --- 1. Blokir file sensitif -------------------------------------------------
@@ -38,7 +56,7 @@
     </IfModule>
 </FilesMatch>
 
-# Blokir file tersembunyi (.git, .env, .htaccess, dst.)
+# Blokir file tersembunyi (.env, .htaccess, dst.)
 <FilesMatch "^\.">
     <IfModule mod_authz_core.c>
         Require all denied
@@ -48,6 +66,14 @@
         Deny from all
     </IfModule>
 </FilesMatch>
+
+# Blokir TOTAL folder .git (riwayat & konfigurasi repo).
+# Penting: <FilesMatch "^\."> di atas TIDAK cukup — berkas di dalam .git/
+# (mis. .git/config, .git/HEAD) tidak berawalan titik, sehingga tanpa aturan
+# ini isinya bisa diunduh siapa pun bila folder .git ikut ter-upload.
+RedirectMatch 404 (?i)/\.git(/|$)
+RedirectMatch 404 (?i)/\.svn(/|$)
+RedirectMatch 404 (?i)/\.hg(/|$)
 
 # --- 2. Matikan directory listing --------------------------------------------
 Options -Indexes
@@ -68,4 +94,14 @@ Options -Indexes
 # (includes/.htaccess sudah memblokir seluruh folder; ini lapisan tambahan.)
 <IfModule mod_rewrite.c>
     RewriteRule ^includes/(db_credentials|auth_config)\.php$ - [F,L]
+</IfModule>
+
+# --- 5. PDF (DBMP) ditampilkan di peramban, bukan langsung terunduh -----------
+# Tanpa ini, sebagian server mengirim PDF sebagai lampiran (attachment) sehingga
+# tombol "Lihat PDF" malah mengunduh berkas. Tombol "Unduh PDF" tetap mengunduh
+# karena memakai atribut download pada tautannya.
+<IfModule mod_headers.c>
+    <FilesMatch "\.pdf$">
+        Header set Content-Disposition "inline"
+    </FilesMatch>
 </IfModule>

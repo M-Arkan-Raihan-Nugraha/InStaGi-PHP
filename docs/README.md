@@ -15,8 +15,9 @@ dibiarkan singkat** (deskripsi proyek + cara menjalankan) agar tampilan repo ber
 - **Stack:** HTML5 + CSS3 (vanilla) · PHP Native · MySQL (mysqli).
 - **Rumus perhitungan** (IMT, kalori Harris-Benedict, ambang klasifikasi) ada di
   **satu tempat**: `includes/gizi.php`. Jangan menduplikasinya.
-- **Istilah di tampilan = IMT** (Indeks Massa Tubuh), bukan "BMI". Nama teknis
-  lama (`bmi.php`, tabel `bmi_history`) sengaja dipertahankan — lihat bagian
-  "Konsistensi Penamaan" di [`PERBAIKAN.md`](PERBAIKAN.md).
+- **Istilah di tampilan = IMT** (Indeks Massa Tubuh), bukan "BMI". Berkas form
+  sudah di-rename menjadi `imt.php` (CSS: `css/imt.css`); nama lama `bmi.php`
+  dialihkan otomatis (301). Hanya tabel database `bmi_history` yang sengaja
+  dipertahankan — lihat "Konsistensi Penamaan" di [`PERBAIKAN.md`](PERBAIKAN.md).
 - **Kredensial** ada di `includes/db_credentials.php` dan `includes/auth_config.php`
   (diblokir dari web). Sebaiknya diisi lewat environment variable di produksi.

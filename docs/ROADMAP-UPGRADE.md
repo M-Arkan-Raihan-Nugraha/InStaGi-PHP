@@ -23,7 +23,7 @@ Legenda prioritas:
 |---|--------|--------|
 | A | Kredensial DB asli dalam plaintext (host, user, password) | `includes/db_credentials.php:18-22` |
 | B | Hash admin + username produksi ikut tersimpan | `includes/auth_config.php:17-18` |
-| C | Detail error SQL bocor ke respons client | `api/delete_record.php:55,80`, `api/update_record.php:69`, `bmi.php:105` |
+| C | Detail error SQL bocor ke respons client | `api/delete_record.php:55,80`, `api/update_record.php:69`, `imt.php:105` |
 | D | `login.php` redirect sukses tanpa `exit` | `login.php:44` |
 | E | CDN tanpa SRI + versi usang | `admin.php:38,39,138,139`, `result.php:266` |
 | F | Tidak ada `.htaccess` di root (proteksi hanya di subfolder) | root |
@@ -111,7 +111,7 @@ Legenda prioritas:
   error_log('[InStaGi] delete gagal: ' . $stmt->error);
   $response['message'] = 'Gagal menghapus data. Silakan coba lagi.';
   ```
-  Terapkan di `api/delete_record.php:55,80`, `api/update_record.php:69`, `bmi.php:105`.
+  Terapkan di `api/delete_record.php:55,80`, `api/update_record.php:69`, `imt.php:105`.
 
 ### 6. `.htaccess` root (temuan F) — **SUDAH DIKERJAKAN**
 - `/.htaccess` di root sudah ada: `Options -Indexes`, menolak akses ke
@@ -170,7 +170,7 @@ Legenda prioritas:
   Nama file PDF juga pakai nilai mentah (`$nama_raw`), bukan yang ter-escape.
 
 ### 11. Validasi rentang input
-- Tambah batas wajar (di `bmi.php` **dan** `api/update_record.php` supaya konsisten):
+- Tambah batas wajar (di `imt.php` **dan** `api/update_record.php` supaya konsisten):
   usia 1–120, TB 50–250 cm, BB 5–300 kg, `no_hp` format Indonesia, `aktivitas` harus
   salah satu nilai yang diizinkan (1.2/1.375/1.55/1.725/1.9).
 - Jangan hanya mengandalkan atribut HTML; **validasi di server adalah otoritatif**.
@@ -249,7 +249,7 @@ atau tambahkan ke blok `CREATE TABLE` di `includes/db.php`.
 ### 23. Unit test untuk `includes/gizi.php`
 - Fungsi murni (IMT, kategori, kalori) sangat mudah diuji. Tambah PHPUnit dengan
   kasus batas: 18.49/18.5, 24.9/25, 27/27.01, dan verifikasi konsistensi
-  `bmi.php` ↔ `api/update_record.php`.
+  `imt.php` ↔ `api/update_record.php`.
 
 ### 24. Konsistensi UI
 - `index.html` (statis) terpisah dari halaman PHP lain → pertimbangkan partial
@@ -273,7 +273,7 @@ atau tambahkan ke blok `CREATE TABLE` di `includes/db.php`.
 - **Multi-user admin + peran** (admin/operator) dan **audit log** perubahan data.
 - **Ekspor PDF/Excel server-side** (menggantikan html2pdf client-side) dan **impor massal**.
 - **Filter & pencarian server-side** (status gizi, rentang tanggal) — terkait item 14.
-- **Anti-spam pada `bmi.php`** (form publik): honeypot + rate-limit per-IP.
+- **Anti-spam pada `imt.php`** (form publik): honeypot + rate-limit per-IP.
 - **Verifikasi format No. HP** Indonesia.
 
 ---

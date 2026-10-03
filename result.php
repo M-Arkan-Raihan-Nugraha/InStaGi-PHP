@@ -10,7 +10,7 @@ require_once 'includes/dbmp.php';
 
 // Redirect jika tidak ada data hasil analisis di session
 if (!isset($_SESSION['imt_result'])) {
-    header("location: bmi.php");
+    header("location: imt.php");
     exit;
 }
 
@@ -198,6 +198,16 @@ $dbmp_cover = instagi_dbmp_cover();
             </h3>
         </div>
 
+        <div class="action-buttons">
+            <a href="<?= $whatsapp_url ?>" target="_blank" class="whatsapp-btn">
+                Hubungi WhatsApp untuk Konsultasi
+            </a>
+            <button onclick="downloadPDF()" class="pdf-btn">
+                Simpan ke PDF
+            </button>
+            <a href="imt.php" class="back-btn">Hitung Ulang / Kembali</a>
+        </div>
+
         <?php if (!empty($leaflets)): ?>
         <!-- ===== LEAFLET INFORMASI GIZI ===== -->
         <section class="leaflet-section" id="leaflet">
@@ -311,11 +321,9 @@ $dbmp_cover = instagi_dbmp_cover();
                         sayuran, buah &amp; gula, susu, minyak &amp; lemak, hingga makanan tanpa kalori.
                     </p>
                     <div class="dbmp-actions">
-                        <a class="dbmp-btn dbmp-btn-view"
-                           href="<?= htmlspecialchars($dbmp_pdf) ?>"
-                           target="_blank" rel="noopener">
+                        <button type="button" class="dbmp-btn dbmp-btn-view" id="dbmpViewBtn">
                             Lihat PDF
-                        </a>
+                        </button>
                         <a class="dbmp-btn dbmp-btn-download"
                            href="<?= htmlspecialchars($dbmp_pdf) ?>"
                            download="DBMP-InStaGi-Daftar-Bahan-Makanan-Penukar.pdf">
@@ -325,17 +333,48 @@ $dbmp_cover = instagi_dbmp_cover();
                 </div>
             </article>
         </section>
-        <?php endif; ?>
 
-        <div class="action-buttons">
-            <a href="<?= $whatsapp_url ?>" target="_blank" class="whatsapp-btn">
-                Hubungi WhatsApp untuk Konsultasi
-            </a>
-            <button onclick="downloadPDF()" class="pdf-btn">
-                Simpan ke PDF
-            </button>
-            <a href="bmi.php" class="back-btn">Hitung Ulang / Kembali</a>
+        <!-- Pratinjau PDF DBMP (dibuka di dalam halaman, tidak langsung terunduh) -->
+        <div class="dbmp-lightbox" id="dbmpLightbox" role="dialog" aria-modal="true"
+             aria-label="Pratinjau Daftar Bahan Makanan Penukar" hidden>
+            <div class="dbmp-lb-backdrop" data-dbmp-close></div>
+            <div class="dbmp-lb-panel">
+                <div class="dbmp-lb-head">
+                    <div class="dbmp-lb-meta">
+                        <strong>Daftar Bahan Makanan Penukar (DBMP)</strong>
+                        <span><?= (int) instagi_dbmp_jumlah_halaman() ?> halaman &middot; PDF</span>
+                    </div>
+                    <div class="dbmp-lb-tools">
+                        <a class="dbmp-lb-icon dbmp-lb-open"
+                           href="<?= htmlspecialchars($dbmp_pdf) ?>"
+                           target="_blank" rel="noopener"
+                           title="Buka di tab baru" aria-label="Buka di tab baru">&#8599;</a>
+                        <a class="dbmp-lb-icon dbmp-lb-download"
+                           href="<?= htmlspecialchars($dbmp_pdf) ?>"
+                           download="DBMP-InStaGi-Daftar-Bahan-Makanan-Penukar.pdf"
+                           title="Unduh PDF" aria-label="Unduh PDF">&#11015;</a>
+                        <button type="button" class="dbmp-lb-icon dbmp-lb-close"
+                                data-dbmp-close aria-label="Tutup">&times;</button>
+                    </div>
+                </div>
+                <div class="dbmp-lb-stage">
+                    <iframe id="dbmpFrame" title="Pratinjau DBMP" src="about:blank"
+                            loading="lazy"></iframe>
+                    <div class="dbmp-lb-fallback" id="dbmpFallback" hidden>
+                        <p>Pratinjau PDF tidak didukung di peramban ini.</p>
+                        <p>
+                            <a class="dbmp-lb-fallback-link"
+                               href="<?= htmlspecialchars($dbmp_pdf) ?>"
+                               target="_blank" rel="noopener">Buka PDF di tab baru</a>
+                        </p>
+                    </div>
+                </div>
+                <div class="dbmp-lb-foot">
+                    <span class="dbmp-lb-hint">Tekan <kbd>Esc</kbd> untuk menutup</span>
+                </div>
+            </div>
         </div>
+        <?php endif; ?>
     </div>
 
     <footer class="main-footer">
@@ -493,6 +532,67 @@ $dbmp_cover = instagi_dbmp_cover();
                 if (Math.abs(dx) > 50) { render(dx < 0 ? current + 1 : current - 1); }
                 startX = null;
             }, { passive: true });
+        })();
+    </script>
+    <?php endif; ?>
+
+    <?php if ($dbmp_pdf !== null): ?>
+    <script>
+        /* ===== Pratinjau PDF DBMP (tampil di dalam halaman, bukan langsung terunduh) ===== */
+        (function () {
+            var btn  = document.getElementById('dbmpViewBtn');
+            var box  = document.getElementById('dbmpLightbox');
+            var frame = document.getElementById('dbmpFrame');
+            var fallback = document.getElementById('dbmpFallback');
+            if (!btn || !box || !frame) { return; }
+
+            var pdfUrl = <?= json_encode($dbmp_pdf, JSON_UNESCAPED_SLASHES | JSON_HEX_TAG | JSON_HEX_AMP) ?>;
+            var lastFocus = null;
+            var loaded = false;
+
+            // Peramban tanpa penampil PDF bawaan (mis. iOS lama) -> tampilkan tautan cadangan.
+            function showFallback() {
+                frame.hidden = true;
+                if (fallback) { fallback.hidden = false; }
+            }
+
+            function open() {
+                lastFocus = document.activeElement;
+
+                if (!loaded) {
+                    frame.addEventListener('load', function () {
+                        // Beberapa peramban memuat "about:blank" tanpa error walau
+                        // PDF tidak bisa ditampilkan; deteksi lewat contentDocument kosong.
+                        try {
+                            var doc = frame.contentDocument;
+                            if (doc && doc.body && doc.body.childElementCount === 0) {
+                                showFallback();
+                            }
+                        } catch (e) { /* lintas-origin: biarkan */ }
+                    });
+                    frame.src = pdfUrl;
+                    loaded = true;
+                }
+
+                box.hidden = false;
+                document.body.classList.add('dbmp-open');
+                var closeBtn = box.querySelector('.dbmp-lb-close');
+                if (closeBtn) { closeBtn.focus(); }
+            }
+
+            function close() {
+                box.hidden = true;
+                document.body.classList.remove('dbmp-open');
+                if (lastFocus && typeof lastFocus.focus === 'function') { lastFocus.focus(); }
+            }
+
+            btn.addEventListener('click', open);
+            box.querySelectorAll('[data-dbmp-close]').forEach(function (el) {
+                el.addEventListener('click', close);
+            });
+            document.addEventListener('keydown', function (e) {
+                if (!box.hidden && e.key === 'Escape') { close(); }
+            });
         })();
     </script>
     <?php endif; ?>

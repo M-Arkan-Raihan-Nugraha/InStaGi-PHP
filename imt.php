@@ -74,7 +74,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         // Penjaga: bila prepare gagal (mis. tabel belum ada), tampilkan pesan
         // error yang jelas alih-alih fatal "call to a member function on bool".
         if ($stmt === false) {
-            error_log('[InStaGi] bmi.php prepare gagal: ' . $koneksi->error);
+            error_log('[InStaGi] imt.php prepare gagal: ' . $koneksi->error);
             $error_message = 'Gagal menyiapkan penyimpanan data. Silakan coba beberapa saat lagi.';
             $koneksi->close();
         } else {
@@ -105,7 +105,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             } else {
                 // Detail teknis hanya ke log server, TIDAK ditampilkan ke pengguna.
-                error_log('[InStaGi] bmi.php execute gagal: ' . $stmt->error);
+                error_log('[InStaGi] imt.php execute gagal: ' . $stmt->error);
                 $error_message = "Gagal menyimpan data ke database. Silakan coba beberapa saat lagi.";
                 $stmt->close();
                 $koneksi->close(); // Close connection on error
@@ -124,7 +124,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>InStaGi - Input Data</title>
     <link rel="shortcut icon" href="assets/favicon.ico" type="image/x-icon">
-    <link rel="stylesheet" href="css/bmi.css">
+    <link rel="stylesheet" href="css/imt.css">
 </head>
 <body>
 
@@ -139,7 +139,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <?php endif; ?>
 
 
-        <form action="bmi.php" method="POST" class="form-grid">
+        <form action="imt.php" method="POST" class="form-grid">
             <input type="hidden" name="csrf_token" value="<?= htmlspecialchars(instagi_csrf_token(), ENT_QUOTES, 'UTF-8') ?>">
             <div class="form-group full-width">
                 <label for="tanggal_input">Tanggal Input</label>

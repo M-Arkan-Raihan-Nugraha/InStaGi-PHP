@@ -1,6 +1,6 @@
 <?php
 require_once '../includes/session.php';
-// Modul perhitungan gizi (dipakai bersama bmi.php agar hasil selalu sama).
+// Modul perhitungan gizi (dipakai bersama imt.php agar hasil selalu sama).
 // >>> RUMUS TIDAK DIUBAH: gizi.php dipakai apa adanya.
 require_once '../includes/gizi.php';
 
@@ -26,7 +26,7 @@ instagi_csrf_require_json();
 require_once '../includes/db.php';
 
 // Ambil data dari POST (disimpan mentah, TANPA htmlspecialchars —
-// lihat penjelasan di bmi.php; escaping dilakukan saat menampilkan).
+// lihat penjelasan di imt.php; escaping dilakukan saat menampilkan).
 $id = (int)($_POST['id'] ?? 0);
 $tanggal = trim($_POST['tanggal'] ?? '');
 $nama = trim($_POST['nama'] ?? '');
@@ -46,7 +46,7 @@ if ($id <= 0 || $berat_badan <= 0 || $tinggi_badan <= 0 || $usia <= 0) {
 
 // Hitung ulang IMT, status gizi, saran, dan kalori memakai modul bersama.
 // Dengan cara ini, hasil edit SELALU identik dengan hasil input awal
-// (sebelumnya kalori di sini tidak dibulatkan ke ratusan seperti di bmi.php).
+// (sebelumnya kalori di sini tidak dibulatkan ke ratusan seperti di imt.php).
 // >>> RUMUS TIDAK DIUBAH: tetap memakai instagi_hitung_semua() apa adanya.
 $hasil = instagi_hitung_semua($berat_badan, $tinggi_badan, $usia, $jenis_kelamin, $aktivitas);
 

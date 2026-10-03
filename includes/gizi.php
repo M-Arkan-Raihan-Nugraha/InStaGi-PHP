@@ -3,10 +3,10 @@
  * Modul Perhitungan Gizi InStaGi (SATU SUMBER KEBENARAN)
  * -----------------------------------------------------------------------------
  * Sebelumnya logika perhitungan ini DUPLIKAT di dua tempat:
- *   - bmi.php               (saat responden mengisi form)
+ *   - imt.php               (saat responden mengisi form)
  *   - api/update_record.php (saat admin mengedit data)
  * dan keduanya TIDAK sama:
- *   - bmi.php membulatkan kalori ke RATUSAN terdekat
+ *   - imt.php membulatkan kalori ke RATUSAN terdekat
  *   - update_record.php memakai round() biasa
  *   - teks "saran" juga berbeda kata
  * Akibatnya, sekadar mengedit data tanpa mengubah BB/TB tetap mengubah nilai
@@ -83,7 +83,7 @@ if (!function_exists('instagi_kategori_gizi')) {
 if (!function_exists('instagi_kalori_harian')) {
     /**
      * Hitung kebutuhan kalori harian (Harris-Benedict x faktor aktivitas/TDEE),
-     * lalu dibulatkan ke RATUSAN terdekat (aturan asli bmi.php).
+     * lalu dibulatkan ke RATUSAN terdekat (aturan asli imt.php).
      *
      * @param float  $bb_kg
      * @param float  $tb_cm
