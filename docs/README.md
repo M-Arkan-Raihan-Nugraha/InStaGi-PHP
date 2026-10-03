@@ -8,7 +8,7 @@ dibiarkan singkat** (deskripsi proyek + cara menjalankan) agar tampilan repo ber
 | [`PERBAIKAN.md`](PERBAIKAN.md) | Riwayat lengkap perbaikan V2 → V3: bug kritis, korektnes data, paket keamanan P0 (S1–S13), dan konsistensi penamaan IMT |
 | [`ROADMAP-UPGRADE.md`](ROADMAP-UPGRADE.md) | Hasil audit: apa yang **masih bisa** di-upgrade (P0–P3), lengkap dengan lokasi presisi di kode |
 | [`DEPLOY-AEONFREE.md`](DEPLOY-AEONFREE.md) | Panduan unggah ke hosting **AeonFree** langkah demi langkah (cPanel, MySQL; tabel dibuat otomatis) |
-| [`schema.sql`](schema.sql) | Skema tabel `bmi_history` untuk dibuat manual lewat phpMyAdmin |
+| [`schema.sql`](schema.sql) | Skema tabel `imt_history` untuk dibuat manual lewat phpMyAdmin |
 
 ## Ringkas
 
@@ -17,7 +17,8 @@ dibiarkan singkat** (deskripsi proyek + cara menjalankan) agar tampilan repo ber
   **satu tempat**: `includes/gizi.php`. Jangan menduplikasinya.
 - **Istilah di tampilan = IMT** (Indeks Massa Tubuh), bukan "BMI". Berkas form
   sudah di-rename menjadi `imt.php` (CSS: `css/imt.css`); nama lama `bmi.php`
-  dialihkan otomatis (301). Hanya tabel database `bmi_history` yang sengaja
-  dipertahankan — lihat "Konsistensi Penamaan" di [`PERBAIKAN.md`](PERBAIKAN.md).
+  dialihkan otomatis (301). Tabel database juga sudah bernama `imt_history`;
+  tabel lama `bmi_history` dipindahkan otomatis (RENAME TABLE, data ikut).
+  Lihat "Konsistensi Penamaan" di [`PERBAIKAN.md`](PERBAIKAN.md).
 - **Kredensial** ada di `includes/db_credentials.php` dan `includes/auth_config.php`
   (diblokir dari web). Sebaiknya diisi lewat environment variable di produksi.

@@ -120,7 +120,8 @@ terputus, gunakan FTP.
 Tidak ada langkah migrasi manual. Cukup buka:
 
 1. **`https://<domain-anda>/imt.php`** — saat request pertama, `includes/db.php`
-   otomatis membuat tabel `bmi_history` bila belum ada (aman diulang).
+   otomatis membuat tabel `imt_history` bila belum ada (aman diulang). Bila tabel
+   lama `bmi_history` masih ada, isinya dipindahkan otomatis lewat `RENAME TABLE`.
 2. Bila kredensial di `includes/db_credentials.php` salah, akan muncul halaman
    **"Layanan sedang tidak tersedia" (503)** — perbaiki kredensial lalu muat ulang.
 3. Untuk memastikan koneksi & tabel beres, login admin lalu buka **`/admin.php`**

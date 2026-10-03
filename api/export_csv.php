@@ -62,7 +62,7 @@ $header = [
 fputcsv($output, $header, ',', '"', '');
 
 // Ambil semua data dari database
-$query = "SELECT id, tanggal, nama, usia, jenis_kelamin, no_hp, berat_badan, tinggi_badan, aktivitas, kalori, imt, status_gizi, saran, created_at FROM bmi_history ORDER BY tanggal DESC, id DESC";
+$query = "SELECT id, tanggal, nama, usia, jenis_kelamin, no_hp, berat_badan, tinggi_badan, aktivitas, kalori, imt, status_gizi, saran, created_at FROM imt_history ORDER BY tanggal DESC, id DESC";
 $result = $koneksi->query($query);
 
 // Penjaga: bila query gagal (mis. tabel belum siap), jangan fatal.

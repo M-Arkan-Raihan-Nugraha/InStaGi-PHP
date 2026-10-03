@@ -24,7 +24,7 @@ if (isset($_GET['id'])) {
     }
 
     // Siapkan statement SELECT
-    $stmt = $koneksi->prepare("SELECT * FROM bmi_history WHERE id = ?");
+    $stmt = $koneksi->prepare("SELECT * FROM imt_history WHERE id = ?");
     $stmt->bind_param("i", $id);
     $stmt->execute();
     $result = $stmt->get_result();

@@ -46,7 +46,7 @@ if (isset($_POST['ids']) && is_array($_POST['ids'])) {
     // Create type definition string: "iii"
     $types = str_repeat('i', count($valid_ids));
 
-    $stmt = $koneksi->prepare("DELETE FROM bmi_history WHERE id IN ($placeholders)");
+    $stmt = $koneksi->prepare("DELETE FROM imt_history WHERE id IN ($placeholders)");
     $stmt->bind_param($types, ...$valid_ids);
 
     if ($stmt->execute()) {
@@ -71,7 +71,7 @@ if (isset($_POST['ids']) && is_array($_POST['ids'])) {
         exit;
     }
 
-    $stmt = $koneksi->prepare("DELETE FROM bmi_history WHERE id = ?");
+    $stmt = $koneksi->prepare("DELETE FROM imt_history WHERE id = ?");
     $stmt->bind_param("i", $id);
 
     if ($stmt->execute()) {

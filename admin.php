@@ -12,7 +12,7 @@ if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true) {
 require_once 'includes/db.php';
 
 // Ambil semua data riwayat dari database, urutkan berdasarkan yang terbaru
-$riwayat_result = $koneksi->query("SELECT * FROM bmi_history ORDER BY tanggal DESC, id DESC");
+$riwayat_result = $koneksi->query("SELECT * FROM imt_history ORDER BY tanggal DESC, id DESC");
 
 // Penjaga: bila query gagal (mis. tabel belum siap), jangan biarkan aplikasi
 // menampilkan halaman putih.

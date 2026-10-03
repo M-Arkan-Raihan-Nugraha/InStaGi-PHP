@@ -135,7 +135,7 @@ nama teknis **sengaja dipertahankan** agar data & URL yang sudah beredar tidak r
 | Kelas CSS (`imt-bar-container`, `imt-marker`, …) | **IMT** | Internal, aman diganti |
 | Kunci session (`$_SESSION['imt_result']`) | **IMT** | Internal, aman diganti |
 | Nama file unduhan CSV (`data_responden_imt_*.csv`) | **IMT** | Yang dilihat pengguna |
-| Tabel database `bmi_history` | **tetap** | Berisi data produksi; rename = berisiko (perlu memindahkan data) |
+| Tabel database `imt_history` | **imt_history** | Sudah di-rename dari `bmi_history`; tabel lama dipindahkan otomatis lewat `RENAME TABLE` di `includes/db.php`, jadi data tidak hilang |
 | File `imt.php`, `css/imt.css` | **IMT** | Sudah di-rename; nama lama `bmi.php`/`css/bmi.css` dialihkan otomatis (301) agar tautan/bookmark lama tidak rusak |
 | Rumus & ambang batas di `includes/gizi.php` | **tidak disentuh** | Sesuai permintaan; hanya teks saran yang dirapikan |
 
@@ -183,4 +183,4 @@ kodenya. Yang paling penting:
    sebelum diklasifikasi (`includes/gizi.php`), sehingga nilai tepat di batas bisa
    masuk kategori yang kurang tepat. **Belum diubah karena menyentuh rumus.**
 4. SRI pada CDN + naikkan versi jQuery/DataTables.
-5. Index pada `bmi_history` dan server-side pagination di `admin.php`.
+5. Index pada `imt_history` dan server-side pagination di `admin.php`.

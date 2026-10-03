@@ -32,7 +32,7 @@ Legenda prioritas:
 | I | Nama & saran ter-escape ganda masuk pesan WhatsApp | `result.php:23,27,39` |
 | J | Nama file PDF ikut ter-escape | `result.php:299` |
 | K | Nomor WA hardcoded & duplikat | `result.php:36,163` |
-| L | Tidak ada index pada `bmi_history` (selalu ORDER BY tanggal) | `includes/db.php` (setup tabel) |
+| L | Tidak ada index pada `imt_history` (selalu ORDER BY tanggal) | `includes/db.php` (setup tabel) |
 | M | Admin memuat seluruh tabel ke browser (client-side DataTables) | `admin.php:15` |
 | N | Export CSV buffered (seluruh hasil ke memori) | `api/export_csv.php:67` |
 | O | Tombol hapus per-baris tidak pernah dirender (dead code) | `admin.php:121` vs `:338` |
@@ -187,11 +187,11 @@ Legenda prioritas:
 
 ## P1 — Performa & database
 
-### 13. Index pada `bmi_history` (temuan L)
+### 13. Index pada `imt_history` (temuan L)
 ```sql
-ALTER TABLE bmi_history ADD INDEX idx_tanggal (tanggal);
+ALTER TABLE imt_history ADD INDEX idx_tanggal (tanggal);
 -- bila sering difilter per status:
-ALTER TABLE bmi_history ADD INDEX idx_status (status_gizi);
+ALTER TABLE imt_history ADD INDEX idx_status (status_gizi);
 ```
 Tambahkan lewat phpMyAdmin (idempoten: cek `INFORMATION_SCHEMA.STATISTICS` lebih dulu),
 atau tambahkan ke blok `CREATE TABLE` di `includes/db.php`.
@@ -269,7 +269,7 @@ atau tambahkan ke blok `CREATE TABLE` di `includes/db.php`.
 
 ## P3 — Fitur (opsional)
 
-- **Grafik tren IMT per responden** (Chart.js) memanfaatkan `bmi_history` yang sudah ada.
+- **Grafik tren IMT per responden** (Chart.js) memanfaatkan `imt_history` yang sudah ada.
 - **Multi-user admin + peran** (admin/operator) dan **audit log** perubahan data.
 - **Ekspor PDF/Excel server-side** (menggantikan html2pdf client-side) dan **impor massal**.
 - **Filter & pencarian server-side** (status gizi, rentang tanggal) — terkait item 14.

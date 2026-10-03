@@ -57,7 +57,7 @@ $kalori_harian = $hasil['kalori_harian'];
 
 // Siapkan statement UPDATE
 $stmt = $koneksi->prepare(
-    "UPDATE bmi_history SET 
+    "UPDATE imt_history SET 
         tanggal = ?, nama = ?, usia = ?, jenis_kelamin = ?, no_hp = ?, 
         berat_badan = ?, tinggi_badan = ?, aktivitas = ?, kalori = ?, imt = ?, status_gizi = ?, saran = ?
     WHERE id = ?"

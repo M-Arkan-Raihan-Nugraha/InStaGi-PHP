@@ -1,9 +1,16 @@
 -- =============================================================================
 -- InStaGi — Skema Database
 -- -----------------------------------------------------------------------------
--- File ini OPSIONAL. Tabel `bmi_history` sudah dibuat OTOMATIS oleh aplikasi
+-- File ini OPSIONAL. Tabel `imt_history` sudah dibuat OTOMATIS oleh aplikasi
 -- saat pertama kali dibuka (lihat includes/db.php). Gunakan file ini hanya
 -- bila Anda lebih suka membuat tabel secara manual lewat phpMyAdmin.
+--
+-- PENTING (nama tabel versi lama):
+--   Bila di database Anda sudah ada tabel lama `bmi_history` berisi data,
+--   TIDAK perlu memindahkan apa pun secara manual — aplikasi akan otomatis
+--   me-rename `bmi_history` menjadi `imt_history` (RENAME TABLE, data ikut
+--   pindah) saat pertama kali dibuka. Bila ingin melakukannya sendiri:
+--       RENAME TABLE `bmi_history` TO `imt_history`;
 --
 -- Cara pakai:
 --   1. Buat database lewat cPanel (mis. namauser_instagi).
@@ -11,7 +18,7 @@
 --   3. Isi kredensial di includes/db_credentials.php sesuai database tersebut.
 -- =============================================================================
 
-CREATE TABLE IF NOT EXISTS `bmi_history` (
+CREATE TABLE IF NOT EXISTS `imt_history` (
     `id`            INT(11)      NOT NULL AUTO_INCREMENT,
     `tanggal`       DATE         NOT NULL,
     `nama`          VARCHAR(255) NOT NULL,
@@ -30,4 +37,4 @@ CREATE TABLE IF NOT EXISTS `bmi_history` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- Opsional (disarankan bila data sudah banyak): percepat ORDER BY tanggal.
--- ALTER TABLE `bmi_history` ADD INDEX `idx_tanggal` (`tanggal`);
+-- ALTER TABLE `imt_history` ADD INDEX `idx_tanggal` (`tanggal`);

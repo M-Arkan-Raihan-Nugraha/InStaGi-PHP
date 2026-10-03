@@ -7,7 +7,10 @@
  *      (Di hosting berbagi seperti AeonFree, database biasanya sudah dibuat
  *      lebih dulu lewat cPanel. Bila user DB tidak berhak CREATE DATABASE,
  *      kegagalan itu diabaikan dan aplikasi lanjut memakai database yang ada.)
- *   2. Bila tabel bmi_history belum ada, aplikasi membuatnya otomatis.
+ *   2. Bila tabel imt_history belum ada, aplikasi membuatnya otomatis.
+ *      Bila tabel versi lama bmi_history masih ada (mis. hasil unggahan lama),
+ *      isinya OTOMATIS dipindahkan ke imt_history lewat RENAME TABLE —
+ *      jadi data lama tidak hilang dan tidak perlu migrasi manual.
  *   3. Bila kolom aktivitas/kalori belum ada (data lama), kolom itu
  *      ditambahkan otomatis.
  *   Semua langkah di atas memakai IF NOT EXISTS / pengecekan INFORMATION_SCHEMA
@@ -138,9 +141,32 @@ try {
         );
     }
 
-    // 3) Buat tabel bila belum ada (aman diulang, IF NOT EXISTS).
+    // 3) Pindahkan nama tabel versi lama bmi_history -> imt_history.
+    //    RENAME TABLE memindahkan SELURUH isi (data tidak hilang) dan aman:
+    //    hanya dijalankan bila tabel lama ada DAN tabel baru belum ada.
+    //    Kalau tabel lama sudah tidak ada, langkah ini tidak melakukan apa pun.
+    $tabel_lama = 'bmi_history';
+    $tabel_baru = 'imt_history';
+    $sql_cek = "SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES
+                 WHERE TABLE_SCHEMA = '" . $koneksi->real_escape_string($db_name) . "'
+                 AND TABLE_NAME IN ('" . $tabel_lama . "', '" . $tabel_baru . "')";
+    $tabel_ada = [];
+    $res_cek = @$koneksi->query($sql_cek);
+    if ($res_cek) {
+        while ($row = $res_cek->fetch_row()) {
+            $tabel_ada[$row[0]] = true;
+        }
+    }
+    if (isset($tabel_ada[$tabel_lama]) && !isset($tabel_ada[$tabel_baru])) {
+        // Gagal rename bukan alasan fatal: bila gagal, CREATE TABLE di bawah
+        // akan membuat tabel baru (aplikasi tetap jalan; data lama tetap utuh
+        // di tabel bmi_history untuk dipindahkan manual bila perlu).
+        @$koneksi->query("RENAME TABLE `" . $tabel_lama . "` TO `" . $tabel_baru . "`");
+    }
+
+    // 4) Buat tabel bila belum ada (aman diulang, IF NOT EXISTS).
     $sql_create_table = "
-    CREATE TABLE IF NOT EXISTS bmi_history (
+    CREATE TABLE IF NOT EXISTS imt_history (
         id INT(11) AUTO_INCREMENT PRIMARY KEY,
         tanggal DATE NOT NULL,
         nama VARCHAR(255) NOT NULL,
@@ -165,13 +191,13 @@ try {
         );
     }
 
-    // 4) Tambah kolom aktivitas/kalori bila belum ada (data dari versi lama).
+    // 5) Tambah kolom aktivitas/kalori bila belum ada (data dari versi lama).
     //    Memakai pengecekan INFORMATION_SCHEMA — BUKAN "ADD COLUMN IF NOT EXISTS"
     //    yang hanya ada di MariaDB dan membuat fatal di MySQL 8.
     $existing_columns = [];
     $res = @$koneksi->query("SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS
                              WHERE TABLE_SCHEMA = '" . $koneksi->real_escape_string($db_name) . "'
-                             AND TABLE_NAME = 'bmi_history'");
+                             AND TABLE_NAME = 'imt_history'");
     if ($res) {
         while ($row = $res->fetch_row()) {
             $existing_columns[$row[0]] = true;
@@ -179,8 +205,8 @@ try {
     }
 
     $column_migrations = [
-        'aktivitas' => "ALTER TABLE bmi_history ADD COLUMN aktivitas DECIMAL(4,3) NOT NULL DEFAULT 0 AFTER tinggi_badan",
-        'kalori'    => "ALTER TABLE bmi_history ADD COLUMN kalori INT(11) NOT NULL DEFAULT 0 AFTER aktivitas",
+        'aktivitas' => "ALTER TABLE imt_history ADD COLUMN aktivitas DECIMAL(4,3) NOT NULL DEFAULT 0 AFTER tinggi_badan",
+        'kalori'    => "ALTER TABLE imt_history ADD COLUMN kalori INT(11) NOT NULL DEFAULT 0 AFTER aktivitas",
     ];
     foreach ($column_migrations as $column => $sql) {
         if (!isset($existing_columns[$column])) {
