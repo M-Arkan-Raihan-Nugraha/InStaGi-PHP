@@ -118,6 +118,39 @@ input[readonly] {
     background-color: #c0392b;
 }
 
+/* Petunjuk kecil di bawah label (rentang nilai yang diterima) */
+.field-hint {
+    display: block;
+    margin: -4px 0 8px 0;
+    font-size: 12px;
+    font-weight: 400;
+    color: #8a8f98;
+}
+
+/* Tombol saat form sedang dikirim (mencegah klik ganda) */
+.submit-btn.is-loading,
+.submit-btn:disabled {
+    background-color: #b94a3c;
+    cursor: progress;
+    opacity: 0.85;
+}
+
+/* Hormati preferensi pengguna yang membatasi animasi */
+@media (prefers-reduced-motion: reduce) {
+    * {
+        transition-duration: 0.01ms !important;
+        animation-duration: 0.01ms !important;
+    }
+}
+
+/* Penanda fokus yang jelas untuk pengguna keyboard */
+.submit-btn:focus-visible,
+.form-group input:focus-visible,
+a:focus-visible {
+    outline: 3px solid rgba(231, 76, 60, 0.45);
+    outline-offset: 2px;
+}
+
 .message {
     padding: 15px;
     border-radius: 8px;

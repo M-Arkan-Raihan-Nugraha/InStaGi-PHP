@@ -169,11 +169,15 @@ Legenda prioritas:
   ```
   Nama file PDF juga pakai nilai mentah (`$nama_raw`), bukan yang ter-escape.
 
-### 11. Validasi rentang input
-- Tambah batas wajar (di `imt.php` **dan** `api/update_record.php` supaya konsisten):
-  usia 1–120, TB 50–250 cm, BB 5–300 kg, `no_hp` format Indonesia, `aktivitas` harus
-  salah satu nilai yang diizinkan (1.2/1.375/1.55/1.725/1.9).
-- Jangan hanya mengandalkan atribut HTML; **validasi di server adalah otoritatif**.
+### 11. Validasi rentang input — **SUDAH DIKERJAKAN (sebagian)**
+- **`imt.php`: selesai.** Batas di peramban (`min`/`max`/`step`/`pattern`/`inputmode`)
+  **dan** validasi otoritatif di server dengan pesan jelas: usia 1–120, BB 2–500 kg,
+  TB 40–250 cm (bilangan bulat — kolom DB `INT`), `no_hp` 8–20 digit.
+  Lihat `docs/PERBAIKAN.md` bagian 4.
+- **Belum:** `api/update_record.php` belum memakai batas yang sama. Endpoint ini
+  hanya bisa diakses admin yang sudah login, tetapi sebaiknya disamakan.
+- **Belum:** `aktivitas` belum divalidasi terhadap daftar nilai yang diizinkan
+  (1.2/1.375/1.55/1.725/1.9).
 
 ### 12. Rumus kalori
 - Pertimbangkan beralih dari **Harris-Benedict (1919)** ke **Mifflin-St Jeor**
@@ -210,9 +214,12 @@ atau tambahkan ke blok `CREATE TABLE` di `includes/db.php`.
 - `logs/php-error.log` tumbuh tanpa batas. Tambahkan rotasi (logrotate di server,
   atau cek ukuran di `includes/config.php` dan arsipkan bila > mis. 5 MB).
 
-### 17. Optimasi aset gambar
-- Gambar leaflet asli ~2,7 MB, thumbnail ~1,2 MB total. Konversi ke **WebP** +
-  `srcset`/`sizes`; tambah `width`/`height` untuk mencegah layout shift.
+### 17. Optimasi aset gambar — **SUDAH DIKERJAKAN (sebagian)**
+- **Selesai:** `logo.png` dipangkas + dikompres (242 KB → 66 KB), semua `<img>` logo
+  kini punya `width`/`height` (anti-CLS). `assets/og-image.jpg` (1200×630) dibuat
+  untuk pratinjau tautan. Lihat `docs/PERBAIKAN.md` bagian 4.
+- **Belum:** gambar leaflet asli ~2,7 MB, thumbnail ~1,2 MB total. Konversi ke
+  **WebP** + `srcset`/`sizes`.
 
 ---
 
@@ -274,7 +281,8 @@ atau tambahkan ke blok `CREATE TABLE` di `includes/db.php`.
 - **Ekspor PDF/Excel server-side** (menggantikan html2pdf client-side) dan **impor massal**.
 - **Filter & pencarian server-side** (status gizi, rentang tanggal) — terkait item 14.
 - **Anti-spam pada `imt.php`** (form publik): honeypot + rate-limit per-IP.
-- **Verifikasi format No. HP** Indonesia.
+- **Verifikasi format No. HP** Indonesia. — **sebagian**: `imt.php` sudah memakai
+  `pattern` 8–20 digit; validasi server masih menerima string apa pun.
 
 ---
 

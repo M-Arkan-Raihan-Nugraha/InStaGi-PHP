@@ -46,10 +46,23 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     // 2. Validasi input
     //    Termasuk token CSRF: form ini publik, jadi submit lintas situs ditolak.
+    //    'submitted' = penjaga klik-ganda: bila tombol terklik dua kali, kiriman
+    //    kedua (yang tidak punya penanda) ditolak sehingga data TIDAK tersimpan dua kali.
     if (!instagi_csrf_check($_POST['csrf_token'] ?? '')) {
         $error_message = 'Sesi form tidak valid. Silakan muat ulang halaman lalu coba lagi.';
-    } elseif ($bb <= 0 || $tb <= 0 || $usia <= 0) {
-        $error_message = 'Usia, Berat Badan, dan Tinggi Badan harus diisi dengan angka positif.';
+    } elseif (empty($_POST['submitted'])) {
+        $error_message = 'Formulir sudah dikirim. Silakan tunggu sebentar atau muat ulang halaman.';
+    } elseif ($usia < 1 || $usia > 120) {
+        $error_message = 'Usia harus antara 1 sampai 120 tahun.';
+    } elseif ($bb < 2 || $bb > 500) {
+        $error_message = 'Berat Badan harus antara 2 sampai 500 kg.';
+    } elseif ($tb < 40 || $tb > 250) {
+        $error_message = 'Tinggi Badan harus antara 40 sampai 250 cm.';
+    } elseif (abs($tb - round($tb)) > 0.001) {
+        // Kolom tinggi_badan bertipe INT, jadi desimal akan dibulatkan oleh
+        // database dan membuat nilai tersimpan berbeda dari yang dihitung.
+        // Lebih baik ditolak dengan pesan jelas daripada tersimpan keliru.
+        $error_message = 'Tinggi Badan dalam cm harus bilangan bulat (tanpa koma), mis. 165.';
     } else {
         // 3. Lakukan Perhitungan jika data valid
         //    Semua rumus ada di includes/gizi.php agar identik dengan
@@ -125,12 +138,31 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <title>InStaGi - Input Data</title>
     <link rel="shortcut icon" href="assets/favicon.ico" type="image/x-icon">
     <link rel="stylesheet" href="css/imt.css">
+
+    <meta name="description" content="Masukkan nama, usia, jenis kelamin, berat dan tinggi badan untuk menghitung IMT (Indeks Massa Tubuh), status gizi, serta estimasi kebutuhan kalori harian Anda.">
+    <meta name="theme-color" content="#e74c3c">
+
+    <!-- Pratinjau tautan (WhatsApp, Facebook, X/Twitter) -->
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="InStaGi">
+    <meta property="og:title" content="InStaGi - Input Data Diri">
+    <meta property="og:description" content="Masukkan nama, usia, jenis kelamin, berat dan tinggi badan untuk menghitung IMT (Indeks Massa Tubuh), status gizi, serta estimasi kebutuhan kalori harian Anda.">
+    <meta property="og:url" content="https://instagi.iceiy.com/imt.php">
+    <meta property="og:image" content="https://instagi.iceiy.com/assets/og-image.jpg">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="Logo InStaGi">
+    <meta property="og:locale" content="id_ID">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="InStaGi - Input Data Diri">
+    <meta name="twitter:description" content="Masukkan nama, usia, jenis kelamin, berat dan tinggi badan untuk menghitung IMT (Indeks Massa Tubuh), status gizi, serta estimasi kebutuhan kalori harian Anda.">
+    <meta name="twitter:image" content="https://instagi.iceiy.com/assets/og-image.jpg">
 </head>
 <body>
 
     <div class="container">
         <div style="text-align: center;">
-            <img src="assets/logo.png" alt="InStaGi Logo" style="max-width: 150px; margin-bottom: 10px;">
+            <img src="assets/logo.png" alt="InStaGi Logo" width="512" height="466" style="max-width: 150px; height: auto; margin-bottom: 10px;">
         </div>
         <h1>Input Data Diri Anda</h1>
 
@@ -141,6 +173,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         <form action="imt.php" method="POST" class="form-grid">
             <input type="hidden" name="csrf_token" value="<?= htmlspecialchars(instagi_csrf_token(), ENT_QUOTES, 'UTF-8') ?>">
+            <input type="hidden" name="submitted" value="1">
             <div class="form-group full-width">
                 <label for="tanggal_input">Tanggal Input</label>
                 <input type="date" id="tanggal_input" name="tanggal_input" value="<?= htmlspecialchars($tanggal_input) ?>" readonly>
@@ -148,11 +181,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             
             <div class="form-group">
                 <label for="nama">Nama Lengkap</label>
-                <input type="text" id="nama" name="nama" value="<?= htmlspecialchars($nama) ?>" required>
+                <input type="text" id="nama" name="nama" value="<?= htmlspecialchars($nama) ?>"
+                       autocomplete="name" maxlength="100" required>
             </div>
             <div class="form-group">
                 <label for="usia">Usia (Tahun)</label>
-                <input type="number" id="usia" name="usia" value="<?= htmlspecialchars($usia) ?>" required>
+                <small class="field-hint">1&ndash;120 tahun</small>
+                <input type="number" id="usia" name="usia" value="<?= htmlspecialchars($usia) ?>"
+                       min="1" max="120" step="1" inputmode="numeric" required>
             </div>
             <div class="form-group">
                 <label>Jenis Kelamin</label>
@@ -165,15 +201,21 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             </div>
             <div class="form-group">
                  <label for="no_hp">No. HP</label>
-                <input type="tel" id="no_hp" name="no_hp" value="<?= htmlspecialchars($no_hp) ?>" required>
+                <input type="tel" id="no_hp" name="no_hp" value="<?= htmlspecialchars($no_hp) ?>"
+                       inputmode="tel" autocomplete="tel" pattern="[0-9+\(\)\- ]{8,20}"
+                       title="Masukkan nomor HP yang valid (8-20 digit, boleh + - spasi)" required>
             </div>
             <div class="form-group">
                 <label for="bb">Berat Badan (kg)</label>
-                <input type="number" step="0.1" id="bb" name="bb" value="<?= htmlspecialchars($bb) ?>" required>
+                <small class="field-hint">2&ndash;500 kg, boleh desimal (mis. 52,5)</small>
+                <input type="number" step="0.1" id="bb" name="bb" value="<?= htmlspecialchars($bb) ?>"
+                       min="2" max="500" inputmode="decimal" required>
             </div>
             <div class="form-group">
                 <label for="tb">Tinggi Badan (cm)</label>
-                <input type="number" id="tb" name="tb" value="<?= htmlspecialchars($tb) ?>" required>
+                <small class="field-hint">40&ndash;250 cm (bilangan bulat, mis. 165)</small>
+                <input type="number" step="1" id="tb" name="tb" value="<?= htmlspecialchars($tb) ?>"
+                       min="40" max="250" inputmode="numeric" required>
             </div>
             <div class="form-group full-width">
                 <label for="aktivitas">Tingkat Aktivitas Fisik</label>
@@ -194,5 +236,47 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <p>Halaman data responden hanya bisa diakses oleh admin. <a href="login.php">Login Admin</a></p>
         <p>Copyright © 2026 InStaGi | Created With ❤️</p>
     </footer>
+
+    <script>
+    // ===================================================================
+    // Pengaman klik-ganda pada tombol "Hitung IMT & Simpan".
+    // Tanpa ini, klik cepat dua kali dapat mengirim form dua kali dan
+    // menyimpan DUA baris data yang sama ke database.
+    // ===================================================================
+    (function () {
+        var form = document.querySelector('form.form-grid');
+        if (!form) { return; }
+        var btn = form.querySelector('.submit-btn');
+        if (!btn) { return; }
+
+        var original = btn.textContent;
+        var terkirim = false;
+
+        form.addEventListener('submit', function (e) {
+            // Validasi bawaan peramban (min/max/pattern) dijalankan lebih dulu.
+            if (typeof form.checkValidity === 'function' && !form.checkValidity()) {
+                return; // biarkan peramban menampilkan pesan
+            }
+            if (terkirim) {
+                e.preventDefault(); // kiriman kedua diabaikan
+                return;
+            }
+            terkirim = true;
+            btn.disabled = true;
+            btn.classList.add('is-loading');
+            btn.textContent = 'Menghitung...';
+        });
+
+        // Pulihkan tombol bila pengguna kembali ke halaman ini (bfcache).
+        window.addEventListener('pageshow', function () {
+            if (terkirim) {
+                terkirim = false;
+                btn.disabled = false;
+                btn.classList.remove('is-loading');
+                btn.textContent = original;
+            }
+        });
+    })();
+    </script>
 </body>
 </html>

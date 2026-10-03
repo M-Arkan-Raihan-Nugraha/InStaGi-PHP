@@ -134,13 +134,32 @@ foreach (instagi_menu_list() as $kkal => $meta) {
     <title>InStaGi - Hasil Analisis IMT</title>
     <link rel="shortcut icon" href="assets/favicon.ico" type="image/x-icon">
     <link rel="stylesheet" href="css/result.css">
+
+    <meta name="description" content="Hasil analisis IMT dan status gizi Anda, lengkap dengan berat badan ideal, estimasi kebutuhan kalori harian, serta saran gizi praktis dari InStaGi.">
+    <meta name="theme-color" content="#e74c3c">
+
+    <!-- Pratinjau tautan (WhatsApp, Facebook, X/Twitter) -->
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="InStaGi">
+    <meta property="og:title" content="InStaGi - Hasil Analisis IMT">
+    <meta property="og:description" content="Hasil analisis IMT dan status gizi Anda, lengkap dengan berat badan ideal, estimasi kebutuhan kalori harian, serta saran gizi praktis dari InStaGi.">
+    <meta property="og:url" content="https://instagi.iceiy.com/result.php">
+    <meta property="og:image" content="https://instagi.iceiy.com/assets/og-image.jpg">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="Logo InStaGi">
+    <meta property="og:locale" content="id_ID">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="InStaGi - Hasil Analisis IMT">
+    <meta name="twitter:description" content="Hasil analisis IMT dan status gizi Anda, lengkap dengan berat badan ideal, estimasi kebutuhan kalori harian, serta saran gizi praktis dari InStaGi.">
+    <meta name="twitter:image" content="https://instagi.iceiy.com/assets/og-image.jpg">
 </head>
 
 <body>
 
     <div class="container">
         <div style="text-align: center;" id="page-logo">
-            <img src="assets/logo.png" alt="InStaGi Logo" style="max-width: 150px; margin-bottom: 10px;">
+            <img src="assets/logo.png" alt="InStaGi Logo" width="512" height="466" style="max-width: 150px; height: auto; margin-bottom: 10px;">
         </div>
         <h1>Hasil Analisis IMT (Indeks Massa Tubuh) Anda</h1>
 
@@ -522,7 +541,7 @@ foreach (instagi_menu_list() as $kkal => $meta) {
             pdfHeader.style.padding = '10px 0 12px 0';
             pdfHeader.style.borderBottom = '2px solid #e74c3c';
             pdfHeader.innerHTML = `
-                <img src="assets/logo.png" style="max-width: 80px; margin-bottom: 8px; display: block; margin-left: auto; margin-right: auto;">
+                <img src="assets/logo.png" width="512" height="466" alt="Logo InStaGi" style="max-width: 80px; height: auto; margin-bottom: 8px; display: block; margin-left: auto; margin-right: auto;">
                 <h1 style="color: #e74c3c; font-size: 16px; margin: 0 0 3px 0; font-family: Arial, sans-serif; font-weight: bold;">Hasil Analisis InStaGi</h1>
                 <p style="color: #555; font-size: 11px; margin: 0; font-family: Arial, sans-serif;">Informasi Status Gizi</p>
             `;

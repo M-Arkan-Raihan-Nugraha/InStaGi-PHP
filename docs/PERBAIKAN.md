@@ -181,7 +181,71 @@ nama teknis **sengaja dipertahankan** agar data & URL yang sudah beredar tidak r
 
 ---
 
-## 4. Verifikasi
+## 4. Perbaikan Frontend (prioritas tinggi)
+
+Empat perbaikan yang paling berdampak pada pengalaman pengguna.
+
+### 1. Validasi input di `imt.php` (sebelumnya kosong)
+
+| Kolom | Sebelum | Sesudah |
+|-------|---------|---------|
+| Usia | bebas (`999`, `-5` diterima) | `min="1" max="120" step="1" inputmode="numeric"` |
+| Berat badan | bebas (`5000` diterima) | `min="2" max="500" step="0.1" inputmode="decimal"` |
+| Tinggi badan | `INT` di DB, tapi tanpa batas & tanpa `step` | `min="40" max="250" step="1" inputmode="numeric"` |
+| Nama | tanpa batas | `maxlength="100" autocomplete="name"` |
+| No. HP | tanpa pola | `pattern` 8–20 digit (boleh `+ ( ) - spasi`), `inputmode="tel"` |
+
+Ditambahkan pula **petunjuk kecil** (`.field-hint`) di bawah tiap kolom, dan
+**validasi di sisi server** (bukan hanya peramban) dengan pesan yang jelas.
+
+> **Catatan Tinggi Badan:** kolom `tinggi_badan` di database bertipe `INT(5)`.
+> Bila pengguna memasukkan TB desimal (mis. `165,5`), MySQL akan membulatkannya
+> menjadi `166` sehingga nilai yang **tersimpan** berbeda dari yang **dihitung**.
+> Karena itu TB kini diwajibkan bilangan bulat (dan desimal ditolak dengan pesan
+> jelas), agar data yang tersimpan selalu sama dengan yang dihitung.
+> **Skema database tidak diubah.**
+
+### 2. Pengaman klik-ganda (anti-duplikat)
+
+Sebelumnya `imt.php` **tidak punya JavaScript sama sekali**. Bila pengguna
+mengeklik tombol "Hitung IMT & Simpan" dua kali dengan cepat, form terkirim dua
+kali dan **dua baris data kembar** tersimpan ke `imt_history`.
+
+Sekarang dilindungi dua lapis:
+
+1. **Sisi peramban** — tombol langsung dinonaktifkan dan berubah menjadi
+   "Menghitung..." saat form dikirim; kiriman kedua diabaikan. Tombol dipulihkan
+   otomatis bila pengguna kembali ke halaman (tombol *back*).
+2. **Sisi server** — ada penanda `submitted`; kiriman tanpa penanda ditolak
+   (berguna bila JavaScript dimatikan).
+
+### 3. Pratinjau tautan (meta description + Open Graph)
+
+`index.html`, `imt.php`, dan `result.php` kini punya `meta description`,
+`theme-color`, dan **Open Graph + Twitter Card** lengkap, sehingga saat tautan
+dibagikan lewat WhatsApp/Facebook/X akan muncul judul, deskripsi, dan gambar
+pratinjau (bukan tautan polos).
+
+Gambar pratinjau `assets/og-image.jpg` (1200×630) dibuat dari logo InStaGi.
+
+### 4. Optimasi logo (berat & tata letak)
+
+| Sebelum | Sesudah |
+|---------|---------|
+| `logo.png` 1024×1024, **242 KB** | 512×466, **66 KB** (−73%) |
+
+Ruang putih di sekeliling logo dipangkas, ukuran diperkecil, dan dikompres.
+Semua tag `<img>` logo (termasuk header PDF) kini punya atribut
+`width`/`height` sehingga halaman **tidak bergeser (CLS)** saat logo dimuat.
+
+### Tambahan kecil (sekalian)
+
+- `prefers-reduced-motion` — hormati pengguna yang membatasi animasi.
+- `:focus-visible` — penanda fokus jelas untuk pengguna keyboard.
+
+---
+
+## 5. Verifikasi
 
 - `php -l` pada **seluruh** file `.php` → bersih.
 - JS inline (`admin.php`, `result.php`) → `node --check` OK.
@@ -193,19 +257,41 @@ nama teknis **sengaja dipertahankan** agar data & URL yang sudah beredar tidak r
   (session, `.htaccess`, redirect, pembuatan tabel otomatis) dengan MySQL lokal:
   **36/36 pengujian lulus** — alur input → hasil → admin → API (get/update/export/delete),
   proteksi folder sensitif, dan perbaikan data lama.
+- **Perbaikan frontend (bagian 4)** diuji end-to-end dengan PHP dev server + MySQL
+  lokal (database uji terpisah, lalu dihapus):
+  - Validasi server: usia `999`/`-5`, BB `5000`, TB `999`/`20`, TB desimal → semua
+    **ditolak** dengan pesan yang tepat; input wajar (`bb 60.5`, `tb 165`) **diterima**.
+  - Penjaga klik-ganda: kiriman tanpa penanda `submitted` ditolak; database berisi
+    **tepat 2 baris** (tidak ada duplikat) setelah 7 percobaan pengiriman.
+  - CSRF salah → ditolak.
+  - JS anti-klik-ganda diuji statis dengan Node: **7/7 lulus** (kiriman ke-1 lolos,
+    ke-2 dicegah, tombol pulih saat kembali, validasi peramban dihormati).
+  - Pola `no_hp` divalidasi di mode regex HTML5 modern (`v`) → valid.
+  - Rumus: `includes/gizi.php` **tidak berubah** (diff kosong); baris rumus asli
+    `round($bb_kg / ($tb_meter * $tb_meter), 1)` dan `round($tdee + $kalori_adj)`
+    masih utuh.
+  - Ukuran terkirim: `logo.png` 66.431 B, `og-image.jpg` 56.879 B.
 
 ---
 
-## 5. Yang Masih Direkomendasikan (belum dikerjakan)
+## 6. Yang Masih Direkomendasikan (belum dikerjakan)
 
 Lihat [`ROADMAP-UPGRADE.md`](ROADMAP-UPGRADE.md) untuk daftar lengkap beserta lokasi
 kodenya. Yang paling penting:
 
 1. **Rotasi password DB & admin** — password lama pernah tersimpan plaintext dan
    ikut tersalin, jadi harus dianggap bocor. (Wajib, manual, di hosting.)
-2. **Validasi rentang input** (usia/TB/BB) di server — masih longgar.
+2. ~~**Validasi rentang input** (usia/TB/BB) di server~~ — **sudah dikerjakan**
+   (lihat bagian 4 di atas).
 3. **Klasifikasi IMT memakai nilai mentah** — saat ini IMT dibulatkan lebih dulu
    sebelum diklasifikasi (`includes/gizi.php`), sehingga nilai tepat di batas bisa
    masuk kategori yang kurang tepat. **Belum diubah karena menyentuh rumus.**
 4. SRI pada CDN + naikkan versi jQuery/DataTables.
 5. Index pada `imt_history` dan server-side pagination di `admin.php`.
+6. **Duplikasi CSS** — `:root`, `.main-footer`, `.container`, `box-shadow`, dan
+   `border-radius: 12px` disalin identik di kelima file CSS. Bisa dipindahkan ke
+   satu `css/base.css` bersama (aman, hanya gaya).
+7. **`css/result.css`** — ada selector kembar: `.imt-segments-wrapper` (2×) dan
+   `@media (max-width: 768px)` (2×). Bisa digabung tanpa mengubah tampilan.
+8. **SRI (`integrity`) pada skrip CDN** — `html2pdf.js`, jQuery, dan DataTables
+   dimuat dari CDN tanpa pengaman integritas.
