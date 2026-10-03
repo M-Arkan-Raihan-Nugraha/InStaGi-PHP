@@ -1,0 +1,43 @@
+# =============================================================================
+# .gitattributes — InStaGi (V3 PHP Native)
+# =============================================================================
+# Tujuan:
+#  1. File BINER (PDF, gambar, font, arsip) tidak pernah "dinormalisasi" baris
+#      barunya — kalau salah dianggap teks, isinya bisa rusak.
+#  2. File TEKS (kode) disimpan dengan LF di repo, apa pun sistem operasinya.
+# =============================================================================
+
+# --- Default: teks dinormalisasi otomatis ke LF di dalam repo -----------------
+* text=auto eol=lf
+
+# --- File biner: JANGAN disentuh ---------------------------------------------
+*.pdf   binary
+*.jpg   binary
+*.jpeg  binary
+*.png   binary
+*.gif   binary
+*.webp  binary
+*.ico   binary
+*.bmp   binary
+*.svg   binary
+*.woff  binary
+*.woff2 binary
+*.ttf   binary
+*.eot   binary
+*.otf   binary
+*.zip   binary
+*.gz    binary
+*.7z    binary
+*.rar   binary
+
+# --- Perkakas bantu: file .sh wajib LF (dipakai Git Bash / server Linux) ------
+*.sh    text eol=lf
+
+# --- Berkas yang tidak perlu ditampilkan di diff / statistik bahasa -----------
+*.pdf   -diff
+*.jpg   -diff
+*.jpeg  -diff
+*.png   -diff
+*.ico   -diff
+*.webp  -diff
+*.pdf   -text

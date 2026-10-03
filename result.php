@@ -5,6 +5,9 @@ require_once 'includes/session.php';
 // Modul leaflet informasi gizi (data galeri + nama file unduhan)
 require_once 'includes/leaflet.php';
 
+// Modul DBMP — Daftar Bahan Makanan Penukar (satu berkas PDF)
+require_once 'includes/dbmp.php';
+
 // Redirect jika tidak ada data hasil analisis di session
 if (!isset($_SESSION['imt_result'])) {
     header("location: bmi.php");
@@ -87,6 +90,11 @@ foreach (instagi_leaflet_list() as $slug => $meta) {
         'unduh'    => $meta['unduh'],
     ];
 }
+
+// --- Siapkan berkas DBMP (Daftar Bahan Makanan Penukar) ---
+// Satu berkas PDF gabungan; bagian ini otomatis dilewati bila PDF belum ada.
+$dbmp_pdf   = instagi_dbmp_pdf();
+$dbmp_cover = instagi_dbmp_cover();
 
 ?>
 
@@ -271,6 +279,52 @@ foreach (instagi_leaflet_list() as $slug => $meta) {
                 JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_HEX_TAG | JSON_HEX_AMP
             ) ?>;
         </script>
+        <?php endif; ?>
+
+        <?php if ($dbmp_pdf !== null): ?>
+        <!-- ===== DBMP — DAFTAR BAHAN MAKANAN PENUKAR (1 berkas PDF) ===== -->
+        <section class="dbmp-section" id="dbmp">
+            <h2 class="dbmp-heading">Daftar Bahan Makanan Penukar (DBMP)</h2>
+            <p class="dbmp-intro">
+                Panduan menukar bahan makanan dengan nilai gizi setara, disusun per golongan pangan
+                untuk membantu menyusun menu diet sehat dan seimbang.
+            </p>
+
+            <article class="dbmp-card">
+                <div class="dbmp-cover">
+                    <?php if ($dbmp_cover !== null): ?>
+                    <img src="<?= htmlspecialchars($dbmp_cover) ?>"
+                         alt="Sampul Daftar Bahan Makanan Penukar (DBMP)"
+                         loading="lazy" decoding="async">
+                    <?php else: ?>
+                    <div class="dbmp-cover-fallback" aria-hidden="true">DBMP</div>
+                    <?php endif; ?>
+                    <span class="dbmp-badge"><?= (int) instagi_dbmp_jumlah_halaman() ?> halaman</span>
+                </div>
+                <div class="dbmp-body">
+                    <span class="dbmp-tag">Panduan Diet</span>
+                    <h3 class="dbmp-title">Daftar Bahan Makanan Penukar</h3>
+                    <p class="dbmp-sub">Satu berkas PDF — 8 golongan bahan makanan</p>
+                    <p class="dbmp-desc">
+                        Memuat ukuran rumah tangga (URT), pengertian 1 satuan penukar, serta daftar
+                        bahan makanan per golongan: karbohidrat, protein hewani, protein nabati,
+                        sayuran, buah &amp; gula, susu, minyak &amp; lemak, hingga makanan tanpa kalori.
+                    </p>
+                    <div class="dbmp-actions">
+                        <a class="dbmp-btn dbmp-btn-view"
+                           href="<?= htmlspecialchars($dbmp_pdf) ?>"
+                           target="_blank" rel="noopener">
+                            Lihat PDF
+                        </a>
+                        <a class="dbmp-btn dbmp-btn-download"
+                           href="<?= htmlspecialchars($dbmp_pdf) ?>"
+                           download="DBMP-InStaGi-Daftar-Bahan-Makanan-Penukar.pdf">
+                            Unduh PDF
+                        </a>
+                    </div>
+                </div>
+            </article>
+        </section>
         <?php endif; ?>
 
         <div class="action-buttons">

@@ -173,6 +173,7 @@ Tidak ada langkah migrasi manual. Cukup buka:
 | **Halaman tampil sebagai kode / terunduh** | PHP tidak aktif atau versi PHP salah. Set **PHP 8.x** di cPanel → PHP Settings. |
 | **`db_credentials.php` bisa dibuka di browser** | `.htaccess` diabaikan (server bukan Apache/LiteSpeed). Hubungi support atau pindahkan file kredensial ke luar web root. |
 | **Gambar leaflet tidak muncul** | Pastikan `assets/leaflet/` dan `assets/leaflet/thumbs/` ikut ter-upload dan izinnya `755`/`644`. |
+| **PDF DBMP tidak muncul / tidak bisa dibuka** | Pastikan `assets/dbmp/dbmp-lengkap.pdf` (dan `dbmp-cover.jpg`) ikut ter-upload dengan izin `644`. |
 | **Upload terputus** | Pakai FTP, bukan File Manager. |
 | **Excel menampilkan CSV berantakan** | Seharusnya tidak — file sudah memuat BOM UTF-8. Pastikan yang diunduh adalah hasil export dari aplikasi (bukan file lama). |
 

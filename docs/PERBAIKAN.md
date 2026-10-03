@@ -60,6 +60,19 @@ Menambah/mengganti leaflet:
 Leaflet yang file gambarnya tidak ditemukan akan **dilewati tanpa error**; bila folder
 `thumbs/` belum ada, galeri otomatis memakai gambar ukuran penuh.
 
+### DBMP — Daftar Bahan Makanan Penukar
+
+DBMP disajikan sebagai **satu berkas PDF** gabungan 8 halaman golongan bahan makanan
+(`assets/dbmp/dbmp-lengkap.pdf`), dengan gambar sampul ringan (`assets/dbmp/dbmp-cover.jpg`).
+Bagian ini juga berada di luar `#printable-area`, jadi tidak ikut ke dalam PDF hasil analisis.
+
+- Data & pencarian berkas: `includes/dbmp.php`
+- Tampilan: blok `<!-- ===== DBMP ... -->` di `result.php`; gaya di `css/result.css`
+- Bila `dbmp-lengkap.pdf` belum ada, bagian DBMP **otomatis tidak ditampilkan** (tanpa error).
+
+Memperbarui DBMP cukup dengan mengganti `assets/dbmp/dbmp-lengkap.pdf`
+(dan `dbmp-cover.jpg`) — tidak perlu mengubah kode.
+
 ---
 
 ## 2. Paket Keamanan P0
