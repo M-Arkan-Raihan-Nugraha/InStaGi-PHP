@@ -1,0 +1,30 @@
+# =============================================================================
+# .gitignore — InStaGi (V3 PHP Native)
+# =============================================================================
+
+# --- Kredensial nyata: JANGAN PERNAH masuk repo publik ------------------------
+# File asli tetap ada di folder kerja & tetap di-upload ke hosting.
+# Untuk pengguna baru: salin dari *.example.php lalu isi nilainya.
+includes/db_credentials.php
+includes/auth_config.php
+
+# --- Log runtime --------------------------------------------------------------
+logs/*.log
+logs/*.log.*
+
+# --- Artefak editor / OS ------------------------------------------------------
+*.bak
+*.old
+*~
+Thumbs.db
+.DS_Store
+desktop.ini
+
+# --- Folder backup lokal (kalau ikut tersalin ke dalam proyek) ----------------
+_backup*/
+_htest/
+
+# --- Arsip hasil kompres untuk upload ----------------------------------------
+*.zip
+*.tar.gz
+*.7z

@@ -1,0 +1,71 @@
+# =============================================================================
+# InStaGi — .htaccess root (Apache)
+# -----------------------------------------------------------------------------
+# CATATAN: file ini hanya berlaku di Apache/LiteSpeed dengan AllowOverride aktif.
+# Di Nginx, aturan setara harus ditulis di konfigurasi server (bukan .htaccess).
+# =============================================================================
+
+# --- 0. Redirect kanonik: semua ke https://instagi.iceiy.com/ ---------------
+# Tujuan: apa pun yang masuk — http://, domain tanpa https, atau host lain
+# (mis. www.) — berakhir di SATU alamat resmi: https://instagi.iceiy.com/
+# Ditaruh paling atas supaya berlaku sebelum aturan lain.
+# Jalur/query dipertahankan lewat %{REQUEST_URI}, jadi
+#   http://instagi.iceiy.com/bmi.php?id=1  ->  https://instagi.iceiy.com/bmi.php?id=1
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+
+    # (a) Host bukan domain resmi (mis. www.instagi.iceiy.com) -> alihkan ke domain resmi.
+    RewriteCond %{HTTP_HOST} !^instagi\.iceiy\.com(:[0-9]+)?$ [NC]
+    RewriteRule ^ https://instagi.iceiy.com%{REQUEST_URI} [R=301,L]
+
+    # (b) Sudah domain resmi tapi belum HTTPS -> paksa HTTPS.
+    #     Dua kondisi: HTTPS mati DAN proxy tidak menyatakan https
+    #     (agar tidak terjadi redirect berulang di belakang proxy/SSL terminasi).
+    RewriteCond %{HTTPS} !=on
+    RewriteCond %{HTTP:X-Forwarded-Proto} !=https
+    RewriteRule ^ https://instagi.iceiy.com%{REQUEST_URI} [R=301,L]
+</IfModule>
+
+# --- 1. Blokir file sensitif -------------------------------------------------
+# File konfigurasi/kredensial & dokumentasi jangan pernah disajikan sebagai teks.
+<FilesMatch "\.(md|log|sql|ini|sh|bak|old|env|json|lock)$">
+    <IfModule mod_authz_core.c>
+        Require all denied
+    </IfModule>
+    <IfModule !mod_authz_core.c>
+        Order allow,deny
+        Deny from all
+    </IfModule>
+</FilesMatch>
+
+# Blokir file tersembunyi (.git, .env, .htaccess, dst.)
+<FilesMatch "^\.">
+    <IfModule mod_authz_core.c>
+        Require all denied
+    </IfModule>
+    <IfModule !mod_authz_core.c>
+        Order allow,deny
+        Deny from all
+    </IfModule>
+</FilesMatch>
+
+# --- 2. Matikan directory listing --------------------------------------------
+Options -Indexes
+
+# --- 3. Security headers ------------------------------------------------------
+<IfModule mod_headers.c>
+    # Cegah halaman ini di-embed di situs lain (clickjacking).
+    Header always set X-Frame-Options "SAMEORIGIN"
+    # Jangan tebak MIME type (anti MIME-sniffing).
+    Header always set X-Content-Type-Options "nosniff"
+    # Batasi informasi referer yang dikirim ke situs lain.
+    Header always set Referrer-Policy "strict-origin-when-cross-origin"
+    # Batasi fitur browser yang tidak dipakai.
+    Header always set Permissions-Policy "geolocation=(), microphone=(), camera=()"
+</IfModule>
+
+# --- 4. Lindungi file kredensial di dalam includes/ ---------------------------
+# (includes/.htaccess sudah memblokir seluruh folder; ini lapisan tambahan.)
+<IfModule mod_rewrite.c>
+    RewriteRule ^includes/(db_credentials|auth_config)\.php$ - [F,L]
+</IfModule>

@@ -1,0 +1,9 @@
+# Dokumentasi tidak perlu disajikan ke pengunjung.
+# (Root .htaccess sudah memblokir .md/.sql; ini lapisan tambahan.)
+<IfModule mod_authz_core.c>
+    Require all denied
+</IfModule>
+<IfModule !mod_authz_core.c>
+    Order allow,deny
+    Deny from all
+</IfModule>

@@ -1,0 +1,149 @@
+# Riwayat Perbaikan InStaGi V3
+
+Dokumen ini memindahkan seluruh catatan perbaikan yang dulu menumpuk di `README.md`.
+Folder V3 adalah salinan dari **V2 PHP Native** yang disiapkan khusus untuk perbaikan.
+
+> **Prinsip yang dipegang:** **rumus perhitungan tidak diubah.** IMT, kalori
+> (Harris-Benedict × faktor aktivitas), ambang klasifikasi, dan pembulatan tetap
+> persis seperti aslinya. Yang diperbaiki hanya bug, keamanan, korektnes data,
+> dan penamaan tampilan.
+
+---
+
+## 1. Perbaikan V2 → V3
+
+### Kritis
+
+| # | Masalah | Perbaikan |
+|---|---------|-----------|
+| 1 | `ALTER TABLE ... ADD COLUMN IF NOT EXISTS` **tidak didukung MySQL** (hanya MariaDB) → `mysqli_sql_exception` fatal di setiap halaman | Sintaks MariaDB **dihapus**; pembuatan tabel/kolom kini memakai `IF NOT EXISTS` + pengecekan `INFORMATION_SCHEMA` (aman di MySQL 8) |
+| 2 | `error_log` menunjuk `includes/logs/` (tidak ada) → logging gagal senyap | Path diperbaiki ke `dirname(__DIR__).'/logs/'` + folder dibuat otomatis |
+| 3 | `$koneksi->connect_error` tak pernah tereksekusi (mysqli sudah exception) → halaman putih | Koneksi dibungkus `try/catch`, `mysqli_report(MYSQLI_REPORT_OFF)`; error tampil sebagai pesan ramah / JSON sesuai konteks |
+| 4 | Kredensial DB & admin hardcoded di file yang ikut disalin | Dipindah ke `includes/db_credentials.php` & `includes/auth_config.php`, bisa dioverride via environment variable, dan diblokir dari web |
+
+### Data & konsistensi
+
+| # | Masalah | Perbaikan |
+|---|---------|-----------|
+| 5 | Kalori di `bmi.php` dibulatkan ke ratusan, tapi di `api/update_record.php` tidak → **edit data mengubah nilai kalori**; teks `saran` juga berbeda | Dibuat `includes/gizi.php` sebagai satu sumber kebenaran, dipakai kedua file |
+| 6 | Input di-`htmlspecialchars` **sebelum disimpan** → `A & B` tersimpan `A &amp; B` (rusak & makin rusak saat ditampilkan) | Data disimpan mentah; escaping hanya saat menampilkan. Data lama yang sudah rusak perlu diperbaiki manual bila diperlukan |
+| 7 | Redirect `login.php` di `api/export_csv.php` salah (→ `api/login.php`, 404) | Diperbaiki menjadi `../login.php` |
+| 8 | `fputcsv()` memicu deprecation di PHP 8.4+; CSV tanpa BOM tampil rusak di Excel | Parameter eksplisit + BOM UTF-8 + proteksi CSV injection (cell berawalan `= + - @`) |
+
+### Fitur baru
+
+| # | Fitur | Keterangan |
+|---|-------|-----------|
+| 9 | **Galeri leaflet informasi gizi** di `result.php` | 8 leaflet InStaGi (Gizi Seimbang, Karbohidrat, Protein, Lemak & Kolesterol, Vitamin & Serat, Natrium, Gula, Purin). Thumbnail 600×900 (~1,2 MB total) untuk galeri, gambar asli untuk unduhan. Klik → pratinjau besar (lightbox) dengan navigasi tombol/panah keyboard/geser layar sentuh, plus tombol **Unduh Gambar** |
+
+### Lain-lain
+
+| # | Masalah | Perbaikan |
+|---|---------|-----------|
+| 10 | Folder `includes/` & `logs/` bisa diakses langsung dari browser | Ditambahkan `.htaccess` (deny all) |
+| 11 | Koneksi gagal → pengguna hanya melihat halaman putih | Pesan error ramah (HTML) atau JSON, detail tetap masuk log |
+
+### Leaflet Informasi Gizi
+
+Gambar leaflet disimpan di `assets/leaflet/` dan **tidak** ikut dalam `#printable-area`,
+sehingga tombol "Unduh PDF" pada halaman hasil tidak terpengaruh.
+
+Menambah/mengganti leaflet:
+
+1. Taruh gambar baru di `assets/leaflet/` (nama file = slug, mis. `sumber_zat_besi.jpeg`).
+2. Daftarkan di `includes/leaflet.php` pada `instagi_leaflet_list()`
+   (kunci array = slug, isi `judul`, `subjudul`, `ringkas`, `tag`, `unduh`).
+3. Buat thumbnail: `php includes/leaflet_build_thumbs.php`
+   (butuh ekstensi GD; folder `thumbs/` dibuat otomatis).
+4. Buka `result.php` — kartu muncul otomatis.
+
+Leaflet yang file gambarnya tidak ditemukan akan **dilewati tanpa error**; bila folder
+`thumbs/` belum ada, galeri otomatis memakai gambar ukuran penuh.
+
+---
+
+## 2. Paket Keamanan P0
+
+Semua perbaikan di bawah ini **tidak mengubah satu pun rumus perhitungan**
+(`includes/gizi.php` tidak disentuh; `bmi.php` & `api/update_record.php` tetap
+memakai `instagi_hitung_semua()` apa adanya).
+
+| # | Masalah sebelumnya | Perbaikan |
+|---|--------------------|-----------|
+| S1 | **CSRF tidak ada** pada delete/update/export/form input | `includes/session.php` menyediakan `instagi_csrf_token()` / `instagi_csrf_check()`. Token diverifikasi di `api/delete_record.php`, `api/update_record.php` (**HTTP 403** bila tidak sah), `login.php`, dan form publik `bmi.php`. `admin.php` mengirim token otomatis lewat `$.ajaxSetup` (`X-CSRF-Token`) |
+| S2 | Session fixation | `session_regenerate_id(true)` dipanggil tepat setelah login berhasil |
+| S3 | Cookie session tanpa proteksi | Cookie sesi kini `HttpOnly` + `SameSite=Lax` + `Secure` (otomatis bila HTTPS), `use_strict_mode=1`, nama khusus `INSTAGISESSID`. Diatur terpusat di `includes/session.php` |
+| S4 | Brute force bebas | Pembatas percobaan login: maks. 5 gagal → jeda 15 menit (berbasis sesi). Sisa percobaan ditampilkan ke pengguna |
+| S5 | **Detail error SQL bocor ke klien** (`$stmt->error`) | Detail hanya masuk `error_log` server; klien menerima pesan umum. Berlaku di `bmi.php`, `api/delete_record.php`, `api/update_record.php` |
+| S6 | `login.php` sukses redirect **tanpa `exit`** | Ditambahkan `exit` (dan pesan error kini di-escape) |
+| S7 | Respons API selalu **HTTP 200** | Status benar: **401** (belum login), **403** (CSRF), **405** (metode salah), **500** (gagal query), **503** (DB tak terjangkau) |
+| S8 | Cek login dilakukan **setelah** koneksi DB | Login/CSRF diperiksa lebih dulu → permintaan tak sah tidak menyentuh database |
+| S9 | `logout.php` tidak menghapus cookie sesi | Cookie sesi dihapus di browser + `session_destroy()` |
+| S10 | Skrip pembuatan tabel bisa diakses siapa pun dari web | Tidak ada lagi skrip migrasi terpisah; pembuatan tabel terjadi otomatis di dalam `includes/db.php` saat aplikasi dijalankan, dan `.htaccess` root memblokir file sensitif (`.md`, `.log`, `.sql`, file titik) |
+| S11 | Tanpa security header | `.htaccess` root menambahkan `X-Frame-Options`, `X-Content-Type-Options`, `Referrer-Policy`, `Permissions-Policy`, `Options -Indexes` |
+| S12 | Escaping ganda pada pesan WhatsApp & nama file PDF | Pesan WA memakai nilai **mentah** + `http_build_query()` (`A & B` tidak lagi jadi `A &amp; B`); nama file PDF dibersihkan dari karakter ilegal |
+| S13 | Empty-state tabel `colspan="11"` padahal 14 kolom | Diperbaiki menjadi `colspan="14"` |
+
+---
+
+## 3. Konsistensi Penamaan: IMT (bukan BMI)
+
+Istilah yang dipakai di seluruh **tampilan** adalah **IMT (Indeks Massa Tubuh)** —
+padanan resmi Indonesia untuk *BMI*. Rename sudah dilakukan, tetapi beberapa
+nama teknis **sengaja dipertahankan** agar data & URL yang sudah beredar tidak rusak:
+
+| Bagian | Status | Alasan |
+|--------|--------|--------|
+| Teks, judul, label, kolom CSV, header tabel | **IMT** | Yang dibaca pengguna |
+| Kelas CSS (`imt-bar-container`, `imt-marker`, …) | **IMT** | Internal, aman diganti |
+| Kunci session (`$_SESSION['imt_result']`) | **IMT** | Internal, aman diganti |
+| Nama file unduhan CSV (`data_responden_imt_*.csv`) | **IMT** | Yang dilihat pengguna |
+| Tabel database `bmi_history` | **tetap** | Berisi data produksi; rename = berisiko (perlu memindahkan data) |
+| File `bmi.php`, `css/bmi.css` | **tetap** | Sudah dipakai di URL/bookmark & tautan internal |
+| Rumus & ambang batas di `includes/gizi.php` | **tidak disentuh** | Sesuai permintaan; hanya teks saran yang dirapikan |
+
+> Bila kelak ingin menuntaskan rename, lakukan sebagai langkah terpisah:
+> buat tabel `imt_history` → salin data → tambahkan view/alias → baru ubah kode.
+
+### Inkonsistensi lain yang ikut dirapikan
+
+| # | Temuan | Perbaikan |
+|---|--------|-----------|
+| 1 | `admin.php` menghasilkan class `obesitas`, sedangkan `gizi.php` memakai `obese` — dua nama untuk satu kategori | Disatukan menjadi **`obese`** (CSS juga disesuaikan) |
+| 2 | `css/admin.css` punya selector mati `.status.berat-badan-berlebih` — tak pernah dihasilkan kode | Dihapus |
+| 3 | Header tabel admin "**Gender**", padahal form & CSV memakai "Jenis Kelamin" | Diseragamkan menjadi "Jenis Kelamin" |
+| 4 | Nomor WA ditulis **dua kali** dengan format berbeda (`6281224948388` & `081224948388`) | Satu sumber di `includes/config.php` (`INSTAGI_WA_NUMBER`, bisa dioverride env); versi `08…` diturunkan otomatis |
+| 5 | `index.html`: alt `Instagi Logo` (kapital salah) | `InStaGi Logo` |
+| 6 | `index.html` & `result.php`: kata "anda" di tengah kalimat | "Anda" |
+| 7 | Typo teks saran: *"Berat badan **ada masih dibawah** normal,"*, *"**memalui**"*, koma-splice | Dirapikan (hanya teks `'saran'`; rumus & ambang batas tidak berubah) |
+
+---
+
+## 4. Verifikasi
+
+- `php -l` pada **seluruh** file `.php` → bersih.
+- JS inline (`admin.php`, `result.php`) → `node --check` OK.
+- Uji render `result.php`: kelas `imt-*` terpakai, sisa `bmi-*` = 0; nomor WA
+  `wa.me/6281224948388` + tampilan `081224948388` berasal dari satu sumber;
+  nama `Budi & Santoso` → `&amp;` di HTML tetapi `%26` di URL WA (escaping ganda beres).
+- Semua route merespons sesuai harapan: `200 / 302 / 401 / 403 / 503`.
+- Perbaikan sebelumnya juga diverifikasi end-to-end lewat Apache + mod_php
+  (session, `.htaccess`, redirect, pembuatan tabel otomatis) dengan MySQL lokal:
+  **36/36 pengujian lulus** — alur input → hasil → admin → API (get/update/export/delete),
+  proteksi folder sensitif, dan perbaikan data lama.
+
+---
+
+## 5. Yang Masih Direkomendasikan (belum dikerjakan)
+
+Lihat [`ROADMAP-UPGRADE.md`](ROADMAP-UPGRADE.md) untuk daftar lengkap beserta lokasi
+kodenya. Yang paling penting:
+
+1. **Rotasi password DB & admin** — password lama pernah tersimpan plaintext dan
+   ikut tersalin, jadi harus dianggap bocor. (Wajib, manual, di hosting.)
+2. **Validasi rentang input** (usia/TB/BB) di server — masih longgar.
+3. **Klasifikasi IMT memakai nilai mentah** — saat ini IMT dibulatkan lebih dulu
+   sebelum diklasifikasi (`includes/gizi.php`), sehingga nilai tepat di batas bisa
+   masuk kategori yang kurang tepat. **Belum diubah karena menyentuh rumus.**
+4. SRI pada CDN + naikkan versi jQuery/DataTables.
+5. Index pada `bmi_history` dan server-side pagination di `admin.php`.

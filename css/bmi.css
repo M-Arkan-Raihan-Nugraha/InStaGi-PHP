@@ -1,0 +1,259 @@
+/* InStaGi - Kalkulator Styles */
+:root {
+    --primary-color: #e74c3c;
+    --secondary-color: #F8F9FC;
+    --text-color: #333;
+    --border-color: #E5E6EB;
+    --green: #00b894;
+    --orange: #e67e22;
+    --red: #e74c3c;
+    --blue: #3498db;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    background-color: var(--secondary-color);
+    color: var(--text-color);
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.container {
+    flex: 1;
+    max-width: 800px;
+    margin: 20px auto;
+    background-color: #fff;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+    border: 1px solid var(--border-color);
+}
+
+h1, h2 {
+    text-align: center;
+    color: var(--primary-color);
+    margin-bottom: 25px;
+}
+
+.form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-group label {
+    margin-bottom: 8px;
+    font-weight: 600;
+    font-size: 14px;
+}
+
+.form-group input:not([type="radio"]),
+.form-group .radio-group {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    box-sizing: border-box;
+    transition: border-color 0.3s;
+}
+
+.form-group .radio-group {
+    border: none;
+    padding: 0 12px;
+}
+
+.form-group input:focus {
+    outline: none;
+    border-color: var(--primary-color);
+}
+
+input[readonly] {
+    background-color: #f2f2f2;
+    cursor: not-allowed;
+}
+
+.radio-group {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    height: 100%;
+}
+
+.radio-group label {
+    font-weight: normal;
+    margin: 0;
+}
+
+.radio-group input[type="radio"] {
+    width: auto;
+    margin-right: -10px;
+}
+
+.full-width {
+    grid-column: 1 / -1;
+}
+
+.submit-btn {
+    grid-column: 1 / -1;
+    padding: 15px;
+    border: none;
+    background-color: var(--primary-color);
+    color: white;
+    font-size: 16px;
+    font-weight: 600;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.submit-btn:hover {
+    background-color: #c0392b;
+}
+
+.message {
+    padding: 15px;
+    border-radius: 8px;
+    text-align: center;
+    margin: 20px 0;
+    border: 1px solid;
+}
+
+.error-message {
+    background-color: #ffdddd;
+    color: #d8000c;
+    border-color: #ffbaba;
+}
+
+.success-message {
+    background-color: #ddffdd;
+    color: #004400;
+    border-color: #baffba;
+}
+
+.result-container {
+    margin-top: 30px;
+    padding: 25px;
+    border-radius: 12px;
+    background-color: var(--secondary-color);
+    border: 1px dashed var(--primary-color);
+}
+
+.result-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    text-align: center;
+    margin-top: 20px;
+}
+
+.result-item {
+    background: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+}
+
+.result-item h3 {
+    margin-top: 0;
+    font-size: 16px;
+    color: #6c757d;
+}
+
+.result-item .value {
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--text-color);
+}
+
+.saran-item {
+    grid-column: 1 / -1;
+    text-align: left;
+    background: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+}
+
+.saran-item h3 {
+    text-align: center;
+}
+
+.saran-item p {
+    text-align: center;
+    margin-top: 10px;
+    line-height: 1.6;
+}
+
+.result-item .status {
+    padding: 5px 15px;
+    border-radius: 50px;
+    font-size: 20px;
+    font-weight: 700;
+    color: white;
+    display: inline-block;
+}
+
+.status.underweight {
+    background-color: var(--blue);
+}
+
+.status.normal {
+    background-color: var(--green);
+}
+
+.status.overweight {
+    background-color: var(--orange);
+}
+
+.status.obese {
+    background-color: var(--red);
+}
+
+.disclaimer {
+    text-align: center;
+    font-size: 12px;
+    color: #6c757d;
+    margin-top: 25px;
+}
+
+.main-footer {
+    text-align: center;
+    padding: 15px;
+    background-color: #f0f0f0;
+    color: #555;
+    font-size: 0.9em;
+}
+
+.main-footer p {
+    margin: 0;
+}
+
+footer {
+    text-align: center;
+    margin-top: 40px;
+    font-size: 14px;
+    color: #888;
+}
+
+footer a {
+    color: var(--primary-color);
+    text-decoration: none;
+}
+
+footer a:hover {
+    text-decoration: underline;
+}
+
+@media (max-width: 768px) {
+    .form-grid, .result-grid {
+        grid-template-columns: 1fr;
+    }
+}
