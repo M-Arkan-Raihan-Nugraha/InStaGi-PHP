@@ -7,13 +7,16 @@
  * DBMP disajikan sebagai SATU berkas PDF (gabungan 8 halaman golongan bahan
  * makanan) agar mudah dibaca, diunduh, dan dicetak.
  *
- * CARA MENGGANTI / MEMPERBARUI DBMP
- * ---------------------------------
- * 1. Siapkan gambar tiap halaman di folder  assets/dbmp/  (mis. 0.jpeg … 7.jpeg).
- * 2. Gabungkan menjadi satu PDF bernama  assets/dbmp/dbmp-lengkap.pdf
- *    (lihat skrip pembantu bila tersedia).
- * 3. (Disarankan) Sediakan gambar sampul  assets/dbmp/dbmp-cover.jpg
- *    agar kartu galeri tetap ringan.
+ * CARA MEMPERBARUI DBMP
+ * ---------------------
+ * Cara paling mudah: cukup GANTI berkas PDF di  assets/dbmp/  (nama:
+ * dbmp-lengkap.pdf) dan gambar sampulnya (dbmp-cover.jpg). Tidak perlu
+ * mengubah kode sama sekali.
+ *
+ * Bila ingin menyusun ulang PDF dari gambar per halaman:
+ * 1. Simpan gambar tiap halaman di  assets/dbmp/sumber/  (mis. 0.jpeg … 7.jpeg).
+ * 2. Gabungkan menjadi satu PDF bernama  assets/dbmp/dbmp-lengkap.pdf.
+ * 3. Perbarui gambar sampul  assets/dbmp/dbmp-cover.jpg  (lebar ±600 px).
  *
  * Bila berkas PDF belum ada, bagian DBMP otomatis tidak ditampilkan
  * (tidak menimbulkan error).
