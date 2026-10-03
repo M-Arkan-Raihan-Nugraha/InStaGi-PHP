@@ -8,6 +8,9 @@ require_once 'includes/leaflet.php';
 // Modul DBMP — Daftar Bahan Makanan Penukar (satu berkas PDF)
 require_once 'includes/dbmp.php';
 
+// Modul contoh menu — galeri contoh menu sesuai kebutuhan kalori
+require_once 'includes/menu.php';
+
 // Redirect jika tidak ada data hasil analisis di session
 if (!isset($_SESSION['imt_result'])) {
     header("location: imt.php");
@@ -95,6 +98,30 @@ foreach (instagi_leaflet_list() as $slug => $meta) {
 // Satu berkas PDF gabungan; bagian ini otomatis dilewati bila PDF belum ada.
 $dbmp_pdf   = instagi_dbmp_pdf();
 $dbmp_cover = instagi_dbmp_cover();
+
+// --- Siapkan galeri contoh menu (sesuai estimasi kebutuhan kalori) ---
+// Menu yang paling dekat dengan kebutuhan kalori pengguna ditandai "Sesuai".
+// Gambar yang belum tersedia otomatis dilewati sehingga galeri tetap aman.
+$menus = [];
+$menu_terdekat = instagi_menu_terdekat((float) $kalori_harian_raw);
+foreach (instagi_menu_list() as $kkal => $meta) {
+    $thumb = instagi_menu_thumb_url($kkal);
+    $full  = instagi_menu_web_url($kkal);
+    if ($thumb === null || $full === null) {
+        continue;
+    }
+    $menus[] = [
+        'kkal'     => (int) $kkal,
+        'judul'    => $meta['judul'],
+        'subjudul' => $meta['subjudul'],
+        'ringkas'  => $meta['ringkas'],
+        'tag'      => $meta['tag'],
+        'thumb'    => $thumb,
+        'full'     => $full,
+        'unduh'    => $meta['unduh'],
+        'sesuai'   => ((int) $kkal === (int) $menu_terdekat),
+    ];
+}
 
 ?>
 
@@ -194,7 +221,7 @@ $dbmp_cover = instagi_dbmp_cover();
             </div>
             <h3 class="disclaimer">
                 Bila Anda ingin mendapatkan informasi gizi lebih lanjut dan membutuhkan layanan katering diet silahkan
-                menghubungi nomor WA <?= htmlspecialchars(INSTAGI_WA_LABEL) ?>: <?= htmlspecialchars($whatsapp_display) ?>
+                menghubungi nomor WA <?= htmlspecialchars($whatsapp_display) ?>
             </h3>
         </div>
 
@@ -286,6 +313,94 @@ $dbmp_cover = instagi_dbmp_cover();
                         'download' => $lf['unduh'],
                     ];
                 }, $leaflets),
+                JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_HEX_TAG | JSON_HEX_AMP
+            ) ?>;
+        </script>
+        <?php endif; ?>
+
+        <?php if (!empty($menus)): ?>
+        <!-- ===== CONTOH MENU SESUAI KEBUTUHAN KALORI ===== -->
+        <section class="menu-section" id="menu">
+            <h2 class="menu-heading">Contoh Menu Sesuai Kebutuhan Kalori</h2>
+            <p class="menu-intro">
+                Estimasi kebutuhan kalori Anda <strong><?= $kalori_harian ?> kkal/hari</strong>.
+                Menu yang ditandai <em>Sesuai kebutuhan Anda</em> adalah pilihan yang paling dekat
+                dengan angka tersebut. Klik salah satu menu untuk melihat versi besarnya, lalu
+                unduh bila ingin disimpan atau dibagikan.
+            </p>
+
+            <div class="menu-grid">
+                <?php foreach ($menus as $i => $mn): ?>
+                <article class="menu-card<?= $mn['sesuai'] ? ' menu-card-utama' : '' ?>">
+                    <?php if ($mn['sesuai']): ?>
+                    <span class="menu-badge">Sesuai kebutuhan Anda</span>
+                    <?php endif; ?>
+                    <button type="button"
+                            class="menu-thumb"
+                            data-menu-index="<?= $i ?>"
+                            aria-label="Lihat <?= htmlspecialchars($mn['judul']) ?>">
+                        <img src="<?= htmlspecialchars($mn['thumb']) ?>"
+                             alt="<?= htmlspecialchars($mn['judul']) ?>"
+                             loading="lazy" decoding="async">
+                        <span class="menu-zoom" aria-hidden="true">&#128269; Lihat</span>
+                    </button>
+                    <div class="menu-body">
+                        <span class="menu-tag"><?= htmlspecialchars($mn['tag']) ?></span>
+                        <h3 class="menu-title"><?= htmlspecialchars($mn['judul']) ?></h3>
+                        <p class="menu-sub"><?= htmlspecialchars($mn['subjudul']) ?></p>
+                        <p class="menu-desc"><?= htmlspecialchars($mn['ringkas']) ?></p>
+                        <div class="menu-actions">
+                            <button type="button" class="menu-btn menu-btn-view" data-menu-index="<?= $i ?>">
+                                Lihat
+                            </button>
+                            <a class="menu-btn menu-btn-download"
+                               href="<?= htmlspecialchars($mn['full']) ?>"
+                               download="<?= htmlspecialchars($mn['unduh']) ?>">
+                                Unduh Gambar
+                            </a>
+                        </div>
+                    </div>
+                </article>
+                <?php endforeach; ?>
+            </div>
+        </section>
+
+        <!-- Lightbox pratinjau contoh menu -->
+        <div class="menu-lightbox" id="menuLightbox" role="dialog" aria-modal="true" aria-label="Pratinjau contoh menu" hidden>
+            <div class="menu-lb-backdrop" data-menu-close></div>
+            <div class="menu-lb-panel">
+                <div class="menu-lb-head">
+                    <div class="menu-lb-meta">
+                        <strong id="mlbTitle">&nbsp;</strong>
+                        <span id="mlbSub">&nbsp;</span>
+                    </div>
+                    <div class="menu-lb-tools">
+                        <span class="menu-lb-counter" id="mlbCounter"></span>
+                        <button type="button" class="menu-lb-icon" data-menu-prev aria-label="Menu sebelumnya">&#10094;</button>
+                        <button type="button" class="menu-lb-icon" data-menu-next aria-label="Menu berikutnya">&#10095;</button>
+                        <a class="menu-lb-icon menu-lb-download" id="mlbDownload" href="#" download aria-label="Unduh menu">&#11015;</a>
+                        <button type="button" class="menu-lb-icon menu-lb-close" data-menu-close aria-label="Tutup">&times;</button>
+                    </div>
+                </div>
+                <div class="menu-lb-stage">
+                    <img id="mlbImage" src="" alt="">
+                </div>
+                <div class="menu-lb-foot">
+                    <a class="menu-lb-open" id="mlbOpen" href="#" target="_blank" rel="noopener">Buka di tab baru</a>
+                    <span class="menu-lb-hint">Gunakan tombol &#10094; &#10095; untuk berpindah menu</span>
+                </div>
+            </div>
+        </div>
+        <script>
+            window.INSTAGI_MENUS = <?= json_encode(
+                array_map(static function ($mn) {
+                    return [
+                        'title'    => $mn['judul'],
+                        'sub'      => $mn['subjudul'],
+                        'full'     => $mn['full'],
+                        'download' => $mn['unduh'],
+                    ];
+                }, $menus),
                 JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_HEX_TAG | JSON_HEX_AMP
             ) ?>;
         </script>
@@ -512,6 +627,90 @@ $dbmp_cover = instagi_dbmp_cover();
             });
             box.querySelector('[data-lb-prev]').addEventListener('click', function () { render(current - 1); });
             box.querySelector('[data-lb-next]').addEventListener('click', function () { render(current + 1); });
+
+            // Navigasi keyboard
+            document.addEventListener('keydown', function (e) {
+                if (box.hidden) { return; }
+                if (e.key === 'Escape')     { close(); }
+                if (e.key === 'ArrowLeft')  { render(current - 1); }
+                if (e.key === 'ArrowRight') { render(current + 1); }
+            });
+
+            // Geser (swipe) di perangkat sentuh
+            var startX = null;
+            box.addEventListener('touchstart', function (e) {
+                startX = e.changedTouches[0].clientX;
+            }, { passive: true });
+            box.addEventListener('touchend', function (e) {
+                if (startX === null) { return; }
+                var dx = e.changedTouches[0].clientX - startX;
+                if (Math.abs(dx) > 50) { render(dx < 0 ? current + 1 : current - 1); }
+                startX = null;
+            }, { passive: true });
+        })();
+    </script>
+    <?php endif; ?>
+
+    <?php if (!empty($menus)): ?>
+    <script>
+        /* ===== Galeri & pratinjau contoh menu ===== */
+        (function () {
+            var data = window.INSTAGI_MENUS || [];
+            var box = document.getElementById('menuLightbox');
+            if (!data.length || !box) { return; }
+
+            var elImage   = document.getElementById('mlbImage');
+            var elTitle   = document.getElementById('mlbTitle');
+            var elSub     = document.getElementById('mlbSub');
+            var elCounter = document.getElementById('mlbCounter');
+            var elDown    = document.getElementById('mlbDownload');
+            var elOpen    = document.getElementById('mlbOpen');
+            var current   = 0;
+            var lastFocus = null;
+
+            function render(i) {
+                if (i < 0) { i = data.length - 1; }
+                if (i >= data.length) { i = 0; }
+                current = i;
+
+                var item = data[i];
+                elImage.src = item.full;
+                elImage.alt = item.title;
+                elTitle.textContent = item.title;
+                elSub.textContent = item.sub || '';
+                elCounter.textContent = (i + 1) + ' / ' + data.length;
+                elDown.href = item.full;
+                elDown.setAttribute('download', item.download || '');
+                elOpen.href = item.full;
+            }
+
+            function open(i) {
+                lastFocus = document.activeElement;
+                render(i);
+                box.hidden = false;
+                document.body.classList.add('menu-open');
+                box.querySelector('.menu-lb-close').focus();
+            }
+
+            function close() {
+                box.hidden = true;
+                document.body.classList.remove('menu-open');
+                elImage.src = '';
+                if (lastFocus && typeof lastFocus.focus === 'function') { lastFocus.focus(); }
+            }
+
+            // Buka dari kartu (thumbnail) maupun tombol "Lihat"
+            document.querySelectorAll('.menu-thumb, .menu-btn-view').forEach(function (el) {
+                el.addEventListener('click', function () {
+                    open(parseInt(el.getAttribute('data-menu-index'), 10) || 0);
+                });
+            });
+
+            box.querySelectorAll('[data-menu-close]').forEach(function (el) {
+                el.addEventListener('click', close);
+            });
+            box.querySelector('[data-menu-prev]').addEventListener('click', function () { render(current - 1); });
+            box.querySelector('[data-menu-next]').addEventListener('click', function () { render(current + 1); });
 
             // Navigasi keyboard
             document.addEventListener('keydown', function (e) {

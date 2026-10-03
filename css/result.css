@@ -1351,10 +1351,424 @@ body.dbmp-open {
     }
 }
 
+/* ============================================================
+   CONTOH MENU SESUAI KEBUTUHAN KALORI
+   ============================================================ */
+.menu-section {
+    margin-top: 32px;
+    padding-top: 24px;
+    border-top: 2px dashed var(--border-color);
+}
+
+.menu-heading {
+    margin-bottom: 6px;
+}
+
+.menu-intro {
+    text-align: center;
+    color: #666;
+    font-size: 0.92em;
+    line-height: 1.5;
+    max-width: 640px;
+    margin: 0 auto 18px auto;
+}
+
+.menu-intro strong {
+    color: var(--primary-color);
+}
+
+.menu-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+    gap: 16px;
+    align-items: start;
+}
+
+.menu-card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    background: #fff;
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.04);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.menu-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 22px rgba(0, 0, 0, 0.10);
+}
+
+/* Kartu menu yang paling dekat dengan kebutuhan kalori pengguna */
+.menu-card-utama {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 2px rgba(231, 76, 60, 0.18), 0 2px 10px rgba(0, 0, 0, 0.06);
+}
+
+.menu-badge {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    z-index: 2;
+    font-size: 0.68em;
+    font-weight: 700;
+    letter-spacing: 0.4px;
+    text-transform: uppercase;
+    color: #fff;
+    background: var(--primary-color);
+    border-radius: 999px;
+    padding: 4px 11px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+}
+
+.menu-thumb {
+    position: relative;
+    display: block;
+    width: 100%;
+    padding: 0;
+    border: 0;
+    background: #f2f4f7;
+    cursor: pointer;
+    line-height: 0;
+    overflow: hidden;
+}
+
+.menu-thumb img {
+    display: block;
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+    object-position: top center;
+    transition: transform 0.35s ease;
+}
+
+.menu-thumb:hover img {
+    transform: scale(1.04);
+}
+
+.menu-zoom {
+    position: absolute;
+    inset: auto 0 0 0;
+    padding: 8px 10px;
+    font-size: 0.82em;
+    font-weight: 600;
+    color: #fff;
+    text-align: center;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.72), rgba(0, 0, 0, 0));
+    opacity: 0;
+    transition: opacity 0.25s ease;
+}
+
+.menu-thumb:hover .menu-zoom,
+.menu-thumb:focus-visible .menu-zoom {
+    opacity: 1;
+}
+
+.menu-body {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    padding: 14px 15px 16px 15px;
+}
+
+.menu-tag {
+    align-self: flex-start;
+    font-size: 0.68em;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    color: var(--primary-color);
+    background: #fdecea;
+    border-radius: 999px;
+    padding: 3px 10px;
+    margin-bottom: 8px;
+}
+
+.menu-title {
+    font-size: 1.02em;
+    color: #222;
+    margin: 0 0 4px 0;
+    text-align: left;
+    line-height: 1.3;
+}
+
+.menu-sub {
+    font-size: 0.82em;
+    color: #777;
+    font-style: italic;
+    margin: 0 0 9px 0;
+    line-height: 1.4;
+}
+
+.menu-desc {
+    font-size: 0.84em;
+    color: #555;
+    line-height: 1.45;
+    margin: 0 0 12px 0;
+    flex: 1;
+    /* Batasi maksimal 2 baris agar kartu tidak memanjang ke bawah */
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.menu-actions {
+    display: flex;
+    gap: 8px;
+    margin-top: auto;
+}
+
+.menu-btn {
+    flex: 1;
+    display: inline-block;
+    text-align: center;
+    font-size: 0.84em;
+    font-weight: 600;
+    padding: 9px 10px;
+    border-radius: 8px;
+    border: 1px solid var(--primary-color);
+    text-decoration: none;
+    cursor: pointer;
+    transition: background 0.2s ease, color 0.2s ease;
+    font-family: inherit;
+}
+
+.menu-btn-view {
+    background: #fff;
+    color: var(--primary-color);
+}
+
+.menu-btn-view:hover {
+    background: #fdecea;
+}
+
+.menu-btn-download {
+    background: var(--primary-color);
+    color: #fff;
+}
+
+.menu-btn-download:hover {
+    background: #c0392b;
+}
+
+/* ---------- Lightbox pratinjau contoh menu ---------- */
+body.menu-open {
+    overflow: hidden;
+}
+
+.menu-lightbox {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+}
+
+.menu-lightbox[hidden] {
+    display: none;
+}
+
+.menu-lb-backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(15, 18, 22, 0.88);
+    backdrop-filter: blur(2px);
+}
+
+.menu-lb-panel {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    width: min(940px, 100%);
+    height: min(94vh, 100%);
+    background: #fff;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 18px 50px rgba(0, 0, 0, 0.4);
+}
+
+.menu-lb-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 10px 14px;
+    background: var(--primary-color);
+    color: #fff;
+    flex-shrink: 0;
+}
+
+.menu-lb-meta {
+    min-width: 0;
+}
+
+.menu-lb-meta strong {
+    display: block;
+    font-size: 1em;
+    line-height: 1.3;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.menu-lb-meta span {
+    display: block;
+    font-size: 0.78em;
+    opacity: 0.9;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.menu-lb-tools {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-shrink: 0;
+}
+
+.menu-lb-counter {
+    font-size: 0.8em;
+    opacity: 0.9;
+    margin-right: 4px;
+    white-space: nowrap;
+}
+
+.menu-lb-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 34px;
+    height: 34px;
+    border: 0;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.18);
+    color: #fff;
+    font-size: 1em;
+    line-height: 1;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background 0.2s ease;
+    font-family: inherit;
+}
+
+.menu-lb-icon:hover,
+.menu-lb-icon:focus-visible {
+    background: rgba(255, 255, 255, 0.38);
+}
+
+.menu-lb-close {
+    font-size: 1.45em;
+}
+
+.menu-lb-stage {
+    flex: 1;
+    overflow: auto;
+    background: #eef1f5;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    padding: 14px;
+    -webkit-overflow-scrolling: touch;
+}
+
+.menu-lb-stage img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    border-radius: 6px;
+    box-shadow: 0 3px 14px rgba(0, 0, 0, 0.16);
+    background: #fff;
+}
+
+.menu-lb-foot {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    padding: 9px 14px;
+    border-top: 1px solid var(--border-color);
+    background: #fafbfc;
+    flex-shrink: 0;
+}
+
+.menu-lb-open {
+    font-size: 0.85em;
+    font-weight: 600;
+    color: var(--primary-color);
+    text-decoration: none;
+}
+
+.menu-lb-open:hover {
+    text-decoration: underline;
+}
+
+.menu-lb-hint {
+    font-size: 0.78em;
+    color: #888;
+}
+
+/* ---------- Responsif ---------- */
+@media (max-width: 768px) {
+    .menu-grid {
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+        gap: 12px;
+    }
+
+    .menu-thumb img {
+        height: 140px;
+    }
+
+    .menu-desc {
+        display: none;
+    }
+
+    .menu-actions {
+        flex-direction: column;
+    }
+
+    .menu-lb-head {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .menu-lb-tools {
+        width: 100%;
+        justify-content: flex-end;
+    }
+
+    .menu-lb-hint {
+        display: none;
+    }
+}
+
+@media (max-width: 480px) {
+    .menu-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+    }
+
+    .menu-thumb img {
+        height: 120px;
+    }
+
+    .menu-lb-panel {
+        height: 96vh;
+    }
+}
+
 /* Jangan ikut ke dalam hasil cetak / PDF hasil analisis */
 @media print {
     .leaflet-section,
     .leaflet-lightbox,
+    .menu-section,
+    .menu-lightbox,
     .dbmp-section,
     .dbmp-lightbox {
         display: none !important;

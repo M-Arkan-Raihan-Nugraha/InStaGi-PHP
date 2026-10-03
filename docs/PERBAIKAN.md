@@ -35,13 +35,14 @@ Folder V3 adalah salinan dari **V2 PHP Native** yang disiapkan khusus untuk perb
 | # | Fitur | Keterangan |
 |---|-------|-----------|
 | 9 | **Galeri leaflet informasi gizi** di `result.php` | 8 leaflet InStaGi (Gizi Seimbang, Karbohidrat, Protein, Lemak & Kolesterol, Vitamin & Serat, Natrium, Gula, Purin). Thumbnail 600×900 (~1,2 MB total) untuk galeri, gambar asli untuk unduhan. Klik → pratinjau besar (lightbox) dengan navigasi tombol/panah keyboard/geser layar sentuh, plus tombol **Unduh Gambar** |
+| 10 | **Galeri contoh menu sesuai kebutuhan kalori** di `result.php` | 5 leaflet InStaGi "Contoh Menu" (1.400 · 1.500 · 1.700 · 2.000 · 2.400 kkal). Menu yang **paling dekat** dengan estimasi kebutuhan kalori pengguna ditandai otomatis. Thumbnail 600×900 untuk galeri, gambar asli untuk unduhan; pratinjau lightbox sama seperti galeri leaflet |
 
 ### Lain-lain
 
 | # | Masalah | Perbaikan |
 |---|---------|-----------|
-| 10 | Folder `includes/` & `logs/` bisa diakses langsung dari browser | Ditambahkan `.htaccess` (deny all) |
-| 11 | Koneksi gagal → pengguna hanya melihat halaman putih | Pesan error ramah (HTML) atau JSON, detail tetap masuk log |
+| 11 | Folder `includes/` & `logs/` bisa diakses langsung dari browser | Ditambahkan `.htaccess` (deny all) |
+| 12 | Koneksi gagal → pengguna hanya melihat halaman putih | Pesan error ramah (HTML) atau JSON, detail tetap masuk log |
 
 ### Leaflet Informasi Gizi
 
@@ -58,6 +59,28 @@ Menambah/mengganti leaflet:
 4. Buka `result.php` — kartu muncul otomatis.
 
 Leaflet yang file gambarnya tidak ditemukan akan **dilewati tanpa error**; bila folder
+`thumbs/` belum ada, galeri otomatis memakai gambar ukuran penuh.
+
+### Contoh Menu Sesuai Kebutuhan Kalori
+
+Gambar contoh menu disimpan di `assets/menu/` dan juga **tidak** ikut dalam
+`#printable-area`, sehingga PDF hasil analisis tidak terpengaruh.
+
+Galeri menampilkan 5 pilihan menu (1.400 · 1.500 · 1.700 · 2.000 · 2.400 kkal).
+Menu yang **paling dekat** dengan `kalori_harian` pengguna diberi tanda
+*"Sesuai kebutuhan Anda"*. Bila jarak dua menu sama, dipilih kalori yang lebih kecil.
+
+Menambah/mengganti menu:
+
+1. Taruh gambar baru di `assets/menu/` dengan nama pola `<kkal>kkal.jpeg`
+   (mis. `1800kkal.jpeg` → kunci `1800`).
+2. Daftarkan di `includes/menu.php` pada `instagi_menu_list()`
+   (kunci array = total kkal; isi `judul`, `subjudul`, `ringkas`, `tag`, `unduh`).
+3. Buat thumbnail: `php includes/menu_build_thumbs.php`
+   (butuh ekstensi GD; folder `thumbs/` dibuat otomatis).
+4. Buka `result.php` — kartu muncul otomatis dan penanda menu terdekat ikut menyesuaikan.
+
+Menu yang file gambarnya tidak ditemukan akan **dilewati tanpa error**; bila folder
 `thumbs/` belum ada, galeri otomatis memakai gambar ukuran penuh.
 
 ### DBMP — Daftar Bahan Makanan Penukar
@@ -85,15 +108,17 @@ Urutan blok di halaman hasil:
 1. Kartu ringkasan hasil + saran (di dalam `#printable-area`)
 2. **Tiga tombol aksi:** Hubungi WhatsApp · Simpan ke PDF · Hitung Ulang / Kembali
 3. **Leaflet Informasi Gizi** (galeri, ringkas)
-4. **DBMP — Daftar Bahan Makanan Penukar** (satu berkas PDF)
+4. **Contoh Menu Sesuai Kebutuhan Kalori** (galeri, menu terdekat ditandai)
+5. **DBMP — Daftar Bahan Makanan Penukar** (satu berkas PDF)
 
-Leaflet & DBMP sengaja diletakkan **setelah** tombol aksi dan **di luar** `#printable-area`,
-supaya tombol "Simpan ke PDF" hanya mencetak kartu hasil — bukan leaflet/DBMP.
-Keduanya juga disembunyikan saat mencetak lewat aturan `@media print` di `css/result.css`.
+Leaflet, contoh menu, & DBMP sengaja diletakkan **setelah** tombol aksi dan **di luar**
+`#printable-area`, supaya tombol "Simpan ke PDF" hanya mencetak kartu hasil — bukan
+leaflet/contoh menu/DBMP. Ketiganya juga disembunyikan saat mencetak lewat aturan
+`@media print` di `css/result.css`.
 
-Agar halaman tidak memanjang ke bawah, kartu leaflet memakai thumbnail pendek
-(180 px; 140 px di tablet, 120 px di ponsel) dan deskripsi dibatasi **maksimal 2 baris**
-(`-webkit-line-clamp: 2`).
+Agar halaman tidak memanjang ke bawah, kartu leaflet **dan** kartu contoh menu memakai
+thumbnail pendek (180 px; 140 px di tablet, 120 px di ponsel) dan deskripsi dibatasi
+**maksimal 2 baris** (`-webkit-line-clamp: 2`).
 
 ---
 
