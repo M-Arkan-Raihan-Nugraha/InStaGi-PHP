@@ -58,3 +58,32 @@ if (!defined('INSTAGI_WA_NUMBER')) {
 if (!defined('INSTAGI_WA_LABEL')) {
     define('INSTAGI_WA_LABEL', 'RS Paru dr. H. A. Rotinsulu');
 }
+
+// --- Alamat dasar situs (dinamis) -------------------------------------------
+// Dipakai untuk tautan Open Graph (og:url / og:image) dan tautan absolut lain.
+//
+// Kenapa tidak ditulis tetap "https://instagi.iceiy.com"? Karena domain hosting
+// gratis bisa berganti (mis. ke *.aeonfree.com). Dengan menghitungnya dari
+// permintaan yang masuk, pratinjau tautan WhatsApp/Facebook selalu benar di
+// domain mana pun — tanpa perlu mengedit kode saat pindah hosting.
+//
+// Catatan keamanan: nilai ini HANYA dipakai untuk teks yang di-escape ke HTML,
+// bukan untuk koneksi keluar, jadi aman dari penyalahgunaan Host header.
+if (!function_exists('instagi_base_url')) {
+    function instagi_base_url() {
+        // Deteksi skema. Di belakang proxy/SSL-terminasi (umum di hosting
+        // gratis), HTTPS bisa mati tetapi X-Forwarded-Proto menyatakan https.
+        $proto = (!empty($_SERVER['HTTPS']) && strtolower($_SERVER['HTTPS']) !== 'off')
+            ? 'https'
+            : 'http';
+        if (!empty($_SERVER['HTTP_X_FORWARDED_PROTO'])) {
+            $fwd = strtolower(trim(explode(',', $_SERVER['HTTP_X_FORWARDED_PROTO'])[0]));
+            if ($fwd === 'https' || $fwd === 'http') {
+                $proto = $fwd;
+            }
+        }
+
+        $host = $_SERVER['HTTP_HOST'] ?? 'instagi.iceiy.com';
+        return $proto . '://' . $host;
+    }
+}

@@ -95,8 +95,11 @@ php -r "echo password_hash('PasswordBaruAnda', PASSWORD_DEFAULT);"
 2. cPanel → **File Manager** → masuk ke **`htdocs`** (atau folder root
    subdomain/domain Anda).
 3. Upload `.zip` → klik kanan → **Extract**.
-4. Pastikan `index.html`, `imt.php`, `login.php`, dll. berada **langsung** di dalam
+4. Pastikan `index.php`, `imt.php`, `login.php`, dll. berada **langsung** di dalam
    `htdocs/`, bukan di dalam subfolder ekstra seperti `htdocs/V3 PHP Native/`.
+   > Catatan: halaman utama bernama **`index.php`** (bukan `index.html`). Ini
+   > disengaja — dengan PHP, alamat Open Graph (pratinjau tautan WhatsApp) bisa
+   > dibuat otomatis mengikuti domain yang sedang dipakai.
 
 **Cara B — FTP (disarankan, lebih andal untuk file besar):**
 Gunakan FileZilla dengan detail FTP dari cPanel, upload ke folder root yang sama.
@@ -177,6 +180,7 @@ Tidak ada langkah migrasi manual. Cukup buka:
 | **PDF DBMP tidak muncul / tidak bisa dibuka** | Pastikan `assets/dbmp/dbmp-lengkap.pdf` (dan `dbmp-cover.jpg`) ikut ter-upload dengan izin `644`. |
 | **Upload terputus** | Pakai FTP, bukan File Manager. |
 | **Excel menampilkan CSV berantakan** | Seharusnya tidak — file sudah memuat BOM UTF-8. Pastikan yang diunduh adalah hasil export dari aplikasi (bukan file lama). |
+| **`ERR_SSL_PROTOCOL_ERROR` / "tidak dapat menyediakan sambungan aman" — HANYA di perangkat yang memakai DNS AdGuard** | **Bukan masalah hosting maupun kode.** AdGuard DNS memblokir domain gratis (termasuk `*.iceiy.com`) dan mengarahkannya ke IP "sinkhole" yang tidak melayani TLS, sehingga jabat tangan SSL gagal. Bukti: resolver AdGuard *tanpa filter* (`unfiltered.adguard-dns.com`) mengembalikan IP asli, sedangkan resolver AdGuard biasa mengembalikan IP sinkhole untuk domain yang sama. **Solusi:** (a) laporkan salah-blokir di <https://reports.adguard.com/en/website_report.html>; (b) di perangkat terdampak, matikan proteksi DNS AdGuard atau ganti DNS ke `1.1.1.1` / `8.8.8.8`; (c) pindah ke domain yang tidak diblokir. Lihat catatan lengkap di bagian akhir `.htaccess`. |
 
 ---
 

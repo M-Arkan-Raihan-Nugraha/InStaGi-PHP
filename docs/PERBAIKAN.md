@@ -221,12 +221,18 @@ Sekarang dilindungi dua lapis:
 
 ### 3. Pratinjau tautan (meta description + Open Graph)
 
-`index.html`, `imt.php`, dan `result.php` kini punya `meta description`,
-`theme-color`, dan **Open Graph + Twitter Card** lengkap, sehingga saat tautan
-dibagikan lewat WhatsApp/Facebook/X akan muncul judul, deskripsi, dan gambar
-pratinjau (bukan tautan polos).
+`index.php` (halaman utama), `imt.php`, dan `result.php` kini punya
+`meta description`, `theme-color`, dan **Open Graph + Twitter Card** lengkap,
+sehingga saat tautan dibagikan lewat WhatsApp/Facebook/X akan muncul judul,
+deskripsi, dan gambar pratinjau (bukan tautan polos).
 
 Gambar pratinjau `assets/og-image.jpg` (1200×630) dibuat dari logo InStaGi.
+
+**Alamat Open Graph dibuat DINAMIS** (`og:url`/`og:image` mengikuti domain yang
+sedang dipakai). Karena itu halaman utama dipindah dari `index.html` ke
+`index.php` — kalau domain hosting berganti (mis. dari `*.iceiy.com` ke
+`*.aeonfree.com`), pratinjau tautan tetap benar tanpa mengedit kode. Berkas
+`index.html` lama otomatis dialihkan (301) ke halaman utama.
 
 ### 4. Optimasi logo (berat & tata letak)
 
@@ -242,6 +248,59 @@ Semua tag `<img>` logo (termasuk header PDF) kini punya atribut
 
 - `prefers-reduced-motion` — hormati pengguna yang membatasi animasi.
 - `:focus-visible` — penanda fokus jelas untuk pengguna keyboard.
+
+---
+
+## 4b. `ERR_SSL_PROTOCOL_ERROR` lewat DNS AdGuard — DIAGNOSIS & PERBAIKAN
+
+**Gejala.** Saat `instagi.iceiy.com` dibuka dari perangkat yang memakai **DNS
+AdGuard**, muncul *"Situs ini tidak dapat menyediakan sambungan aman —
+ERR_SSL_PROTOCOL_ERROR"*. Dari jaringan/DNS lain, situs normal.
+
+**Penyebab (sudah diverifikasi, bukan dugaan).** AdGuard DNS **memblokir**
+domain ini dan mengarahkannya ke alamat *sinkhole* `94.140.14.33` yang **tidak
+melayani TLS sama sekali** — karena itu jabat tangan SSL gagal.
+
+Bukti pengukuran:
+
+| Sumber resolusi | `instagi.iceiy.com` → |
+|-----------------|------------------------|
+| Cloudflare DoH (`1.1.1.1`) | `185.27.134.181` (server asli) |
+| Google DoH (`8.8.8.8`) | `185.27.134.181` |
+| AdGuard **unfiltered** (`unfiltered.adguard-dns.com`) | `185.27.134.181` |
+| AdGuard **filtered** (`dns.adguard-dns.com`) | `94.140.14.33` ← sinkhole |
+
+Resolusi yang sama, hanya berbeda lapisan filter → blokir datang dari
+**AdGuard**, bukan dari server, sertifikat, maupun kode aplikasi.
+
+Pengujian langsung memperkuat: koneksi ke IP asli `185.27.134.181` dengan SNI
+benar menghasilkan **HTTP 200 + sertifikat sah** (ZeroSSL, `CN=iceiy.com`,
+mencakup `*.iceiy.com`), sedangkan koneksi ke IP AdGuard gagal TLS
+(`tlsv1 alert internal error`) tanpa sertifikat.
+
+Blokir ini bersifat **intermiten** (terukur ±2–3 dari 10 resolusi) — sesuai
+keluhan "kadang muncul, kadang tidak".
+
+**Perbaikan yang diterapkan di sisi aplikasi (agar tahan pindah domain):**
+
+1. `.htaccess` dibuat **domain-agnostik** — aturan kanonik & redirect tidak lagi
+   menuliskan `instagi.iceiy.com` secara tetap, tetapi memakai `%{HTTP_HOST}`.
+   Untuk iceiy.com hasilnya identik; bila pindah ke `*.aeonfree.com` situs tidak
+   lagi terlempar balik ke iceiy.com.
+2. Halaman utama `index.html` → **`index.php`**, agar `og:url`/`og:image`
+   **dinamis** mengikuti domain aktif (helper `instagi_base_url()` di
+   `includes/config.php`). `index.html` lama dialihkan 301 ke halaman utama.
+3. Catatan lengkap ditulis di akhir `.htaccess` dan di
+   `docs/DEPLOY-AEONFREE.md` §8 (Troubleshooting).
+
+**Catatan penting:** blokir ini berada di **sisi AdGuard**, jadi tidak bisa
+"diperbaiki" dari kode. Tindakan yang benar (di luar kode):
+
+- **Laporkan salah-blokir** ke AdGuard: <https://reports.adguard.com/en/website_report.html>
+- Di perangkat terdampak: matikan proteksi DNS AdGuard, atau ganti DNS ke
+  `1.1.1.1` / `8.8.8.8`.
+- Atau **pindah ke domain yang tidak diblokir** (mis. subdomain `*.aeonfree.com`).
+  Aplikasi sudah disiapkan agar perpindahan ini tidak merusak apa pun.
 
 ---
 

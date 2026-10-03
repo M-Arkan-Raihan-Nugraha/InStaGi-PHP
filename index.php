@@ -1,3 +1,18 @@
+<?php
+/**
+ * Halaman utama InStaGi.
+ *
+ * Berkas ini sengaja bernama index.php (bukan index.html) supaya alamat
+ * kanonik untuk Open Graph (og:url / og:image) dapat dibuat DINAMIS.
+ *
+ * Mengapa penting: domain hosting gratis bisa berganti (mis. dari
+ * *.iceiy.com ke *.aeonfree.com). Dengan URL dinamis, pratinjau tautan
+ * WhatsApp/Facebook tetap benar di domain mana pun tanpa mengedit kode.
+ */
+require_once __DIR__ . '/includes/config.php';
+
+$instagi_base = htmlspecialchars(instagi_base_url(), ENT_QUOTES, 'UTF-8');
+?>
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -10,13 +25,13 @@
     <meta name="description" content="InStaGi membantu Anda cek dan memantau status gizi (IMT) serta kebutuhan kalori harian secara cepat dan gratis. Hasil skrining awal lengkap dengan saran gizi praktis.">
     <meta name="theme-color" content="#e74c3c">
 
-    <!-- Pratinjau tautan (WhatsApp, Facebook, X/Twitter) -->
+    <!-- Pratinjau tautan (WhatsApp, Facebook, X/Twitter). URL dibuat dinamis. -->
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="InStaGi">
     <meta property="og:title" content="InStaGi - Cek dan Pantau Status Gizi Anda">
     <meta property="og:description" content="InStaGi membantu Anda cek dan memantau status gizi (IMT) serta kebutuhan kalori harian secara cepat dan gratis. Hasil skrining awal lengkap dengan saran gizi praktis.">
-    <meta property="og:url" content="https://instagi.iceiy.com/">
-    <meta property="og:image" content="https://instagi.iceiy.com/assets/og-image.jpg">
+    <meta property="og:url" content="<?= $instagi_base ?>/">
+    <meta property="og:image" content="<?= $instagi_base ?>/assets/og-image.jpg">
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
     <meta property="og:image:alt" content="Logo InStaGi">
@@ -24,7 +39,7 @@
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="InStaGi - Cek dan Pantau Status Gizi Anda">
     <meta name="twitter:description" content="InStaGi membantu Anda cek dan memantau status gizi (IMT) serta kebutuhan kalori harian secara cepat dan gratis. Hasil skrining awal lengkap dengan saran gizi praktis.">
-    <meta name="twitter:image" content="https://instagi.iceiy.com/assets/og-image.jpg">
+    <meta name="twitter:image" content="<?= $instagi_base ?>/assets/og-image.jpg">
 </head>
 <body>
     <div class="container">

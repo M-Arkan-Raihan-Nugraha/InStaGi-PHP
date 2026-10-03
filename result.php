@@ -2,6 +2,9 @@
 // Session aman (HttpOnly/SameSite/Secure + strict mode) — sekaligus memuat config.php.
 require_once 'includes/session.php';
 
+// Alamat dasar situs untuk Open Graph (dinamis, ikut domain aktif).
+$instagi_base = htmlspecialchars(instagi_base_url(), ENT_QUOTES, 'UTF-8');
+
 // Modul leaflet informasi gizi (data galeri + nama file unduhan)
 require_once 'includes/leaflet.php';
 
@@ -143,8 +146,8 @@ foreach (instagi_menu_list() as $kkal => $meta) {
     <meta property="og:site_name" content="InStaGi">
     <meta property="og:title" content="InStaGi - Hasil Analisis IMT">
     <meta property="og:description" content="Hasil analisis IMT dan status gizi Anda, lengkap dengan berat badan ideal, estimasi kebutuhan kalori harian, serta saran gizi praktis dari InStaGi.">
-    <meta property="og:url" content="https://instagi.iceiy.com/result.php">
-    <meta property="og:image" content="https://instagi.iceiy.com/assets/og-image.jpg">
+    <meta property="og:url" content="<?= $instagi_base ?>/result.php">
+    <meta property="og:image" content="<?= $instagi_base ?>/assets/og-image.jpg">
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
     <meta property="og:image:alt" content="Logo InStaGi">
@@ -152,7 +155,7 @@ foreach (instagi_menu_list() as $kkal => $meta) {
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="InStaGi - Hasil Analisis IMT">
     <meta name="twitter:description" content="Hasil analisis IMT dan status gizi Anda, lengkap dengan berat badan ideal, estimasi kebutuhan kalori harian, serta saran gizi praktis dari InStaGi.">
-    <meta name="twitter:image" content="https://instagi.iceiy.com/assets/og-image.jpg">
+    <meta name="twitter:image" content="<?= $instagi_base ?>/assets/og-image.jpg">
 </head>
 
 <body>

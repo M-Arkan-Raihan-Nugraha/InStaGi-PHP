@@ -5,13 +5,18 @@
 # Di Nginx, aturan setara harus ditulis di konfigurasi server (bukan .htaccess).
 # =============================================================================
 
-# --- 0. Redirect kanonik: semua ke https://instagi.iceiy.com/ ---------------
-# Tujuan: apa pun yang masuk — http://, domain tanpa https, atau host lain
-# (mis. www.) — berakhir di SATU alamat resmi: https://instagi.iceiy.com/
+# --- 0. Redirect kanonik: paksa HTTPS + buang awalan www. -------------------
+# Tujuan: apa pun yang masuk — http://, atau host berawalan www. — berakhir di
+# SATU alamat resmi versi HTTPS-nya, TANPA menyebut nama domain secara tetap.
+#
+# PENTING: aturan di bawah sengaja TIDAK menuliskan "instagi.iceiy.com".
+# Dengan begitu situs tetap benar bila domain hosting berganti (mis. pindah ke
+# *.aeonfree.com) tanpa perlu mengedit berkas ini. Untuk iceiy.com hasilnya
+# sama persis seperti sebelumnya.
+#
 # Ditaruh paling atas supaya berlaku sebelum aturan lain.
 # Jalur/query dipertahankan lewat %{REQUEST_URI}, jadi
-#   http://instagi.iceiy.com/result.php?id=1  ->  https://instagi.iceiy.com/result.php?id=1
-# (Khusus bmi.php ada aturan tambahan di bagian 0b di bawah.)
+#   http://instagi.iceiy.com/result.php?id=1 -> https://instagi.iceiy.com/result.php?id=1
 <IfModule mod_rewrite.c>
     RewriteEngine On
     # RewriteBase wajib: tanpa ini, substitusi relatif (mis. imt.php) bisa
@@ -19,16 +24,18 @@
     # Situs ini berada di akar domain, jadi basis-nya "/".
     RewriteBase /
 
-    # (a) Host bukan domain resmi (mis. www.instagi.iceiy.com) -> alihkan ke domain resmi.
-    RewriteCond %{HTTP_HOST} !^instagi\.iceiy\.com(:[0-9]+)?$ [NC]
-    RewriteRule ^ https://instagi.iceiy.com%{REQUEST_URI} [R=301,L]
+    # (a) Host berawalan www. -> buang awalan www. (berlaku untuk domain apa pun).
+    #     %1 = sisa host setelah "www." ; contoh:
+    #       http://www.instagi.iceiy.com/x -> https://instagi.iceiy.com/x
+    RewriteCond %{HTTP_HOST} ^www\.(.+)$ [NC]
+    RewriteRule ^ https://%1%{REQUEST_URI} [R=301,L]
 
-    # (b) Sudah domain resmi tapi belum HTTPS -> paksa HTTPS.
+    # (b) Belum HTTPS -> paksa HTTPS pada host yang SAMA (domain apa pun).
     #     Dua kondisi: HTTPS mati DAN proxy tidak menyatakan https
     #     (agar tidak terjadi redirect berulang di belakang proxy/SSL terminasi).
     RewriteCond %{HTTPS} !=on
     RewriteCond %{HTTP:X-Forwarded-Proto} !=https
-    RewriteRule ^ https://instagi.iceiy.com%{REQUEST_URI} [R=301,L]
+    RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [R=301,L]
 </IfModule>
 
 # --- 0b. Alihkan nama berkas lama bmi.php -> imt.php -------------------------
@@ -38,10 +45,25 @@
 <IfModule mod_rewrite.c>
     RewriteEngine On
     RewriteBase /
-    # Tujuan ditulis ABSOLUT (https) supaya langsung sekali alih, tidak lewat
-    # http dulu. Path & query tetap dipertahankan.
-    RewriteRule ^bmi\.php$ https://instagi.iceiy.com/imt.php [R=301,L,QSA]
-    RewriteRule ^css/bmi\.css$ https://instagi.iceiy.com/css/imt.css [R=301,L]
+    # Tujuan memakai %{HTTP_HOST} (domain yang sedang aktif) supaya alihan tetap
+    # benar walau domain hosting berganti. Path & query tetap dipertahankan.
+    RewriteRule ^bmi\.php$ https://%{HTTP_HOST}/imt.php [R=301,L,QSA]
+    RewriteRule ^css/bmi\.css$ https://%{HTTP_HOST}/css/imt.css [R=301,L]
+</IfModule>
+
+# --- 0c. Halaman utama: index.php (bukan index.html) -------------------------
+# index.php diperlukan agar alamat Open Graph (og:url/og:image) bisa dibuat
+# DINAMIS, sehingga pratinjau tautan tetap benar bila domain hosting berganti
+# (mis. dari *.iceiy.com ke *.aeonfree.com) tanpa mengedit kode.
+# Bila keduanya ada, utamakan index.php agar tidak ada dua halaman utama.
+DirectoryIndex index.php
+
+# index.html lama dialihkan permanen ke halaman utama supaya tidak ada
+# konten kembar (dua-duanya bisa diakses = buruk untuk SEO & tautan lama).
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteBase /
+    RewriteRule ^index\.html$ https://%{HTTP_HOST}/ [R=301,L]
 </IfModule>
 
 # --- 1. Blokir file sensitif -------------------------------------------------
@@ -105,3 +127,26 @@ Options -Indexes
         Header set Content-Disposition "inline"
     </FilesMatch>
 </IfModule>
+
+# =============================================================================
+# CATATAN PENTING — blokir DNS AdGuard (ERR_SSL_PROTOCOL_ERROR)
+# -----------------------------------------------------------------------------
+# Gejala: situs tampak 'tidak dapat menyediakan sambungan aman'
+#         (ERR_SSL_PROTOCOL_ERROR) HANYA saat perangkat memakai DNS AdGuard.
+#
+# Penyebab (sudah diverifikasi): AdGuard DNS memblokir domain ini dan
+# mengarahkannya ke alamat 'sinkhole' (94.140.14.33) yang TIDAK melayani TLS.
+# Karena itu jabat tangan SSL gagal. Ini BUKAN masalah kode, server, maupun
+# sertifikat — sertifikat situs ini sah (ZeroSSL, mencakup *.iceiy.com).
+#
+# Bukti: resolver AdGuard tanpa filter (unfiltered.adguard-dns.com)
+# mengembalikan IP asli, sedangkan resolver AdGuard biasa mengembalikan
+# IP sinkhole untuk domain yang sama.
+#
+# SOLUSI (di luar kode, pilih salah satu):
+#   a) Minta AdGuard membuka blokir (laporkan salah-blokir):
+#      https://reports.adguard.com/en/website_report.html
+#   b) Di perangkat terdampak, matikan 'DNS protection'/filter AdGuard,
+#      ATAU ganti DNS ke 1.1.1.1 / 8.8.8.8.
+#   c) Pindah ke domain yang tidak diblokir (mis. subdomain *.aeonfree.com).
+# =============================================================================

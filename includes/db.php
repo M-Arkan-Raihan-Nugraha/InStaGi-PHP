@@ -100,7 +100,7 @@ if (!function_exists('instagi_db_fail')) {
                . '<h1 style="color:#e74c3c;">Layanan sedang tidak tersedia</h1>'
                . '<p>Aplikasi tidak dapat terhubung ke database saat ini. '
                . 'Silakan coba beberapa saat lagi.</p>'
-               . '<p><a href="index.html" style="color:#e74c3c;">Kembali ke halaman utama</a></p>'
+               . '<p><a href="index.php" style="color:#e74c3c;">Kembali ke halaman utama</a></p>'
                . '</body></html>';
         }
         exit;

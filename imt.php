@@ -6,6 +6,9 @@ require_once 'includes/session.php';
 // Sisipkan file koneksi untuk menghubungkan ke database.
 require_once 'includes/db.php';
 
+// Alamat dasar situs untuk Open Graph (dinamis, ikut domain aktif).
+$instagi_base = htmlspecialchars(instagi_base_url(), ENT_QUOTES, 'UTF-8');
+
 // Modul perhitungan gizi (satu sumber kebenaran untuk IMT/kalori/saran).
 require_once 'includes/gizi.php';
 
@@ -147,8 +150,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <meta property="og:site_name" content="InStaGi">
     <meta property="og:title" content="InStaGi - Input Data Diri">
     <meta property="og:description" content="Masukkan nama, usia, jenis kelamin, berat dan tinggi badan untuk menghitung IMT (Indeks Massa Tubuh), status gizi, serta estimasi kebutuhan kalori harian Anda.">
-    <meta property="og:url" content="https://instagi.iceiy.com/imt.php">
-    <meta property="og:image" content="https://instagi.iceiy.com/assets/og-image.jpg">
+    <meta property="og:url" content="<?= $instagi_base ?>/imt.php">
+    <meta property="og:image" content="<?= $instagi_base ?>/assets/og-image.jpg">
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
     <meta property="og:image:alt" content="Logo InStaGi">
@@ -156,7 +159,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="InStaGi - Input Data Diri">
     <meta name="twitter:description" content="Masukkan nama, usia, jenis kelamin, berat dan tinggi badan untuk menghitung IMT (Indeks Massa Tubuh), status gizi, serta estimasi kebutuhan kalori harian Anda.">
-    <meta name="twitter:image" content="https://instagi.iceiy.com/assets/og-image.jpg">
+    <meta name="twitter:image" content="<?= $instagi_base ?>/assets/og-image.jpg">
 </head>
 <body>
 

@@ -258,9 +258,11 @@ atau tambahkan ke blok `CREATE TABLE` di `includes/db.php`.
   kasus batas: 18.49/18.5, 24.9/25, 27/27.01, dan verifikasi konsistensi
   `imt.php` ↔ `api/update_record.php`.
 
-### 24. Konsistensi UI
-- `index.html` (statis) terpisah dari halaman PHP lain → pertimbangkan partial
-  header/footer bersama agar perubahan tampilan konsisten.
+### 24. Konsistensi UI — **SUDAH DIKERJAKAN (sebagian)**
+- Halaman utama kini `index.php` (dulu `index.html` statis). Sudah ada helper
+  `instagi_base_url()` di `includes/config.php` untuk alamat absolut dinamis
+  (Open Graph, tautan WhatsApp). Belum ada partial header/footer bersama —
+  masih duplikat antar halaman PHP.
 
 ---
 
