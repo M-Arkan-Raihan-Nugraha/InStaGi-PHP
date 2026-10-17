@@ -1,21 +1,7 @@
 /* InStaGi - Login Page Styles */
-:root {
-    --primary-color: #e74c3c;
-    --secondary-color: #ADD8E6; /* lightblue (background halaman) */
-    --text-color: #333;
-    --border-color: #E5E6EB;
-}
+/* Variabel warna (:root) dan body dipusatkan di css/base.css. */
 
-body {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-    background-color: var(--secondary-color);
-    color: var(--text-color);
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
-    margin: 0;
-    padding: 0;
-}
+/* body diatur di css/base.css. */
 
 .main-content {
     flex: 1;
@@ -89,12 +75,9 @@ h1 {
     font-size: 14px;
 }
 
+/* Sisa gaya footer ada di css/base.css; di halaman login footer didorong ke
+   bawah supaya formulir tetap berdiri di tengah. */
 .main-footer {
-    text-align: center;
-    padding: 15px;
-    background-color: #f0f0f0;
-    color: #555;
-    font-size: 0.9em;
     margin-top: auto;
 }
 

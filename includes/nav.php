@@ -21,10 +21,13 @@
 if (!function_exists('instagi_nav_items')) {
     function instagi_nav_items()
     {
+        // Alamat RAPI (tanpa akhiran .php) — diatur oleh aturan rewrite di
+        // .htaccess root. Alamat lama (imt.php, informasi.php, dst.) tetap
+        // berfungsi, jadi tautan lama/bookmark tidak mati.
         return [
-            'hitung'     => ['label' => 'Cek Status Gizi',        'href' => 'imt.php',        'icon' => '📊'],
-            'informasi'  => ['label' => 'Informasi Gizi',         'href' => 'informasi.php',  'icon' => '📄'],
-            'monitoring' => ['label' => 'Monitoring Status Gizi', 'href' => 'monitoring.php', 'icon' => '📈'],
+            'hitung'     => ['label' => 'Cek Status Gizi',        'href' => '/imt',        'icon' => '📊'],
+            'informasi'  => ['label' => 'Informasi Gizi',         'href' => '/informasi',  'icon' => '📄'],
+            'monitoring' => ['label' => 'Monitoring Status Gizi', 'href' => '/monitoring', 'icon' => '📈'],
         ];
     }
 }
@@ -35,7 +38,7 @@ $nav_admin  = (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] === true);
 ?>
 <header class="site-nav">
     <div class="site-nav-inner">
-        <a class="site-nav-brand" href="index.php">
+        <a class="site-nav-brand" href="/">
             <img src="assets/logo.png" alt="Logo InStaGi" width="512" height="466">
             <span>InStaGi</span>
         </a>
@@ -47,7 +50,7 @@ $nav_admin  = (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] === true);
                 </a>
             <?php endforeach; ?>
             <?php if ($nav_admin): ?>
-                <a class="site-nav-link<?= $nav_active === 'admin' ? ' is-active' : '' ?>" href="admin.php">
+                <a class="site-nav-link<?= $nav_active === 'admin' ? ' is-active' : '' ?>" href="/admin">
                     <span class="site-nav-ico" aria-hidden="true">🛠️</span>Admin
                 </a>
             <?php endif; ?>

@@ -4,9 +4,9 @@ require_once 'includes/session.php';
 
 // --- LOGIC UNTUK LOGIN ---
 
-// Jika user sudah login, arahkan ke halaman admin
+// Jika user sudah login, arahkan ke halaman admin (alamat rapi, tanpa .php).
 if (isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true) {
-    header("location: admin.php");
+    header("location: /admin");
     exit;
 }
 
@@ -65,7 +65,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $_SESSION["username"] = $username;
 
                 // Arahkan ke halaman admin (WAJIB exit agar eksekusi berhenti).
-                header("location: admin.php");
+                header("location: /admin");
                 exit;
             } else {
                 // Catat percobaan gagal.
@@ -90,25 +90,21 @@ $csrf_token = instagi_csrf_token();
 $nav_active = 'admin';
 ?>
 
-<!DOCTYPE html>
-<html lang="id">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>InStaGi - Login Admin</title>
-    <link rel="shortcut icon" href="assets/favicon.ico" type="image/x-icon">
-    <link rel="stylesheet" href="css/login.css">
-    <link rel="stylesheet" href="css/nav.css">
-</head>
-<body>
-    <?php require __DIR__ . '/includes/nav.php'; ?>
+<?php
+// Judul, deskripsi, alamat rapi (tanpa .php), dan daftar CSS halaman ini.
+$judul     = 'InStaGi - Login Admin';
+$deskripsi = 'Halaman masuk admin InStaGi untuk mengelola data responden.';
+$og_path   = '/login';
+$css       = ['login.css', 'nav.css'];
+require __DIR__ . '/includes/layout_head.php';
+?>
     <main class="main-content">
         <div class="login-container">
             <h1>Login Admin</h1>
             <?php if (!empty($error_message)): ?>
                 <div class="error-message"><?= htmlspecialchars($error_message, ENT_QUOTES, 'UTF-8'); ?></div>
             <?php endif; ?>
-            <form action="login.php" method="post">
+            <form action="/login" method="post">
                 <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($csrf_token, ENT_QUOTES, 'UTF-8'); ?>">
                 <div class="form-group">
                     <label for="username">Username</label>
@@ -122,8 +118,4 @@ $nav_active = 'admin';
             </form>
         </div>
     </main>
-    <footer class="main-footer">
-        <p>Copyright © 2026 InStaGi | Created With ❤️</p>
-    </footer>
-</body>
-</html>
+<?php require __DIR__ . '/includes/layout_footer.php'; ?>

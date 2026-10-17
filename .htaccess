@@ -66,6 +66,41 @@ DirectoryIndex index.php
     RewriteRule ^index\.html$ https://%{HTTP_HOST}/ [R=301,L]
 </IfModule>
 
+# --- 0d. Alamat RAPI: hilangkan akhiran .php ---------------------------------
+# /imt  ->  imt.php   (rewrite INTERNAL — alamat di peramban tetap "/imt")
+#
+# Tujuan: alamat halaman tidak lagi memperlihatkan ".php", TANPA mengubah nama
+# berkas dan TANPA memindahkan kode ke router/kerangka kerja.
+#
+# Aman karena:
+#  - hanya cocok untuk SATU segmen huruf/angka/-/_  → /api/xxx.php, /css/...,
+#    /assets/..., /docs/... tidak pernah tersentuh;
+#  - RewriteCond %{REQUEST_FILENAME} !-f/!-d memastikan berkas & folder yang
+#    benar-benar ada selalu dilayani apa adanya (CSS, gambar, PDF, api/);
+#  - alamat LAMA (imt.php, result.php, ...) TETAP berfungsi 200 seperti biasa,
+#    jadi tautan lama, bookmark, pratinjau tautan, dan formulir POST ke berkas
+#    .php lama tidak rusak (nikmat untuk masa transisi);
+#  - /imt/ (berslash) dialihkan 301 ke /imt supaya jalur aset relatif aman.
+#
+# Catatan: bila kelak ingin alamat .php DIALIHKAN (301) ke versi rapi — supaya
+# mesin pencari hanya mengenal satu alamat — cukup tambahkan:
+#     RewriteRule ^([a-zA-Z0-9_-]+)\.php$ /$1 [R=301,L]
+# di dalam blok ini (jangan lupa: formulir POST ke .php akan ikut teralihkan).
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteBase /
+
+    # /imt/  ->  /imt  (301 sekali; bukan folder, jadi tidak menabrak /css/ dsb.)
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteRule ^([a-zA-Z0-9_-]+)/$ /$1 [R=301,L]
+
+    # /imt  ->  imt.php  (internal; hanya bila berkas tujuannya memang ada)
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteCond %{DOCUMENT_ROOT}/$1.php -f
+    RewriteRule ^([a-zA-Z0-9_-]+)$ $1.php [L]
+</IfModule>
+
 # --- 1. Blokir file sensitif -------------------------------------------------
 # File konfigurasi/kredensial & dokumentasi jangan pernah disajikan sebagai teks.
 <FilesMatch "\.(md|log|sql|ini|sh|bak|old|env|json|lock)$">

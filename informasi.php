@@ -16,7 +16,6 @@ require_once 'includes/menu.php';
 require_once 'includes/dbmp.php';
 
 $nav_active = 'informasi';
-$instagi_base = htmlspecialchars(instagi_base_url(), ENT_QUOTES, 'UTF-8');
 
 // --- Kumpulkan leaflet yang gambarnya tersedia ---
 $leaflets = [];
@@ -60,21 +59,14 @@ foreach (instagi_menu_list() as $kkal => $meta) {
 $dbmp_pdf   = instagi_dbmp_pdf();
 $dbmp_cover = instagi_dbmp_cover();
 ?>
-<!DOCTYPE html>
-<html lang="id">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>InStaGi - Informasi Gizi</title>
-    <link rel="shortcut icon" href="assets/favicon.ico" type="image/x-icon">
-    <link rel="stylesheet" href="css/index.css">
-    <link rel="stylesheet" href="css/nav.css">
-    <link rel="stylesheet" href="css/pages.css">
-    <meta name="description" content="Kumpulan leaflet informasi gizi, contoh menu sesuai kebutuhan kalori, dan Daftar Bahan Makanan Penukar (DBMP) dari InStaGi.">
-    <meta name="theme-color" content="#e74c3c">
-</head>
-<body>
-    <?php require __DIR__ . '/includes/nav.php'; ?>
+<?php
+// Judul, deskripsi, alamat rapi (tanpa .php), dan daftar CSS halaman ini.
+$judul     = 'InStaGi - Informasi Gizi';
+$deskripsi = 'Kumpulan leaflet informasi gizi, contoh menu sesuai kebutuhan kalori, dan Daftar Bahan Makanan Penukar (DBMP) dari InStaGi.';
+$og_path   = '/informasi';
+$css       = ['index.css', 'nav.css', 'pages.css'];
+require __DIR__ . '/includes/layout_head.php';
+?>
 
     <div class="container">
         <h1 style="text-align:left;color:var(--primary-color);">Informasi Gizi</h1>
@@ -174,8 +166,4 @@ $dbmp_cover = instagi_dbmp_cover();
         </section>
     </div>
 
-    <footer class="main-footer">
-        <p>Copyright © 2026 InStaGi | Created With ❤️</p>
-    </footer>
-</body>
-</html>
+<?php require __DIR__ . '/includes/layout_footer.php'; ?>

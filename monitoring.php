@@ -20,7 +20,6 @@ require_once 'includes/responden.php';
 require_once 'includes/validasi.php';
 
 $nav_active = 'monitoring';
-$instagi_base = htmlspecialchars(instagi_base_url(), ENT_QUOTES, 'UTF-8');
 
 $login_error     = '';
 $pesan_sukses    = '';
@@ -46,7 +45,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($action === 'logout') {
             instagi_responden_logout();
             $koneksi->close();
-            header('location: monitoring.php');
+            header('location: /monitoring');
             exit;
         }
 
@@ -75,7 +74,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     // Berhasil: bersihkan penghitung & lanjutkan ke halaman riwayat.
                     $_SESSION['responden_attempts'] = ['count' => 0, 'last' => 0];
                     $koneksi->close();
-                    header('location: monitoring.php');
+                    header('location: /monitoring');
                     exit;
                 }
 
@@ -243,22 +242,14 @@ $grafik_ambang = [
 $riwayat_tampil = array_reverse($riwayat); // terbaru di atas
 $csrf_token = instagi_csrf_token();
 ?>
-<!DOCTYPE html>
-<html lang="id">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>InStaGi - Monitoring Status Gizi</title>
-    <link rel="shortcut icon" href="assets/favicon.ico" type="image/x-icon">
-    <link rel="stylesheet" href="css/imt.css">
-    <link rel="stylesheet" href="css/result.css">
-    <link rel="stylesheet" href="css/nav.css">
-    <link rel="stylesheet" href="css/pages.css">
-    <meta name="description" content="Lihat riwayat dan grafik perkembangan status gizi (IMT) milik akun Anda dari waktu ke waktu melalui InStaGi.">
-    <meta name="theme-color" content="#e74c3c">
-</head>
-<body>
-    <?php require __DIR__ . '/includes/nav.php'; ?>
+<?php
+// Judul, deskripsi, alamat rapi (tanpa .php), dan daftar CSS halaman ini.
+$judul     = 'InStaGi - Monitoring Status Gizi';
+$deskripsi = 'Lihat riwayat dan grafik perkembangan status gizi (IMT) milik akun Anda dari waktu ke waktu melalui InStaGi.';
+$og_path   = '/monitoring';
+$css       = ['imt.css', 'result.css', 'nav.css', 'pages.css'];
+require __DIR__ . '/includes/layout_head.php';
+?>
 
     <div class="container">
         <h1>Monitoring Status Gizi</h1>
@@ -275,7 +266,7 @@ $csrf_token = instagi_csrf_token();
                     <div class="error-message" style="margin:12px 0;"><?= htmlspecialchars($login_error, ENT_QUOTES, 'UTF-8') ?></div>
                 <?php endif; ?>
 
-                <form method="post" action="monitoring.php" class="account-form-3">
+                <form method="post" action="/monitoring" class="account-form-3">
                     <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($csrf_token, ENT_QUOTES, 'UTF-8') ?>">
                     <input type="hidden" name="action" value="login">
                     <div class="form-group">
@@ -299,7 +290,7 @@ $csrf_token = instagi_csrf_token();
 
                 <p class="catatan-akun">
                     Belum punya akun? Akun dibuat otomatis saat Anda
-                    <a href="imt.php">cek status gizi</a>.
+                    <a href="/imt">cek status gizi</a>.
                     Lupa password? Hubungi kami lewat
                     <a href="<?= htmlspecialchars(instagi_wa_url('Halo InStaGi, saya lupa password akun Monitoring saya. Nama saya: ', INSTAGI_WA_KONSULTASI), ENT_QUOTES, 'UTF-8') ?>"
                        target="_blank" rel="noopener">WhatsApp</a>.
@@ -319,8 +310,8 @@ $csrf_token = instagi_csrf_token();
                    <?php endif; ?>
                 </p>
                 <div class="account-actions">
-                    <a class="btn-primary" href="imt.php">+ Ukur Status Gizi Baru</a>
-                    <form method="post" action="monitoring.php" style="display:inline;">
+                    <a class="btn-primary" href="/imt">+ Ukur Status Gizi Baru</a>
+                    <form method="post" action="/monitoring" style="display:inline;">
                         <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($csrf_token, ENT_QUOTES, 'UTF-8') ?>">
                         <input type="hidden" name="action" value="logout">
                         <button type="submit" class="btn-secondary">Keluar</button>
@@ -425,7 +416,7 @@ $csrf_token = instagi_csrf_token();
             <?php else: ?>
                 <div class="mon-empty">
                     <p>Belum ada riwayat pengukuran untuk akun ini.</p>
-                    <p><a class="btn-primary" href="imt.php">Mulai Cek Status Gizi</a></p>
+                    <p><a class="btn-primary" href="/imt">Mulai Cek Status Gizi</a></p>
                 </div>
             <?php endif; ?>
 
@@ -445,7 +436,7 @@ $csrf_token = instagi_csrf_token();
                     <div class="error-message" style="margin:12px 0;"><?= htmlspecialchars($pesan_keamanan, ENT_QUOTES, 'UTF-8') ?></div>
                 <?php endif; ?>
 
-                <form method="post" action="monitoring.php" class="account-form-3">
+                <form method="post" action="/monitoring" class="account-form-3">
                     <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($csrf_token, ENT_QUOTES, 'UTF-8') ?>">
                     <input type="hidden" name="action" value="password">
                     <?php if ($akun_punya_password): ?>
@@ -472,10 +463,6 @@ $csrf_token = instagi_csrf_token();
             </div>
         <?php endif; ?>
     </div>
-
-    <footer class="main-footer">
-        <p>Copyright © 2026 InStaGi | Created With ❤️</p>
-    </footer>
 
     <?php if ($responden && $stat['jumlah'] > 0): ?>
     <!-- Grafik memakai Chart.js dari CDN; bila gagal dimuat, halaman tetap utuh
@@ -567,5 +554,4 @@ $csrf_token = instagi_csrf_token();
         })();
     </script>
     <?php endif; ?>
-</body>
-</html>
+<?php require __DIR__ . '/includes/layout_footer.php'; ?>

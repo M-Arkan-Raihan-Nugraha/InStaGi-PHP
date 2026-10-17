@@ -4,7 +4,7 @@ require_once 'includes/session.php';
 
 // Cek apakah user sudah login
 if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true) {
-    header("location: login.php");
+    header("location: /login");
     exit;
 }
 
@@ -28,31 +28,26 @@ if ($riwayat_result === false) {
 
 ?>
 
-<!DOCTYPE html>
-<html lang="id">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="csrf-token" content="<?= htmlspecialchars(instagi_csrf_token(), ENT_QUOTES, 'UTF-8') ?>">
-    <title>InStaGi - Data Responden</title>
-    <link rel="shortcut icon" href="assets/favicon.ico" type="image/x-icon">
-    <link rel="stylesheet" href="css/admin.css">
-    <link rel="stylesheet" href="css/nav.css">
-    <!-- DataTables CSS -->
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/responsive/2.2.9/css/responsive.dataTables.min.css">
-</head>
-<body>
-
-    <?php require __DIR__ . '/includes/nav.php'; ?>
-
+<?php
+// Judul, deskripsi, alamat rapi (tanpa .php), dan daftar CSS halaman ini.
+$judul     = 'InStaGi - Data Responden';
+$deskripsi = 'Tabel data responden InStaGi untuk admin: cari, ubah, hapus, dan ekspor CSV.';
+$og_path   = '/admin';
+$css       = ['admin.css', 'nav.css'];
+// Token CSRF dibaca oleh skrip AJAX di halaman ini.
+$meta_ekstra = '<meta name="csrf-token" content="' . htmlspecialchars(instagi_csrf_token(), ENT_QUOTES, 'UTF-8') . '">';
+// CSS dari CDN (DataTables) dikirim lewat slot — daftar <head> tetap di satu tempat.
+$css_ekstra = '    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">' . "\n"
+            . '    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/responsive/2.2.9/css/responsive.dataTables.min.css">';
+require __DIR__ . '/includes/layout_head.php';
+?>
     <div class="container">
         <div class="header">
             <h1>Data Responden</h1>
             <div>
                 <button id="delete-selected-btn" class="action-btn delete-btn" style="display: none; margin-right: 10px;">Hapus Terpilih</button>
                 <a href="api/export_csv.php" class="action-btn export-btn">Export ke CSV</a>
-                <a href="logout.php" class="logout-btn">Logout</a>
+                <a href="/logout" class="logout-btn">Logout</a>
             </div>
         </div>
 
@@ -448,8 +443,4 @@ if ($riwayat_result === false) {
         });
     });
     </script>
-    <footer class="main-footer">
-        <p>Copyright © 2026 InStaGi | Created With ❤️</p>
-    </footer>
-</body>
-</html>
+<?php require __DIR__ . '/includes/layout_footer.php'; ?>

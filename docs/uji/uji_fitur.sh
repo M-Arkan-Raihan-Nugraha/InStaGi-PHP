@@ -36,10 +36,13 @@ ada "navigasi memuat Monitoring Status Gizi" "$NAVBLOCK" "Monitoring Status Gizi
 ada "navigasi TIDAK memuat Login Admin" "$(echo "$IDX" | grep -o 'Login Admin' | wc -l; true)" "0"
 
 echo
-echo "=== B. BACKGROUND LIGHTBLUE DI SEMUA CSS ==="
+echo "=== B. BACKGROUND LIGHTBLUE (dipusatkan di css/base.css) ==="
 cd "D:/Codingan/Instagi/V3 PHP Native"
-for f in css/index.css css/imt.css css/result.css css/admin.css css/login.css; do
-  ada "$f memakai #ADD8E6 (lightblue)" "$(grep -c '#ADD8E6' "$f"; true)" "1"
+ada "css/base.css memakai #ADD8E6 (lightblue)" "$(grep -c '#ADD8E6' css/base.css; true)" "1"
+ada "layout_head.php memuat /css/base.css untuk semua halaman" "$(grep -c '/css/base.css' includes/layout_head.php; true)" "1"
+for f in index imt result informasi monitoring admin login; do
+  ada "$f.php memakai partial layout_head.php" "$(grep -q 'includes/layout_head.php' $f.php && echo YA || echo TIDAK)" "YA"
+  tiada "$f.php tidak lagi menyalin blok <head> sendiri" "$(grep -c '<!DOCTYPE html>' $f.php; true)" "1"
 done
 ada "tidak ada sisa warna lama #CFE8FF" "$(grep -rl '#CFE8FF' css/ 2>/dev/null | wc -l; true)" "0"
 
@@ -148,6 +151,21 @@ for h in informasi.php monitoring.php result.php index.php imt.php; do
 done
 ada "login.php tetap bisa dibuka langsung (pintu admin)" "$(curl -s -o /dev/null -w '%{http_code}' "$BASE/login.php")" "200"
 ada "login.php TIDAK memasang tautan Login Admin di navigasinya" "$(curl -s "$BASE/login.php" | sed -n '/site-nav-links/,/<\/nav>/p' | grep -c 'Login Admin'; true)" "0"
+
+echo
+echo "=== H. ALAMAT RAPI (tanpa .php) & ALAMAT LAMA TETAP HIDUP ==="
+for u in / /imt /informasi /monitoring /login; do
+  ada "GET $u -> 200" "$(curl -s -o /dev/null -w '%{http_code}' "$BASE$u")" "200"
+done
+ada "alamat rapi /imt menampilkan judul halaman yang benar" "$(curl -s "$BASE/imt" | grep -o '<title>[^<]*')" "InStaGi - Cek Status Gizi"
+for u in /imt.php /informasi.php /monitoring.php /login.php; do
+  ada "alamat lama $u tetap 200 (tautan/bookmark lama tidak mati)" "$(curl -s -o /dev/null -w '%{http_code}' "$BASE$u")" "200"
+done
+ada "aset /css/base.css tidak tertelan aturan rewrite" "$(curl -s -o /dev/null -w '%{http_code}' "$BASE/css/base.css")" "200"
+ada "API /api/get_record.php tetap menolak tanpa login (tidak tertelan rewrite)" "$(curl -s "$BASE/api/get_record.php")" "Akses tidak diizinkan"
+ada "/imt/ (berslash) dialihkan 301 ke /imt" "$(curl -s -o /dev/null -w '%{http_code}' "$BASE/imt/")" "301"
+ada "tidak ada lagi tautan .php di beranda (menu & kartu)" "$(grep -o 'href="[a-z_]*\.php"' index.php | wc -l; true)" "0"
+ada "canonical memakai alamat rapi" "$(curl -s "$BASE/imt" | grep -o 'rel="canonical" href="[^"]*')" "/imt"
 
 echo
 echo "=============================================="

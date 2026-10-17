@@ -1,35 +1,12 @@
 /* InStaGi - Kalkulator Styles */
-:root {
-    --primary-color: #e74c3c;
-    --secondary-color: #ADD8E6; /* lightblue (background halaman) */
-    --text-color: #333;
-    --border-color: #E5E6EB;
-    --green: #00b894;
-    --orange: #e67e22;
-    --red: #e74c3c;
-    --blue: #3498db;
-}
+/* Variabel warna (:root), body, dan .main-footer dipusatkan di css/base.css. */
 
-body {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-    background-color: var(--secondary-color);
-    color: var(--text-color);
-    margin: 0;
-    padding: 0;
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
-}
+/* body diatur di css/base.css. */
 
+/* Kartu putih: ukuran khusus halaman form/hasil. */
 .container {
-    flex: 1;
     max-width: 800px;
-    margin: 20px auto;
-    background-color: #fff;
     padding: 30px;
-    border-radius: 12px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
-    border: 1px solid var(--border-color);
 }
 
 h1, h2 {
@@ -257,13 +234,7 @@ a:focus-visible {
     margin-top: 25px;
 }
 
-.main-footer {
-    text-align: center;
-    padding: 15px;
-    background-color: #f0f0f0;
-    color: #555;
-    font-size: 0.9em;
-}
+/* .main-footer ada di css/base.css. */
 
 .main-footer p {
     margin: 0;

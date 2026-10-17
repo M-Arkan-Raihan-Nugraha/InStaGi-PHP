@@ -45,7 +45,7 @@ hitung "GET /result.php -> 200" "$KODE" "200"
 ada "hasil menampilkan nama apa adanya (escaping saat tampil)" "$(cat $WORK/b_result.html)" "Budi &amp; Santoso"
 ada "hasil menampilkan status gizi" "$(cat $WORK/b_result.html)" "Berat badan normal"
 ada "pesan WhatsApp memakai & mentah (tidak ganda)" "$(cat $WORK/b_result.html)" "Budi+%26+Santoso"
-ada "kartu akun Monitoring muncul" "$(cat $WORK/b_result.html)" "monitoring.php"
+ada "kartu akun Monitoring muncul" "$(cat $WORK/b_result.html)" "/monitoring"
 
 echo
 echo "=== C. INPUT TIDAK SAH HARUS DITOLAK (tanpa menambah data) ==="

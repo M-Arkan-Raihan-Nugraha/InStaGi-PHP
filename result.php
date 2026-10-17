@@ -2,9 +2,6 @@
 // Session aman (HttpOnly/SameSite/Secure + strict mode) — sekaligus memuat config.php.
 require_once 'includes/session.php';
 
-// Alamat dasar situs untuk Open Graph (dinamis, ikut domain aktif).
-$instagi_base = htmlspecialchars(instagi_base_url(), ENT_QUOTES, 'UTF-8');
-
 // Modul leaflet informasi gizi (data galeri + nama file unduhan)
 require_once 'includes/leaflet.php';
 
@@ -21,7 +18,7 @@ $nav_active = 'hitung';
 
 // Redirect jika tidak ada data hasil analisis di session
 if (!isset($_SESSION['imt_result'])) {
-    header("location: imt.php");
+    header("location: /imt");
     exit;
 }
 
@@ -133,42 +130,14 @@ foreach (instagi_menu_list() as $kkal => $meta) {
 
 ?>
 
-<!DOCTYPE html>
-<html lang="id">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>InStaGi - Hasil Analisis IMT</title>
-    <link rel="shortcut icon" href="assets/favicon.ico" type="image/x-icon">
-    <link rel="stylesheet" href="css/result.css">
-    <link rel="stylesheet" href="css/nav.css">
-    <link rel="stylesheet" href="css/pages.css">
-
-    <meta name="description" content="Hasil analisis IMT dan status gizi Anda, lengkap dengan berat badan ideal, estimasi kebutuhan kalori harian, serta saran gizi praktis dari InStaGi.">
-    <meta name="theme-color" content="#e74c3c">
-
-    <!-- Pratinjau tautan (WhatsApp, Facebook, X/Twitter) -->
-    <meta property="og:type" content="website">
-    <meta property="og:site_name" content="InStaGi">
-    <meta property="og:title" content="InStaGi - Hasil Analisis IMT">
-    <meta property="og:description" content="Hasil analisis IMT dan status gizi Anda, lengkap dengan berat badan ideal, estimasi kebutuhan kalori harian, serta saran gizi praktis dari InStaGi.">
-    <meta property="og:url" content="<?= $instagi_base ?>/result.php">
-    <meta property="og:image" content="<?= $instagi_base ?>/assets/og-image.jpg">
-    <meta property="og:image:width" content="1200">
-    <meta property="og:image:height" content="630">
-    <meta property="og:image:alt" content="Logo InStaGi">
-    <meta property="og:locale" content="id_ID">
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="InStaGi - Hasil Analisis IMT">
-    <meta name="twitter:description" content="Hasil analisis IMT dan status gizi Anda, lengkap dengan berat badan ideal, estimasi kebutuhan kalori harian, serta saran gizi praktis dari InStaGi.">
-    <meta name="twitter:image" content="<?= $instagi_base ?>/assets/og-image.jpg">
-</head>
-
-<body>
-
-    <?php require __DIR__ . '/includes/nav.php'; ?>
-
+<?php
+// Judul, deskripsi, alamat rapi (tanpa .php), dan daftar CSS halaman ini.
+$judul     = 'InStaGi - Hasil Analisis IMT';
+$deskripsi = 'Hasil analisis IMT dan status gizi Anda, lengkap dengan berat badan ideal, estimasi kebutuhan kalori harian, serta saran gizi praktis dari InStaGi.';
+$og_path   = '/result';
+$css       = ['result.css', 'nav.css', 'pages.css'];
+require __DIR__ . '/includes/layout_head.php';
+?>
     <div class="container">
         <div style="text-align: center;" id="page-logo">
             <img src="assets/logo.png" alt="InStaGi Logo" width="512" height="466" style="max-width: 150px; height: auto; margin-bottom: 10px;">
@@ -263,7 +232,7 @@ foreach (instagi_menu_list() as $kkal => $meta) {
             <button onclick="downloadPDF()" class="pdf-btn">
                 Simpan ke PDF
             </button>
-            <a href="imt.php" class="back-btn">Hitung Ulang / Kembali</a>
+            <a href="/imt" class="back-btn">Hitung Ulang / Kembali</a>
         </div>
 
         <?php $responden_aktif = instagi_responden_saat_ini(); ?>
@@ -272,13 +241,13 @@ foreach (instagi_menu_list() as $kkal => $meta) {
                 <h3>Riwayat tersimpan untuk akun: <?= htmlspecialchars($responden_aktif['nama'], ENT_QUOTES, 'UTF-8') ?></h3>
                 <p>Hasil ini otomatis masuk ke riwayat Anda. Lihat perkembangan status gizi Anda di menu Monitoring.</p>
                 <div class="account-actions">
-                    <a class="btn-primary" href="monitoring.php">Lihat Monitoring Saya</a>
+                    <a class="btn-primary" href="/monitoring">Lihat Monitoring Saya</a>
                 </div>
             <?php else: ?>
                 <h3>Simpan & pantau hasil Anda</h3>
                 <p>Buka menu <strong>Monitoring</strong> lalu masukkan Nama dan No. HP yang sama untuk melihat riwayat pengukuran Anda.</p>
                 <div class="account-actions">
-                    <a class="btn-secondary" href="monitoring.php">Buka Monitoring</a>
+                    <a class="btn-secondary" href="/monitoring">Buka Monitoring</a>
                 </div>
             <?php endif; ?>
         </div>
@@ -539,10 +508,6 @@ foreach (instagi_menu_list() as $kkal => $meta) {
         </div>
         <?php endif; ?>
     </div>
-
-    <footer class="main-footer">
-        <p>Copyright © 2026 InStaGi | Created With ❤️</p>
-    </footer>
 
     <!-- html2pdf.js library -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
@@ -843,6 +808,4 @@ foreach (instagi_menu_list() as $kkal => $meta) {
         })();
     </script>
     <?php endif; ?>
-</body>
-
-</html>
+<?php require __DIR__ . '/includes/layout_footer.php'; ?>

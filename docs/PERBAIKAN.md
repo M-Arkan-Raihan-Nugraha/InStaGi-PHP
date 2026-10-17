@@ -507,3 +507,85 @@ login berpassword, ganti password, anti session fixation), `includes/validasi.ph
 rename), `monitoring.php` (rapikan + grafik + keamanan akun), `css/imt.css` &
 `css/pages.css` (gaya baru), `css/*.css` (background lightblue),
 `docs/schema.sql` (kolom `password_hash`), `assets/bestie/` (folder logo mitra).
+
+---
+
+## 9. Ronde Perapian Struktur & Alamat Rapi (17 Okt 2026)
+
+### 9.1 Keputusan: rapi-in, BUKAN rombak ke MVC
+
+Proyek ini **tidak** dipindah ke MVC/kerangka kerja. Alasannya: skala kecil (7
+halaman, 2 tabel), hosting gratis tanpa SSH/Composer, rumus gizi wajib beku, dan
+tidak ada satu pun bug yang diperbaiki oleh rombak MVC. Yang dikerjakan adalah
+merapikan tata letak berkas + menghapus duplikasi, tanpa mengubah perilaku.
+Rincian pertimbangannya ada di percakapan 17 Okt 2026 (perbandingan MVC penuh vs
+MVC ringan vs rapi-in).
+
+### 9.2 Duplikasi yang dihapus
+
+- **`<head>` + navigasi** sebelumnya disalin di 7 halaman (±35 baris × 7).
+  Sekarang satu berkas: `includes/layout_head.php` (isi `$judul`, `$deskripsi`,
+  `$og_path`, `$css`, opsional `$css_ekstra` / `$meta_ekstra`, lalu `require`).
+- **Footer + penutup dokumen**: `includes/layout_footer.php`.
+- **Gaya dasar** yang dulu disalin 5×: `css/base.css` (`:root`, `body`,
+  `.container`, `.main-footer`). Nilai khusus tiap halaman (max-width halaman
+  admin, padding beranda, tebal huruf beranda, `margin-top:auto` di login) tetap
+  di CSS halaman masing-masing.
+
+### 9.3 Alamat rapi tanpa `.php` (tanpa router, tanpa memindahkan kode)
+
+Bagian **0d** di `.htaccess` root: `/imt` → rewrite internal ke `imt.php`.
+
+- Alamat LAMA (`imt.php`, `result.php`, …) tetap 200 — tautan lama, bookmark,
+  dan formulir POST lama tidak rusak.
+- Aman: hanya cocok SATU segmen `[a-zA-Z0-9_-]`, jadi `/api/…`, `/css/…`,
+  `/assets/…`, `/docs/…` tidak tersentuh; ada penjaga `!-f` / `!-d`.
+- `/imt/` (berslash) → 301 ke `/imt`.
+- Tautan di dalam aplikasi, `form action`, dan `header("location: …")` sudah
+  memakai alamat rapi (`/imt`, `/result`, `/monitoring`, `/login`, `/admin`,
+  `/logout`).
+- Ditambahkan `<link rel="canonical">` per halaman dan `og:url` ikut alamat rapi.
+- Halaman yang tadinya belum punya meta Open Graph (informasi, monitoring,
+  login) sekarang punya, karena dibuat di satu tempat.
+- Bila kelak ingin alamat `.php` **dialihkan** (301) ke versi rapi, cukup satu
+  baris di bagian 0d (sudah ditulis sebagai catatan di `.htaccess`).
+
+### 9.4 Berkas baru/berubah di ronde ini
+
+Baru: `includes/layout_head.php`, `includes/layout_footer.php`, `css/base.css`,
+`docs/uji/dev-router.php`.
+
+Berubah: `index.php`, `imt.php`, `result.php`, `informasi.php`, `monitoring.php`,
+`admin.php`, `login.php`, `logout.php`, `includes/nav.php` (alamat rapi),
+`includes/db.php` (tautan halaman galat → `/`), `css/{index,imt,result,admin,login}.css`
+(blok duplikat dihapus), `.htaccess` (bagian 0d), `docs/uji/uji_{e2e,fitur}.sh`
+(uji baru untuk alamat rapi + partial).
+
+### 9.5 Verifikasi ronde ini
+
+- `php -l` 31 berkas bersih.
+- Uji unit validasi **69/69**, uji end-to-end **61/61**, uji fitur **84/84**.
+- **Apache sungguhan** (2.4.58, konfigurasi uji `apache-uji.conf`, `.htaccess`
+  dipakai apa adanya): `/`, `/imt`, `/informasi`, `/monitoring`, `/login` → 200;
+  `/imt.php` → 200; `/imt/` → 301; `/tidak-ada` → 404; `/css/base.css` →
+  200; `/api/get_record.php` → JSON penolakan (tidak tertelan rewrite).
+- **Gaya terhitung** dibandingkan antara kode SEBELUM (dari git) dan SESUDAH:
+  5 halaman (beranda, cek status gizi, informasi, monitoring, login)
+  **identik** (latar `rgb(173,216,230)`, `.container` 800px/padding khusus,
+  footer `rgb(240,240,240)` 14.4px, posisi footer sama).
+- Perbandingan HTML sebelum/sesudah: isi halaman sama, perbedaan hanya (a) tautan
+  `.php` → alamat rapi, (b) posisi footer pindah ke bawah skrip, (c) tambahan
+  canonical/OG. Tidak ada isi yang hilang.
+- Peramban sungguhan: formulir di `/imt` → POST `/imt` → mendarat di `/result`
+  (IMT 24,2 tampil); masuk Monitoring lewat `/monitoring` berhasil dan grafik
+  Chart.js tergambar (kanvas 766×320, 11.312 piksel); tanpa geser horizontal di
+  lebar 360/414/1280 px.
+
+### 9.6 Yang BELUM dikerjakan (lanjutan opsional)
+
+- Memindahkan `includes/` ke subfolder (`core/`, `domain/`, `data/`, `layout/`)
+  dan mengeluarkan ±450 baris logika `imt.php` & `monitoring.php` ke
+  `controller/` — belum perlu selama halaman masih 7.
+- Guard terpusat (login admin, CSRF, JSON) di satu `bootstrap.php`.
+- Lapisan repositori untuk `imt_history`/`responden`.
+- Pengalihan 301 dari `.php` ke alamat rapi (lihat catatan bagian 0d).

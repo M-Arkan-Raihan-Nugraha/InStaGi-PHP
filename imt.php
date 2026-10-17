@@ -6,9 +6,6 @@ require_once 'includes/session.php';
 // Sisipkan file koneksi untuk menghubungkan ke database.
 require_once 'includes/db.php';
 
-// Alamat dasar situs untuk Open Graph (dinamis, ikut domain aktif).
-$instagi_base = htmlspecialchars(instagi_base_url(), ENT_QUOTES, 'UTF-8');
-
 // Modul perhitungan gizi (satu sumber kebenaran untuk IMT/kalori/saran).
 require_once 'includes/gizi.php';
 
@@ -177,7 +174,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
                 $stmt->close();
                 $koneksi->close();
-                header("location: result.php"); // Redirect ke halaman hasil
+                header("location: /result"); // Redirect ke halaman hasil (alamat rapi)
                 exit;
 
             } else {
@@ -195,39 +192,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 }
 ?>
 
-<!DOCTYPE html>
-<html lang="id">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>InStaGi - Cek Status Gizi</title>
-    <link rel="shortcut icon" href="assets/favicon.ico" type="image/x-icon">
-    <link rel="stylesheet" href="css/imt.css">
-    <link rel="stylesheet" href="css/nav.css">
-
-    <meta name="description" content="Masukkan nama, usia, jenis kelamin, berat dan tinggi badan untuk menghitung IMT (Indeks Massa Tubuh), status gizi, serta estimasi kebutuhan kalori harian Anda.">
-    <meta name="theme-color" content="#e74c3c">
-
-    <!-- Pratinjau tautan (WhatsApp, Facebook, X/Twitter) -->
-    <meta property="og:type" content="website">
-    <meta property="og:site_name" content="InStaGi">
-    <meta property="og:title" content="InStaGi - Cek Status Gizi">
-    <meta property="og:description" content="Masukkan nama, usia, jenis kelamin, berat dan tinggi badan untuk cek status gizi (IMT), status gizi, serta estimasi kebutuhan kalori harian Anda.">
-    <meta property="og:url" content="<?= $instagi_base ?>/imt.php">
-    <meta property="og:image" content="<?= $instagi_base ?>/assets/og-image.jpg">
-    <meta property="og:image:width" content="1200">
-    <meta property="og:image:height" content="630">
-    <meta property="og:image:alt" content="Logo InStaGi">
-    <meta property="og:locale" content="id_ID">
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="InStaGi - Cek Status Gizi">
-    <meta name="twitter:description" content="Masukkan nama, usia, jenis kelamin, berat dan tinggi badan untuk menghitung IMT (Indeks Massa Tubuh), status gizi, serta estimasi kebutuhan kalori harian Anda.">
-    <meta name="twitter:image" content="<?= $instagi_base ?>/assets/og-image.jpg">
-</head>
-<body>
-
-    <?php require __DIR__ . '/includes/nav.php'; ?>
-
+<?php
+// Judul, deskripsi, alamat rapi (tanpa .php), dan daftar CSS halaman ini.
+$judul     = 'InStaGi - Cek Status Gizi';
+$deskripsi = 'Masukkan nama, usia, jenis kelamin, berat dan tinggi badan untuk menghitung IMT (Indeks Massa Tubuh), status gizi, serta estimasi kebutuhan kalori harian Anda.';
+$og_path   = '/imt';
+$css       = ['imt.css', 'nav.css'];
+require __DIR__ . '/includes/layout_head.php';
+?>
     <div class="container">
         <div style="text-align: center;">
             <img src="assets/logo.png" alt="InStaGi Logo" width="512" height="466" style="max-width: 150px; height: auto; margin-bottom: 10px;">
@@ -239,7 +211,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <?php endif; ?>
 
 
-        <form action="imt.php" method="POST" class="form-grid">
+        <form action="/imt" method="POST" class="form-grid">
             <input type="hidden" name="csrf_token" value="<?= htmlspecialchars(instagi_csrf_token(), ENT_QUOTES, 'UTF-8') ?>">
             <input type="hidden" name="submitted" value="1">
             <div class="form-group full-width">
@@ -328,10 +300,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         </form>
 
     </div>
-    
-    <footer class="main-footer">
-        <p>Copyright © 2026 InStaGi | Created With ❤️</p>
-    </footer>
 
     <script>
     // ===================================================================
@@ -395,5 +363,4 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
     })();
     </script>
-</body>
-</html>
+<?php require __DIR__ . '/includes/layout_footer.php'; ?>
