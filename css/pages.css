@@ -519,6 +519,30 @@
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.04);
 }
 
+/* Keterangan warna pita kategori di grafik IMT. */
+.mon-chart-legenda {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 18px;
+    margin: 0 0 12px;
+    font-size: 0.85em;
+    color: #444;
+}
+
+.mon-chart-legenda span {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.mon-chart-legenda i {
+    width: 13px;
+    height: 13px;
+    border-radius: 3px;
+    display: inline-block;
+    flex: none;
+}
+
 .mon-chart-wrap {
     position: relative;
     width: 100%;

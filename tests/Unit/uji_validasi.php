@@ -6,8 +6,8 @@
 error_reporting(E_ALL);
 ini_set('display_errors', '1');
 
-$root = 'D:/Codingan/Instagi/V3 PHP Native';
-require_once $root . '/includes/validasi.php';
+$root = dirname(dirname(__DIR__));
+require_once $root . '/includes/services/validasi.php';
 
 $lulus = 0; $gagal = 0;
 function cek($judul, $harusnya, $benar) {

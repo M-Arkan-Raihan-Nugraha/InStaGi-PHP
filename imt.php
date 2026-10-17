@@ -97,34 +97,48 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         } elseif (!$validasi['valid']) {
             $error_message = $validasi['error'];
         } else {
-            if (!empty($_POST['buat_akun'])) {
-                $password_hash = instagi_hash_password((string) ($_POST['password'] ?? ''));
+            $data          = $validasi['data'];
+            $nama          = $data['nama'];
+            $usia          = $data['usia'];
+            $jenis_kelamin = $data['jenis_kelamin'];
+            $bb            = $data['bb'];
+            $tb            = $data['tb'];
+            $no_hp         = $data['no_hp'];
+            $tanggal_input = $data['tanggal'];
+            $aktivitas     = $data['aktivitas'];
+            $hp_norm       = $data['hp_norm'];
+
+            // Cek integritas akun: jika akun sudah terdaftar dan ber-password,
+            // verifikasi bahwa pengirim adalah pemilik akun yang sah.
+            $akun_terdaftar = instagi_responden_cari($koneksi, $nama, $hp_norm);
+            $sesi_responden = instagi_responden_saat_ini();
+            $sedang_login   = $sesi_responden && ((int) $sesi_responden['id'] === (int) ($akun_terdaftar['id'] ?? 0));
+
+            if ($akun_terdaftar && instagi_responden_punya_password($akun_terdaftar) && !$sedang_login) {
+                $pass_input = (string) ($_POST['password'] ?? '');
+                if ($pass_input === '' || !password_verify($pass_input, (string) $akun_terdaftar['password_hash'])) {
+                    $error_message = 'Akun atas nama dan No. HP ini telah dilindungi password. Silakan centang "Simpan dengan akun aman" lalu masukkan password akun Anda, atau masuk terlebih dahulu melalui menu Monitoring.';
+                }
             }
-        // 3. Lakukan Perhitungan jika data valid
-        //    Semua rumus ada di includes/gizi.php agar identik dengan
-        //    api/update_record.php (tidak lagi duplikat & tidak lagi berbeda).
-        //    Nilai dipakai dari hasil validasi (sudah dirapikan & dipastikan sah).
-        $data          = $validasi['data'];
-        $nama          = $data['nama'];
-        $usia          = $data['usia'];
-        $jenis_kelamin = $data['jenis_kelamin'];
-        $bb            = $data['bb'];
-        $tb            = $data['tb'];
-        $no_hp         = $data['no_hp'];
-        $tanggal_input = $data['tanggal'];
-        $aktivitas     = $data['aktivitas'];
-        $hp_norm       = $data['hp_norm'];
 
-        $hasil = instagi_hitung_semua($bb, $tb, $usia, $jenis_kelamin, $aktivitas);
+            if ($error_message === '') {
+                if (!empty($_POST['buat_akun'])) {
+                    $password_hash = instagi_hash_password((string) ($_POST['password'] ?? ''));
+                }
+                // 3. Lakukan Perhitungan jika data valid
+                //    Semua rumus ada di includes/gizi.php agar identik dengan
+                //    api/update_record.php (tidak lagi duplikat & tidak lagi berbeda).
+                //    Nilai dipakai dari hasil validasi (sudah dirapikan & dipastikan sah).
+                $hasil = instagi_hitung_semua($bb, $tb, $usia, $jenis_kelamin, $aktivitas);
 
-        $imt            = $hasil['imt'];
-        $status_gizi    = $hasil['status_gizi'];
-        $status_class   = $hasil['status_class'];
-        $saran          = $hasil['saran'];
-        $kalori_harian  = $hasil['kalori_harian'];
-        $bb_ideal       = $hasil['bb_ideal'];
-        $bb_sehat_min   = $hasil['bb_sehat_min'];
-        $bb_sehat_max   = $hasil['bb_sehat_max'];
+                $imt            = $hasil['imt'];
+                $status_gizi    = $hasil['status_gizi'];
+                $status_class   = $hasil['status_class'];
+                $saran          = $hasil['saran'];
+                $kalori_harian  = $hasil['kalori_harian'];
+                $bb_ideal       = $hasil['bb_ideal'];
+                $bb_sehat_min   = $hasil['bb_sehat_min'];
+                $bb_sehat_max   = $hasil['bb_sehat_max'];
 
         // 4. Akun responden (1 nama + 1 nomor HP = 1 akun) dibuat otomatis di
         //    sini, lalu ID-nya ikut disimpan agar menu Monitoring Status Gizi
@@ -185,8 +199,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $koneksi->close(); // Close connection on error
             }
         }
-        }   // akhir "else" validasi: data valid -> sudah dihitung & disimpan
-    }       // akhir pemeriksaan validasi input
+            } // akhir if ($error_message === '')
+        }     // akhir else validasi: data valid -> sudah dihitung & disimpan
+    }         // akhir pemeriksaan validasi input
 } else {
     $koneksi->close(); // Close connection if form is not submitted
 }

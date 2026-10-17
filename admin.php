@@ -10,8 +10,9 @@ if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true) {
 
 $nav_active = 'admin';
 
-// Sisipkan file koneksi database
+// Sisipkan file koneksi database dan modul gizi
 require_once 'includes/db.php';
+require_once 'includes/services/gizi.php';
 
 // Ambil semua data riwayat dari database, urutkan berdasarkan yang terbaru
 $riwayat_result = $koneksi->query("SELECT * FROM imt_history ORDER BY tanggal DESC, id DESC");
@@ -100,26 +101,17 @@ require __DIR__ . '/includes/layout_head.php';
                             <td><?= htmlspecialchars($row['imt']) ?></td>
                             <td>
                                 <?php 
-                                    // Menentukan kelas CSS yang benar berdasarkan status gizi dari database
                                     $status_gizi_db = $row['status_gizi'];
-                                    $status_class = '';
-                                    if (strpos($status_gizi_db, '(underweight)') !== false) {
-                                        $status_class = 'underweight';
-                                    } elseif (strpos($status_gizi_db, '(ideal)') !== false) {
-                                        $status_class = 'normal';
-                                    } elseif (strpos($status_gizi_db, '(overweight)') !== false) {
-                                        $status_class = 'overweight';
-                                    } elseif ($status_gizi_db == 'Obesitas') { // Obesitas doesn't have English in parentheses
-                                        $status_class = 'obese';
-                                    }
+                                    $status_class = instagi_status_class($status_gizi_db);
                                 ?>
-                                <span class="status <?= $status_class ?>">
+                                <span class="status <?= htmlspecialchars($status_class) ?>">
                                     <?= htmlspecialchars($status_gizi_db) ?>
                                 </span>
                             </td>
                             <td><?= htmlspecialchars($row['saran']) ?></td>
                             <td>
                                 <button class="action-btn edit-btn" data-id="<?= $row['id'] ?>">Edit</button>
+                                <button class="action-btn delete-btn" data-id="<?= $row['id'] ?>">Hapus</button>
                             </td>
                         </tr>
                         <?php endwhile; ?>

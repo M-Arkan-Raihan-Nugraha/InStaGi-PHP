@@ -19,6 +19,8 @@ require_once 'includes/db.php';
 require_once 'includes/responden.php';
 require_once 'includes/validasi.php';
 require_once 'includes/ikon.php';
+require_once 'includes/format.php';
+require_once 'includes/services/gizi.php';
 
 $nav_active = 'monitoring';
 
@@ -228,7 +230,7 @@ if (!function_exists('instagi_warna_status')) {
 // --- Data grafik (maksimal 12 pengukuran terakhir agar tetap terbaca) --------
 $grafik = ['label' => [], 'imt' => [], 'warna' => []];
 foreach (array_slice($riwayat, -12) as $r) {
-    $grafik['label'][] = date('d/m/y', strtotime($r['tanggal']));
+    $grafik['label'][] = instagi_tanggal($r['tanggal']);   // 17-10-2026
     $grafik['imt'][]   = (float) $r['imt'];
     $grafik['warna'][] = instagi_warna_status((string) $r['status_gizi']);
 }
@@ -238,6 +240,17 @@ $grafik_ambang = [
     ['nilai' => 18.5, 'label' => '18,5', 'warna' => '#3498db'],
     ['nilai' => 25.0, 'label' => '25',   'warna' => '#e67e22'],
     ['nilai' => 27.0, 'label' => '27',   'warna' => '#e74c3c'],
+];
+
+// Pita kategori (latar grafik). TUJUAN: pengguna melihat POSISI-nya terhadap
+// rentang ideal, jadi rentang "Ideal" selalu ditampilkan — bukan hanya titik
+// pengukurannya sendiri. Angka ambang sama dengan $grafik_ambang di atas dan
+// HANYA untuk tampilan; klasifikasi tetap dari includes/gizi.php.
+$grafik_pita = [
+    ['dari' => null, 'sampai' => 18.5, 'label' => 'Kurang',   'warna' => 'rgba(52, 152, 219, 0.10)'],
+    ['dari' => 18.5, 'sampai' => 25.0, 'label' => 'Ideal',    'warna' => 'rgba(0, 184, 148, 0.14)'],
+    ['dari' => 25.0, 'sampai' => 27.0, 'label' => 'Berlebih', 'warna' => 'rgba(230, 126, 34, 0.12)'],
+    ['dari' => 27.0, 'sampai' => null, 'label' => 'Obesitas', 'warna' => 'rgba(231, 76, 60, 0.10)'],
 ];
 
 $riwayat_tampil = array_reverse($riwayat); // terbaru di atas
@@ -334,7 +347,7 @@ require __DIR__ . '/includes/layout_head.php';
                     </div>
                     <div class="mon-stat">
                         <span class="mon-stat-label">IMT Terakhir</span>
-                        <span class="mon-stat-value"><?= htmlspecialchars($stat['imt_terakhir']) ?></span>
+                        <span class="mon-stat-value"><?= htmlspecialchars(instagi_angka_imt($stat['imt_terakhir'])) ?></span>
                     </div>
                     <div class="mon-stat">
                         <span class="mon-stat-label">Status Terakhir</span>
@@ -346,12 +359,12 @@ require __DIR__ . '/includes/layout_head.php';
                     </div>
                     <div class="mon-stat">
                         <span class="mon-stat-label">Rata-rata IMT</span>
-                        <span class="mon-stat-value"><?= htmlspecialchars($stat['imt_rata']) ?></span>
+                        <span class="mon-stat-value"><?= htmlspecialchars(instagi_angka_imt($stat['imt_rata'])) ?></span>
                     </div>
                     <div class="mon-stat">
                         <span class="mon-stat-label">IMT Terendah &ndash; Tertinggi</span>
                         <span class="mon-stat-value" style="font-size:1.15em;">
-                            <?= htmlspecialchars($stat['imt_min']) ?> &ndash; <?= htmlspecialchars($stat['imt_max']) ?>
+                            <?= htmlspecialchars(instagi_angka_imt($stat['imt_min'])) ?> &ndash; <?= htmlspecialchars(instagi_angka_imt($stat['imt_max'])) ?>
                         </span>
                     </div>
                     <div class="mon-stat">
@@ -361,7 +374,7 @@ require __DIR__ . '/includes/layout_head.php';
                                 <span class="mon-naik-turun stabil">&ndash;</span>
                             <?php else: ?>
                                 <span class="mon-naik-turun <?= htmlspecialchars($stat['arah']) ?>">
-                                    <?= ($stat['selisih_imt'] > 0 ? '+' : '') . htmlspecialchars($stat['selisih_imt']) ?>
+                                    <?= ($stat['selisih_imt'] > 0 ? '+' : '') . htmlspecialchars(instagi_angka_imt($stat['selisih_imt'])) ?>
                                 </span>
                             <?php endif; ?>
                         </span>
@@ -369,7 +382,7 @@ require __DIR__ . '/includes/layout_head.php';
                     <div class="mon-stat">
                         <span class="mon-stat-label">Tanggal Terakhir</span>
                         <span class="mon-stat-value" style="font-size:1.1em;">
-                            <?= htmlspecialchars(date('d-m-Y', strtotime($stat['tanggal_terakhir']))) ?>
+                            <?= htmlspecialchars(instagi_tanggal($stat['tanggal_terakhir'])) ?>
                         </span>
                     </div>
                 </div>
@@ -377,18 +390,28 @@ require __DIR__ . '/includes/layout_head.php';
                 <!-- ===== Grafik perkembangan IMT ===== -->
                 <h2 class="mon-judul">Grafik Perkembangan IMT</h2>
                 <div class="mon-chart-card">
+                    <!-- Keterangan warna: supaya warna pita di grafik bisa dibaca
+                         tanpa harus menebak. -->
+                    <div class="mon-chart-legenda">
+                        <span><i style="background:#3498db"></i>Kurang (&lt;18,5)</span>
+                        <span><i style="background:#00b894"></i>Ideal (18,5&ndash;24,9)</span>
+                        <span><i style="background:#e67e22"></i>Berlebih (25&ndash;27)</span>
+                        <span><i style="background:#e74c3c"></i>Obesitas (&gt;27)</span>
+                    </div>
                     <div class="mon-chart-wrap">
                         <canvas id="grafikImt" role="img"
-                                aria-label="Grafik perkembangan nilai IMT Anda dari waktu ke waktu"></canvas>
+                                aria-label="Grafik perkembangan nilai IMT Anda dibandingkan rentang ideal"></canvas>
                     </div>
                     <p class="mon-chart-fallback" id="grafikFallback" hidden>
                         Grafik tidak dapat dimuat (perpustakaan grafik tidak tersedia atau koneksi terbatas).
                         Nilai IMT tiap pengukuran tetap bisa dibaca pada daftar riwayat di bawah.
                     </p>
                     <p class="mon-chart-catatan">
-                        Garis putus-putus adalah batas kategori: <strong>18,5</strong> (kurus/normal),
-                        <strong>25</strong> (normal/gemuk), dan <strong>27</strong> (gemuk/obesitas).
-                        Warna titik mengikuti status gizi saat itu.
+                        Pita berwarna adalah rentang kategori, dan grafik selalu memuat rentang
+                        <strong>ideal (18,5&ndash;24,9)</strong> supaya Anda bisa melihat posisi Anda saat ini
+                        terhadap rentang ideal tersebut. Titik (dan warna titiknya) adalah hasil pengukuran
+                        Anda, sedangkan garis putus-putus menandai batas
+                        <strong>18,5</strong>, <strong>25</strong>, dan <strong>27</strong>.
                         <?php if ($stat['jumlah'] > 12): ?>Ditampilkan 12 pengukuran terakhir.<?php endif; ?>
                     </p>
                 </div>
@@ -398,14 +421,14 @@ require __DIR__ . '/includes/layout_head.php';
                     <?php foreach ($riwayat_tampil as $r): ?>
                     <article class="mon-card">
                         <div class="mon-card-head">
-                            <span class="mon-date"><?= htmlspecialchars(date('d-m-Y', strtotime($r['tanggal']))) ?></span>
+                            <span class="mon-date"><?= htmlspecialchars(instagi_tanggal($r['tanggal'])) ?></span>
                             <span class="status <?= htmlspecialchars(instagi_status_class((string) $r['status_gizi'])) ?>">
                                 <?= htmlspecialchars($r['status_gizi']) ?>
                             </span>
                         </div>
                         <div class="mon-grid">
-                            <div><span>IMT</span><br><strong><?= htmlspecialchars($r['imt']) ?></strong></div>
-                            <div><span>Berat Badan</span><br><strong><?= htmlspecialchars($r['berat_badan']) ?> kg</strong></div>
+                            <div><span>IMT</span><br><strong><?= htmlspecialchars(instagi_angka_imt($r['imt'])) ?></strong></div>
+                            <div><span>Berat Badan</span><br><strong><?= htmlspecialchars(instagi_angka($r['berat_badan'])) ?> kg</strong></div>
                             <div><span>Tinggi Badan</span><br><strong><?= htmlspecialchars($r['tinggi_badan']) ?> cm</strong></div>
                             <div><span>Kalori</span><br><strong><?= htmlspecialchars($r['kalori']) ?> kkal</strong></div>
                         </div>
@@ -474,6 +497,7 @@ require __DIR__ . '/includes/layout_head.php';
         (function () {
             var data = <?= json_encode($grafik, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_HEX_TAG | JSON_HEX_AMP) ?>;
             var ambang = <?= json_encode($grafik_ambang, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_HEX_TAG | JSON_HEX_AMP) ?>;
+            var pita   = <?= json_encode($grafik_pita, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_HEX_TAG | JSON_HEX_AMP) ?>;
             var kanvas = document.getElementById('grafikImt');
             var fallback = document.getElementById('grafikFallback');
 
@@ -481,6 +505,47 @@ require __DIR__ . '/includes/layout_head.php';
                 if (fallback) { fallback.hidden = false; }
                 return;
             }
+
+            // Format angka IMT untuk tooltip: 22,0 -> "22"; 24,2 -> "24,2".
+            function angkaImt(n) {
+                var bulat = Math.round(n);
+                if (Math.abs(n - bulat) < 0.05) { return String(bulat); }
+                return n.toFixed(1).replace('.', ',');
+            }
+
+            // Batas sumbu Y. SELALU memuat rentang ideal (18,5 dan 25) serta batas
+            // obesitas (27), walaupun nilai pengguna jauh di bawah/atas rentang itu —
+            // supaya posisi pengguna terhadap rentang ideal tetap terlihat.
+            var nilaiImt   = data.imt.map(Number);
+            var batasBawah = Math.min(16, Math.floor(Math.min.apply(null, nilaiImt)) - 1);
+            var batasAtas  = Math.max(30, Math.ceil(Math.max.apply(null, nilaiImt)) + 1);
+
+            // Pita kategori (latar berwarna) — di gambar SEBELUM garis data.
+            var pitaKategori = {
+                id: 'pitaKategori',
+                beforeDatasetsDraw: function (chart) {
+                    var area = chart.chartArea;
+                    var skala = chart.scales.y;
+                    if (!area || !skala) { return; }
+                    var ctx = chart.ctx;
+                    pita.forEach(function (p) {
+                        var nilaiAtas  = (p.sampai === null) ? skala.max : p.sampai;
+                        var nilaiBawah = (p.dari === null) ? skala.min : p.dari;
+                        var y1 = skala.getPixelForValue(nilaiAtas);
+                        var y2 = skala.getPixelForValue(nilaiBawah);
+                        var atas  = Math.max(area.top, Math.min(y1, y2));
+                        var bawah = Math.min(area.bottom, Math.max(y1, y2));
+                        if (bawah - atas <= 1) { return; }
+                        ctx.save();
+                        ctx.fillStyle = p.warna;
+                        ctx.fillRect(area.left, atas, area.right - area.left, bawah - atas);
+                        ctx.fillStyle = 'rgba(0, 0, 0, 0.45)';
+                        ctx.font = '11px sans-serif';
+                        ctx.fillText(p.label, area.left + 6, atas + 13);
+                        ctx.restore();
+                    });
+                }
+            };
 
             // Garis panduan kategori (tampilan saja).
             var garisPanduan = {
@@ -536,7 +601,7 @@ require __DIR__ . '/includes/layout_head.php';
                         legend: { display: false },
                         tooltip: {
                             callbacks: {
-                                label: function (ctx) { return 'IMT: ' + ctx.parsed.y; }
+                                label: function (ctx) { return 'IMT: ' + angkaImt(ctx.parsed.y); }
                             }
                         },
                         garisPanduan: { lines: ambang }
@@ -544,14 +609,15 @@ require __DIR__ . '/includes/layout_head.php';
                     scales: {
                         y: {
                             beginAtZero: false,
-                            suggestedMin: Math.max(10, Math.floor(Math.min.apply(null, data.imt) - 2)),
-                            suggestedMax: Math.ceil(Math.max.apply(null, data.imt) + 2),
+                            min: batasBawah,
+                            max: batasAtas,
+                            ticks: { maxTicksLimit: 9 },
                             title: { display: true, text: 'IMT' }
                         },
                         x: { title: { display: true, text: 'Tanggal pengukuran' } }
                     }
                 },
-                plugins: [garisPanduan]
+                plugins: [pitaKategori, garisPanduan]
             });
         })();
     </script>
