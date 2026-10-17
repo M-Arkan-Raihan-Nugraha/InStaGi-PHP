@@ -5,7 +5,9 @@
  * Menampilkan materi edukasi gizi dalam satu halaman:
  *   1. Leaflet Informasi Gizi
  *   2. Contoh Menu Sesuai Kebutuhan Kalori
- *   3. DBMP (Daftar Bahan Makanan Penukar)
+ *   3. Kumpulan Resep (menu ayam, ikan, sup, nusantara, camilan, dst.)
+ *   4. Panduan & Edukasi Gizi (diet DM/PPOK/protein, albumin, zat besi, dst.)
+ *   5. DBMP (Daftar Bahan Makanan Penukar)
  *
  * Konten diambil dari modul yang sama dengan result.php, sehingga menambah /
  * mengganti materi cukup dilakukan di includes/leaflet.php, menu.php, dbmp.php.
@@ -13,47 +15,18 @@
 require_once 'includes/session.php';
 require_once 'includes/leaflet.php';
 require_once 'includes/menu.php';
+require_once 'includes/resep.php';
+require_once 'includes/panduan.php';
 require_once 'includes/dbmp.php';
 
 $nav_active = 'informasi';
 
-// --- Kumpulkan leaflet yang gambarnya tersedia ---
-$leaflets = [];
-foreach (instagi_leaflet_list() as $slug => $meta) {
-    $thumb = instagi_leaflet_thumb_url($slug);
-    $full  = instagi_leaflet_web_url($slug);
-    if ($thumb === null || $full === null) {
-        continue;
-    }
-    $leaflets[] = [
-        'judul'    => $meta['judul'],
-        'subjudul' => $meta['subjudul'],
-        'ringkas'  => $meta['ringkas'],
-        'tag'      => $meta['tag'],
-        'thumb'    => $thumb,
-        'full'     => $full,
-        'unduh'    => $meta['unduh'],
-    ];
-}
-
-// --- Kumpulkan contoh menu yang gambarnya tersedia ---
-$menus = [];
-foreach (instagi_menu_list() as $kkal => $meta) {
-    $thumb = instagi_menu_thumb_url($kkal);
-    $full  = instagi_menu_web_url($kkal);
-    if ($thumb === null || $full === null) {
-        continue;
-    }
-    $menus[] = [
-        'judul'    => $meta['judul'],
-        'subjudul' => $meta['subjudul'],
-        'ringkas'  => $meta['ringkas'],
-        'tag'      => $meta['tag'],
-        'thumb'    => $thumb,
-        'full'     => $full,
-        'unduh'    => $meta['unduh'],
-    ];
-}
+// --- Kumpulkan daftar siap tampil untuk tiap galeri ---
+// (helper bersama: includes/galeri_aset.php — hanya entri yang gambarnya ada)
+$leaflets = instagi_galeri_daftar_tampil('leaflet', instagi_leaflet_list());
+$menus    = instagi_galeri_daftar_tampil('menu', instagi_menu_list(), 'instagi_menu_slug');
+$reseps   = instagi_resep_daftar();
+$panduans = instagi_panduan_daftar();
 
 // --- DBMP (satu berkas PDF) ---
 $dbmp_pdf   = instagi_dbmp_pdf();
@@ -62,7 +35,7 @@ $dbmp_cover = instagi_dbmp_cover();
 <?php
 // Judul, deskripsi, alamat rapi (tanpa .php), dan daftar CSS halaman ini.
 $judul     = 'InStaGi - Informasi Gizi';
-$deskripsi = 'Kumpulan leaflet informasi gizi, contoh menu sesuai kebutuhan kalori, dan Daftar Bahan Makanan Penukar (DBMP) dari InStaGi.';
+$deskripsi = 'Materi edukasi gizi InStaGi: leaflet, contoh menu sesuai kebutuhan kalori, kumpulan resep, panduan diet & edukasi gizi, serta Daftar Bahan Makanan Penukar (DBMP).';
 $og_path   = '/informasi';
 $css       = ['index.css', 'nav.css', 'pages.css'];
 require __DIR__ . '/includes/layout_head.php';
@@ -70,71 +43,59 @@ require __DIR__ . '/includes/layout_head.php';
 
     <div class="container">
         <h1 style="text-align:left;color:var(--primary-color);">Informasi Gizi</h1>
-        <p class="info-intro">Materi edukasi gizi InStaGi: leaflet, contoh menu sesuai kebutuhan kalori, dan Daftar Bahan Makanan Penukar (DBMP). Klik gambar untuk membuka versi besar, atau unduh untuk disimpan.</p>
+        <p class="info-intro">Materi edukasi gizi InStaGi: leaflet, contoh menu sesuai kebutuhan kalori, kumpulan resep, panduan diet & edukasi gizi, serta Daftar Bahan Makanan Penukar (DBMP). Klik gambar untuk membuka versi besar, atau unduh untuk disimpan.</p>
+
+        <nav class="info-jump" aria-label="Lompat ke bagian">
+            <a href="#leaflet">Leaflet</a>
+            <a href="#menu">Contoh Menu</a>
+            <a href="#resep">Kumpulan Resep</a>
+            <a href="#panduan">Panduan &amp; Edukasi</a>
+            <a href="#dbmp">DBMP</a>
+        </nav>
 
         <!-- ===== LEAFLET INFORMASI GIZI ===== -->
-        <section class="info-section" id="leaflet">
-            <h2>Leaflet Informasi Gizi</h2>
-            <p class="info-intro">Panduan praktis seputar gizi seimbang, sumber zat gizi, hingga bahan yang perlu dibatasi.</p>
-
-            <?php if (!empty($leaflets)): ?>
-                <div class="info-grid">
-                    <?php foreach ($leaflets as $lf): ?>
-                    <article class="info-card">
-                        <a href="<?= htmlspecialchars($lf['full'], ENT_QUOTES, 'UTF-8') ?>" target="_blank" rel="noopener">
-                            <img src="<?= htmlspecialchars($lf['thumb'], ENT_QUOTES, 'UTF-8') ?>"
-                                 alt="Leaflet <?= htmlspecialchars($lf['judul'], ENT_QUOTES, 'UTF-8') ?>"
-                                 loading="lazy" decoding="async">
-                        </a>
-                        <div class="info-card-body">
-                            <span class="info-tag"><?= htmlspecialchars($lf['tag'], ENT_QUOTES, 'UTF-8') ?></span>
-                            <h3><?= htmlspecialchars($lf['judul'], ENT_QUOTES, 'UTF-8') ?></h3>
-                            <p class="info-desc"><?= htmlspecialchars($lf['ringkas'], ENT_QUOTES, 'UTF-8') ?></p>
-                            <div class="info-card-actions">
-                                <a href="<?= htmlspecialchars($lf['full'], ENT_QUOTES, 'UTF-8') ?>" target="_blank" rel="noopener">Lihat</a>
-                                <a class="alt" href="<?= htmlspecialchars($lf['full'], ENT_QUOTES, 'UTF-8') ?>"
-                                   download="<?= htmlspecialchars($lf['unduh'], ENT_QUOTES, 'UTF-8') ?>">Unduh</a>
-                            </div>
-                        </div>
-                    </article>
-                    <?php endforeach; ?>
-                </div>
-            <?php else: ?>
-                <div class="info-empty">Belum ada leaflet yang tersedia.</div>
-            <?php endif; ?>
-        </section>
+<?php
+$kartu_id     = 'leaflet';
+$kartu_judul  = 'Leaflet Informasi Gizi';
+$kartu_intro  = 'Panduan praktis seputar gizi seimbang, sumber zat gizi, hingga bahan yang perlu dibatasi.';
+$kartu_daftar = $leaflets;
+$kartu_alt    = 'Leaflet';
+$kartu_kosong = 'Belum ada leaflet yang tersedia.';
+require __DIR__ . '/includes/galeri_kartu.php';
+?>
 
         <!-- ===== CONTOH MENU ===== -->
-        <section class="info-section" id="menu">
-            <h2>Contoh Menu Sesuai Kebutuhan Kalori</h2>
-            <p class="info-intro">Contoh menu sehari (3 makan utama + 2 selingan) untuk beberapa tingkat kebutuhan kalori.</p>
+<?php
+$kartu_id     = 'menu';
+$kartu_judul  = 'Contoh Menu Sesuai Kebutuhan Kalori';
+$kartu_intro  = 'Contoh menu sehari (3 makan utama + 2 selingan) untuk beberapa tingkat kebutuhan kalori.';
+$kartu_daftar = $menus;
+$kartu_alt    = 'Contoh menu';
+$kartu_kosong = 'Belum ada contoh menu yang tersedia.';
+require __DIR__ . '/includes/galeri_kartu.php';
+?>
 
-            <?php if (!empty($menus)): ?>
-                <div class="info-grid">
-                    <?php foreach ($menus as $mn): ?>
-                    <article class="info-card">
-                        <a href="<?= htmlspecialchars($mn['full'], ENT_QUOTES, 'UTF-8') ?>" target="_blank" rel="noopener">
-                            <img src="<?= htmlspecialchars($mn['thumb'], ENT_QUOTES, 'UTF-8') ?>"
-                                 alt="<?= htmlspecialchars($mn['judul'], ENT_QUOTES, 'UTF-8') ?>"
-                                 loading="lazy" decoding="async">
-                        </a>
-                        <div class="info-card-body">
-                            <span class="info-tag"><?= htmlspecialchars($mn['tag'], ENT_QUOTES, 'UTF-8') ?></span>
-                            <h3><?= htmlspecialchars($mn['judul'], ENT_QUOTES, 'UTF-8') ?></h3>
-                            <p class="info-desc"><?= htmlspecialchars($mn['ringkas'], ENT_QUOTES, 'UTF-8') ?></p>
-                            <div class="info-card-actions">
-                                <a href="<?= htmlspecialchars($mn['full'], ENT_QUOTES, 'UTF-8') ?>" target="_blank" rel="noopener">Lihat</a>
-                                <a class="alt" href="<?= htmlspecialchars($mn['full'], ENT_QUOTES, 'UTF-8') ?>"
-                                   download="<?= htmlspecialchars($mn['unduh'], ENT_QUOTES, 'UTF-8') ?>">Unduh</a>
-                            </div>
-                        </div>
-                    </article>
-                    <?php endforeach; ?>
-                </div>
-            <?php else: ?>
-                <div class="info-empty">Belum ada contoh menu yang tersedia.</div>
-            <?php endif; ?>
-        </section>
+        <!-- ===== KUMPULAN RESEP ===== -->
+<?php
+$kartu_id     = 'resep';
+$kartu_judul  = 'Kumpulan Resep';
+$kartu_intro  = 'Lembar resep bergambar: setiap lembar memuat 7 resep lengkap dengan bahan, cara memasak, dan nilai gizinya.';
+$kartu_daftar = $reseps;
+$kartu_alt    = 'Resep';
+$kartu_kosong = 'Belum ada lembar resep yang tersedia.';
+require __DIR__ . '/includes/galeri_kartu.php';
+?>
+
+        <!-- ===== PANDUAN & EDUKASI GIZI ===== -->
+<?php
+$kartu_id     = 'panduan';
+$kartu_judul  = 'Panduan & Edukasi Gizi';
+$kartu_intro  = 'Panduan diet untuk kondisi tertentu, daftar bahan makanan pilihan, keamanan pangan, dan edukasi kesehatan pencernaan.';
+$kartu_daftar = $panduans;
+$kartu_alt    = 'Panduan';
+$kartu_kosong = 'Belum ada panduan yang tersedia.';
+require __DIR__ . '/includes/galeri_kartu.php';
+?>
 
         <!-- ===== DBMP ===== -->
         <section class="info-section" id="dbmp">

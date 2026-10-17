@@ -53,3 +53,18 @@ body {
     color: #555;
     font-size: 0.9em;
 }
+
+/* Ikon vektor (pengganti emoji). Ukuran mengikuti ukuran huruf induknya,
+   warnanya mengikuti warna teks di sekitarnya (currentColor). */
+.ikon {
+    width: 1em;
+    height: 1em;
+    display: inline-block;
+    vertical-align: -0.15em;
+    flex: none;
+}
+
+/* Hati di footer: satu-satunya ikon yang punya warna sendiri. */
+.ikon-hati {
+    color: var(--primary-color);
+}

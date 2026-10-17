@@ -168,6 +168,29 @@ ada "tidak ada lagi tautan .php di beranda (menu & kartu)" "$(grep -o 'href="[a-
 ada "canonical memakai alamat rapi" "$(curl -s "$BASE/imt" | grep -o 'rel="canonical" href="[^"]*')" "/imt"
 
 echo
+echo "=== I. KONTEN INFORMASI GIZI, IKON VEKTOR, GAYA MONITORING ==="
+INFO=$(curl -s "$BASE/informasi")
+ada "halaman Informasi memuat 5 bagian galeri" "$(echo "$INFO" | grep -o 'class="info-section"' | wc -l)" "5"
+ada "bagian Kumpulan Resep ada" "$(echo "$INFO" | grep -c 'id="resep"')" "1"
+ada "bagian Panduan & Edukasi ada" "$(echo "$INFO" | grep -c 'id="panduan"')" "1"
+ada "kartu galeri (leaflet+menu+resep+panduan+dbmp)" "$(echo "$INFO" | grep -o 'class="info-card"' | wc -l)" "36"
+ada "tautan lompat antar bagian" "$(echo "$INFO" | grep -o 'class="info-jump"' | wc -l)" "1"
+ada "kartu resep memakai thumbnail assets/resep/thumbs" "$(echo "$INFO" | grep -c 'assets/resep/thumbs/')" "15"
+ada "kartu panduan memakai thumbnail assets/panduan/thumbs" "$(echo "$INFO" | grep -c 'assets/panduan/thumbs/')" "7"
+ada "berkas modul resep & panduan ada" "$(ls includes/resep.php includes/panduan.php | wc -l)" "2"
+# Ikon: SVG menggantikan emoji
+for u in / /imt /informasi /monitoring; do
+  H=$(curl -s "$BASE$u")
+  ada "$u memakai ikon vektor (svg)" "$(echo "$H" | grep -o '<svg' | wc -l | awk '{print ($1>0)?"ADA":"TIDAK"}')" "ADA"
+  ada "$u bebas emoji" "$(echo "$H" | grep -c '📊\|📄\|📈\|🛠\|🔒\|⚠️\|❤️\|🥗\|🍱')" "0"
+done
+ada "logo beranda diperkecil (maks 170px)" "$(grep -c 'max-height: 170px' css/index.css)" "1"
+MON=$(curl -s "$BASE/monitoring")
+ada "Monitoring: badge 'Akun aman' sudah dihapus" "$(echo "$MON" | grep -c 'Akun aman')" "0"
+ada "Monitoring: judul bagian pakai gaya halaman hasil" "$(grep -c 'Judul bagian Monitoring memakai gaya judul halaman hasil' css/pages.css)" "1"
+ada "Monitoring: tombol 'Cek Status Gizi Baru' ada" "$(grep -c 'Cek Status Gizi Baru' monitoring.php)" "1"
+
+echo
 echo "=============================================="
 echo "LULUS: $LULUS | GAGAL: $GAGAL"
 [ "$GAGAL" -eq 0 ] || exit 1

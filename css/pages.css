@@ -47,18 +47,21 @@
 }
 
 /* --- Kotak akun responden --------------------------------------------------- */
+/* Kotak akun: mengikuti gaya kotak isi di halaman hasil (result.css
+   .result-container) supaya kedua halaman terasa satu gaya. */
 .account-box {
-    background: #eef6ff;
-    border: 1px solid #bcdcff;
+    background-color: var(--secondary-color);
+    border: 1px dashed var(--primary-color);
     border-radius: 12px;
-    padding: 16px 20px;
-    margin: 20px 0;
+    padding: 20px 22px;
+    margin: 25px 0;
 }
 
 .account-box h3 {
     margin: 0 0 6px 0;
     font-size: 1.05em;
-    color: #1a5fa8;
+    /* Warna judul kartu disamakan dengan judul halaman (gaya halaman hasil). */
+    color: var(--primary-color);
 }
 
 .account-box p {
@@ -236,6 +239,31 @@
     color: #555;
     margin-top: 0;
     margin-bottom: 18px;
+}
+
+/* Tautan lompat ke bagian halaman Informasi Gizi (halaman kini panjang). */
+.info-jump {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 16px 0 4px;
+}
+
+.info-jump a {
+    display: inline-block;
+    padding: 7px 14px;
+    border-radius: 999px;
+    background-color: var(--secondary-color);
+    border: 1px solid var(--primary-color);
+    color: var(--primary-color);
+    font-size: 0.9em;
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.info-jump a:hover,
+.info-jump a:focus-visible {
+    background-color: #fff;
 }
 
 .info-grid {
@@ -475,10 +503,12 @@
 }
 
 /* --- Monitoring: ringkasan, grafik, keamanan akun --------------------------- */
+/* Judul bagian Monitoring memakai gaya judul halaman hasil (rata tengah,
+   warna utama) — diatur di css/result.css pada aturan "h1, h2".
+   Di sini hanya ditambah jarak antar bagian dan lebar agar mudah dibaca. */
 .mon-judul {
-    text-align: left;
-    margin: 28px 0 12px;
-    font-size: 1.25em;
+    margin-top: 30px;
+    padding: 0 4px;
 }
 
 .mon-chart-card {
@@ -529,16 +559,9 @@
     color: #6c757d;
 }
 
-.badge-aman {
-    color: #1a7f52;
-    background: #e3f8ef;
-    border-radius: 999px;
-    padding: 2px 10px;
-    font-size: 0.85em;
-    font-weight: 700;
-    white-space: nowrap;
-}
-
+/* .badge-aman dihapus dari halaman Monitoring sesuai permintaan, sehingga
+   aturan gayanya tidak dipakai lagi (dibiarkan ada agar tidak ada yang rusak
+   bila nanti dipakai kembali). */
 .badge-perhatian {
     color: #8a5600;
     background: #fff3d6;
@@ -601,10 +624,6 @@
 @media (max-width: 600px) {
     .mon-chart-wrap {
         height: 260px;
-    }
-
-    .mon-judul {
-        font-size: 1.15em;
     }
 
     .layanan-card,

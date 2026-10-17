@@ -13,6 +13,7 @@
  * CATATAN: tautan "Login Admin" tidak lagi ditampilkan (lihat includes/nav.php).
  */
 require_once __DIR__ . '/includes/session.php';
+require_once __DIR__ . '/includes/ikon.php';
 
 $nav_active = '';
 
@@ -73,17 +74,17 @@ require __DIR__ . '/includes/layout_head.php';
         <!-- ===== PILIHAN MENU DI AWAL ===== -->
         <div class="home-menu">
             <a class="home-menu-card" href="/imt">
-                <span class="home-menu-ico" aria-hidden="true">📊</span>
+                <span class="home-menu-ico" aria-hidden="true"><?= instagi_ikon('cek-gizi') ?></span>
                 <h3>Cek Status Gizi</h3>
                 <p>Hitung Indeks Massa Tubuh (IMT), status gizi, dan kebutuhan kalori harian Anda.</p>
             </a>
             <a class="home-menu-card" href="/informasi">
-                <span class="home-menu-ico" aria-hidden="true">📄</span>
+                <span class="home-menu-ico" aria-hidden="true"><?= instagi_ikon('informasi') ?></span>
                 <h3>Informasi Gizi</h3>
-                <p>Leaflet gizi, contoh menu sesuai kalori, dan Daftar Bahan Makanan Penukar (DBMP).</p>
+                <p>Leaflet gizi, contoh menu sesuai kalori, kumpulan resep, panduan diet, dan Daftar Bahan Makanan Penukar (DBMP).</p>
             </a>
             <a class="home-menu-card" href="/monitoring">
-                <span class="home-menu-ico" aria-hidden="true">📈</span>
+                <span class="home-menu-ico" aria-hidden="true"><?= instagi_ikon('monitoring') ?></span>
                 <h3>Monitoring Status Gizi</h3>
                 <p>Lihat riwayat dan grafik perkembangan status gizi akun Anda dari waktu ke waktu.</p>
             </a>
@@ -96,7 +97,7 @@ require __DIR__ . '/includes/layout_head.php';
 
             <div class="layanan-grid">
                 <article class="layanan-card">
-                    <span class="layanan-ico" aria-hidden="true">🥗</span>
+                    <span class="layanan-ico" aria-hidden="true"><?= instagi_ikon('konsultasi') ?></span>
                     <h3>Konsultasi Gizi</h3>
                     <p>Konsultasikan hasil cek status gizi Anda dengan ahli gizi: pola makan, kebutuhan kalori, dan target berat badan yang realistis.</p>
                     <a class="layanan-btn layanan-btn-wa" href="<?= htmlspecialchars($wa_konsultasi, ENT_QUOTES, 'UTF-8') ?>" target="_blank" rel="noopener">
@@ -105,7 +106,7 @@ require __DIR__ . '/includes/layout_head.php';
                 </article>
 
                 <article class="layanan-card">
-                    <span class="layanan-ico" aria-hidden="true">🍱</span>
+                    <span class="layanan-ico" aria-hidden="true"><?= instagi_ikon('catering') ?></span>
                     <h3>Catering Gizi</h3>
                     <p>Menu harian yang disusun sesuai kebutuhan kalori dan kondisi Anda — praktis untuk program penurunan, kenaikan, atau pemeliharaan berat badan.</p>
                     <a class="layanan-btn layanan-btn-wa" href="<?= htmlspecialchars($wa_catering, ENT_QUOTES, 'UTF-8') ?>" target="_blank" rel="noopener">

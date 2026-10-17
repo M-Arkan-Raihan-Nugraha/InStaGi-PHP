@@ -37,7 +37,8 @@ ul li,
     height: auto;
     display: block;
     margin: 0 auto;
-    max-height: 400px;
+    /* Logo beranda diperkecil sesuai permintaan agar tidak memakan layar. */
+    max-height: 170px;
 }
 
 h2 {
@@ -123,7 +124,7 @@ ul li::before {
         padding: 25px;
     }
     .logo img {
-        max-height: 250px;
+        max-height: 130px;
     }
     h2 {
         font-size: 1.5em;

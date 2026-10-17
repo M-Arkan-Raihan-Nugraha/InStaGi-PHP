@@ -18,6 +18,8 @@
  * partial ini aman dijalankan berkali-kali.
  */
 
+require_once __DIR__ . '/ikon.php';
+
 if (!function_exists('instagi_nav_items')) {
     function instagi_nav_items()
     {
@@ -25,9 +27,9 @@ if (!function_exists('instagi_nav_items')) {
         // .htaccess root. Alamat lama (imt.php, informasi.php, dst.) tetap
         // berfungsi, jadi tautan lama/bookmark tidak mati.
         return [
-            'hitung'     => ['label' => 'Cek Status Gizi',        'href' => '/imt',        'icon' => '📊'],
-            'informasi'  => ['label' => 'Informasi Gizi',         'href' => '/informasi',  'icon' => '📄'],
-            'monitoring' => ['label' => 'Monitoring Status Gizi', 'href' => '/monitoring', 'icon' => '📈'],
+            'hitung'     => ['label' => 'Cek Status Gizi',        'href' => '/imt',        'icon' => 'cek-gizi'],
+            'informasi'  => ['label' => 'Informasi Gizi',         'href' => '/informasi',  'icon' => 'informasi'],
+            'monitoring' => ['label' => 'Monitoring Status Gizi', 'href' => '/monitoring', 'icon' => 'monitoring'],
         ];
     }
 }
@@ -46,12 +48,12 @@ $nav_admin  = (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] === true);
             <?php foreach ($nav_items as $key => $item): ?>
                 <a class="site-nav-link<?= $key === $nav_active ? ' is-active' : '' ?>"
                    href="<?= htmlspecialchars($item['href'], ENT_QUOTES, 'UTF-8') ?>">
-                    <span class="site-nav-ico" aria-hidden="true"><?= $item['icon'] ?></span><?= htmlspecialchars($item['label'], ENT_QUOTES, 'UTF-8') ?>
+                    <span class="site-nav-ico" aria-hidden="true"><?= instagi_ikon($item['icon']) ?></span><?= htmlspecialchars($item['label'], ENT_QUOTES, 'UTF-8') ?>
                 </a>
             <?php endforeach; ?>
             <?php if ($nav_admin): ?>
                 <a class="site-nav-link<?= $nav_active === 'admin' ? ' is-active' : '' ?>" href="/admin">
-                    <span class="site-nav-ico" aria-hidden="true">🛠️</span>Admin
+                    <span class="site-nav-ico" aria-hidden="true"><?= instagi_ikon('admin') ?></span>Admin
                 </a>
             <?php endif; ?>
         </nav>

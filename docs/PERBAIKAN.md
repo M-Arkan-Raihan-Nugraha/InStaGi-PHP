@@ -589,3 +589,131 @@ Berubah: `index.php`, `imt.php`, `result.php`, `informasi.php`, `monitoring.php`
 - Guard terpusat (login admin, CSRF, JSON) di satu `bootstrap.php`.
 - Lapisan repositori untuk `imt_history`/`responden`.
 - Pengalihan 301 dari `.php` ke alamat rapi (lihat catatan bagian 0d).
+
+---
+
+## 10. Ronde Konten Informasi Gizi, Ikon Vektor & Gaya Monitoring (17 Okt 2026)
+
+### 10.1 Konten baru: 22 lembar materi (dinamai sesuai isinya)
+
+Kedua puluh dua gambar yang diletakkan di folder akar proyek dipindahkan dan
+dinamai ulang sesuai ISI gambar (bukan singkatan berkas asalnya). Penamaan
+dilakukan setelah memeriksa setiap gambar satu per satu.
+
+**Kumpulan Resep — `assets/resep/` (15 lembar, tiap lembar berisi 7 resep):**
+
+| Berkas | Judul di lembar |
+|---|---|
+| `menu-ayam.jpeg` | Resep Menu Ayam |
+| `menu-ikan.jpeg` | Resep Menu Ikan |
+| `sup-sayuran-mix-protein.jpeg` | Sup Sayuran Mix Protein |
+| `krim-sup.jpeg` | Krim Sup Ayam |
+| `krim-sup-selain-ayam.jpeg` | Krim Sup Selain Ayam |
+| `menu-bubur.jpeg` | Resep Menu Bubur |
+| `bubur-bayi-kaya-protein.jpeg` | Bubur Bayi Kaya Protein (MPASI) |
+| `nasi-nusantara.jpeg` | Resep Nasi Nusantara |
+| `soto-nusantara.jpeg` | Resep Soto Nusantara |
+| `sate-nusantara.jpeg` | Resep Sate Nusantara |
+| `pepes-khas-nusantara.jpeg` | Resep Pepes Khas Nusantara |
+| `salad-sayur-mix-protein.jpeg` | Salad Sayur Mix Protein |
+| `menu-tinggi-zat-besi.jpeg` | Menu Tinggi Zat Besi |
+| `gorengan-favorit.jpeg` | Gorengan Favorit |
+| `jus-buah-mix-sayuran.jpeg` | Jus Buah Mix Sayuran |
+
+**Panduan & Edukasi Gizi — `assets/panduan/` (7 lembar):**
+
+| Berkas | Judul di lembar |
+|---|---|
+| `diet-diabetes-melitus-3j.jpeg` | Diet Diabetes Melitus (DM): Prinsip 3J |
+| `diet-rendah-karbohidrat-tinggi-lemak-ppok.jpeg` | Diet Rendah Karbohidrat Tinggi Lemak untuk Pasien PPOK |
+| `diet-tinggi-protein.jpeg` | Diet Tinggi Protein |
+| `makanan-sumber-albumin.jpeg` | 16 Makanan Sumber Albumin |
+| `makanan-tinggi-zat-besi.jpeg` | 15 Makanan Tinggi Zat Besi |
+| `keamanan-pangan-rumah-tangga.jpeg` | Panduan Keamanan Pangan Tingkat Rumah Tangga |
+| `prebiotik-dan-probiotik.jpeg` | Prebiotik dan Probiotik |
+
+Halaman Informasi Gizi kini punya **lima bagian** (sebelumnya tiga):
+Leaflet → Contoh Menu → **Kumpulan Resep** → **Panduan & Edukasi Gizi** → DBMP.
+Ditambah baris tautan lompat antar bagian di bawah paragraf pengantar.
+
+### 10.2 Berkas baru (modul & partial)
+
+| Berkas | Guna |
+|---|---|
+| `includes/galeri_aset.php` | Perkakas bersama semua galeri: cari gambar/thumbnail, susun URL, saring entri yang gambarnya belum ada |
+| `includes/resep.php` | Data 15 lembar resep (judul, ringkasan, tag, nama unduhan) |
+| `includes/panduan.php` | Data 7 lembar panduan/edukasi |
+| `includes/galeri_kartu.php` | **Partial satu bagian galeri** — markup kartu (gambar, tag, judul, ringkasan, Lihat/Unduh) kini ditulis SEKALI, dipakai 4 galeri |
+| `includes/ikon.php` | Ikon vektor (SVG) pengganti emoji |
+| `includes/galeri_build_thumbs.php` | Pembuat thumbnail untuk SEMUA galeri (leaflet, menu, resep, panduan) |
+
+`informasi.php` menyusut 170 → 131 baris karena dua blok `foreach` yang sama dan
+markup kartu yang berulang digantikan helper + partial.
+
+### 10.3 Emoji dihapus, diganti ikon vektor
+
+Permintaan: *"pastikan jangan ada pake emoji"*. Seluruh ikon antarmuka kini
+berupa SVG di `includes/ikon.php` (warna mengikuti teks, ukuran mengikuti huruf):
+
+| Sebelum (emoji) | Sekarang (ikon SVG) | Keterangan |
+|---|---|---|
+| 📊 kartu & menu "Cek Status Gizi" | `cek-gizi` | **orang kurus & orang gemuk** berdampingan |
+| 📄 kartu & menu "Informasi Gizi" | `informasi` | **piring dengan sendok & garpu** |
+| 📈 kartu & menu "Monitoring" | `monitoring` | grafik garis naik |
+| 🛠️ tautan Admin | `admin` | pengatur (slider) |
+| 🥗 kartu layanan Konsultasi Gizi | `konsultasi` | gelembung percakapan |
+| 🍱 kartu layanan Catering Gizi | `catering` | tudung saji |
+| 🔒 badge "Akun aman" | **badge dihapus** | sesuai permintaan |
+| ⚠️ badge "Belum memakai password" | `perhatian` | segitiga peringatan |
+| ❤️ footer "Created With" | `hati` | hati penuh berwarna |
+
+Verifikasi: pencarian emoji di seluruh berkas PHP/CSS aplikasi dan pada HTML yang
+dikirim ke peramban = **0 emoji**. Satu-satunya simbol tersisa adalah tanda centang
+`✓` sebagai penanda daftar di `css/index.css` (bukan emoji, hanya glif huruf) —
+sebutkan bila ingin ikut diganti.
+
+### 10.4 Gaya teks Monitoring disamakan dengan halaman hasil
+
+- Aturan `.mon-judul` yang tadinya membuat judul bagian **rata kiri dan lebih
+  kecil** (1,25em) dihapus, sehingga judul bagian kini memakai gaya judul halaman
+  hasil (`h1, h2` di `css/result.css`): **rata tengah, warna utama, 1,5em**.
+  Yang tersisa hanya jarak antar bagian (`margin-top: 30px`).
+- Kotak akun (`.account-box`) disamakan dengan kotak isi halaman hasil
+  (`.result-container`): latar lightblue + **garis putus-putus** warna utama.
+- Warna judul di dalam kotak (`.account-box h3`) disamakan menjadi warna utama.
+- Terukur di peramban: judul halaman 32px dan judul bagian 24px, keduanya
+  `rgb(231, 76, 60)` dan rata tengah — sama seperti halaman hasil.
+
+### 10.5 Penyesuaian lain
+
+- Tombol **"+ Ukur Status Gizi Baru" → "+ Cek Status Gizi Baru"** di Monitoring.
+- Badge **"Akun aman (memakai password)" dihapus**; status password kini hanya
+  ditandai badge peringatan bila akun belum memakai password.
+- **Logo beranda diperkecil**: tinggi maksimum 400px → **170px** (ponsel: 250px →
+  130px). Terukur 170px di peramban.
+
+### 10.6 Verifikasi ronde ini
+
+- `php -l` 38 berkas bersih.
+- Uji unit validasi **69/69**, uji end-to-end **61/61**, uji fitur **84/84**.
+- Halaman Informasi: 5 bagian, **36 kartu**, 35 gambar galeri, 5 tautan lompat;
+  **0 geser horizontal**; thumbnail baru termuat (diuji dengan menggulir halaman).
+- Monitoring (dua kondisi diuji): akun berpassword -> badge peringatan tidak
+  muncul; akun tanpa password -> badge "Belum memakai password" muncul lengkap
+  dengan ikon SVG. "Akun aman" tidak ada di HTML. Tombol "Cek Status Gizi Baru"
+  ada. Emoji 0.
+- Badge status di kartu Ringkasan diukur: tepi badge **17px di dalam** tepi kartu
+  (tidak meluber); tinggi kartu baris pertama seragam (95px).
+
+### 10.7 Cara menambah materi berikutnya
+
+1. Simpan gambar ke `assets/resep/` atau `assets/panduan/` dengan nama sesuai isi.
+2. Tambahkan entri di `instagi_resep_list()` (`includes/resep.php`) atau
+   `instagi_panduan_list()` (`includes/panduan.php`).
+3. Jalankan `php includes/galeri_build_thumbs.php` untuk membuat thumbnail.
+
+Catatan: skrip lama `includes/menu_build_thumbs.php` dan
+`includes/leaflet_build_thumbs.php` masih ada dan tetap berfungsi untuk
+galerinya masing-masing; keduanya kini bisa digantikan oleh
+`galeri_build_thumbs.php` yang menangani semua galeri (kandidat perapian
+berikutnya).

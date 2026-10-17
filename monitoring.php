@@ -18,6 +18,7 @@ require_once 'includes/session.php';
 require_once 'includes/db.php';
 require_once 'includes/responden.php';
 require_once 'includes/validasi.php';
+require_once 'includes/ikon.php';
 
 $nav_active = 'monitoring';
 
@@ -304,13 +305,14 @@ require __DIR__ . '/includes/layout_head.php';
                 <p>No. HP: <?= htmlspecialchars($responden['no_hp'], ENT_QUOTES, 'UTF-8') ?></p>
                 <p>
                    <?php if ($akun_punya_password): ?>
-                       <span class="badge-aman">🔒 Akun aman (memakai password)</span>
+                       <!-- Badge "Akun aman" dihapus sesuai permintaan; status password
+                            kini ditandai lewat badge peringatan di bawah (bila belum ada). -->
                    <?php else: ?>
-                       <span class="badge-perhatian">⚠️ Belum memakai password</span>
+                       <span class="badge-perhatian"><?= instagi_ikon('perhatian') ?> Belum memakai password</span>
                    <?php endif; ?>
                 </p>
                 <div class="account-actions">
-                    <a class="btn-primary" href="/imt">+ Ukur Status Gizi Baru</a>
+                    <a class="btn-primary" href="/imt">+ Cek Status Gizi Baru</a>
                     <form method="post" action="/monitoring" style="display:inline;">
                         <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($csrf_token, ENT_QUOTES, 'UTF-8') ?>">
                         <input type="hidden" name="action" value="logout">
