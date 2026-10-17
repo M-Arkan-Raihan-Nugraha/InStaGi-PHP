@@ -8,6 +8,8 @@ if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true) {
     exit;
 }
 
+$nav_active = 'admin';
+
 // Sisipkan file koneksi database
 require_once 'includes/db.php';
 
@@ -35,11 +37,14 @@ if ($riwayat_result === false) {
     <title>InStaGi - Data Responden</title>
     <link rel="shortcut icon" href="assets/favicon.ico" type="image/x-icon">
     <link rel="stylesheet" href="css/admin.css">
+    <link rel="stylesheet" href="css/nav.css">
     <!-- DataTables CSS -->
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/responsive/2.2.9/css/responsive.dataTables.min.css">
 </head>
 <body>
+
+    <?php require __DIR__ . '/includes/nav.php'; ?>
 
     <div class="container">
         <div class="header">

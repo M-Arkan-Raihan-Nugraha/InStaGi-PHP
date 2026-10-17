@@ -23,8 +23,21 @@ if (isset($_GET['id'])) {
         exit;
     }
 
-    // Siapkan statement SELECT
+    // Siapkan statement SELECT.
+    // Penjaga: prepare() bisa gagal (mis. tabel belum siap). Karena mode
+    // exception mysqli dimatikan (includes/db.php), kegagalan menghasilkan
+    // nilai `false` — memanggil bind_param() pada false memicu fatal yang
+    // membuat respons bukan JSON lagi. Pola sama dengan imt.php.
     $stmt = $koneksi->prepare("SELECT * FROM imt_history WHERE id = ?");
+    if ($stmt === false) {
+        error_log('[InStaGi] get_record prepare gagal: ' . $koneksi->error);
+        http_response_code(500);
+        $response['message'] = 'Gagal mengambil data. Silakan coba beberapa saat lagi.';
+        $koneksi->close();
+        echo json_encode($response);
+        exit;
+    }
+
     $stmt->bind_param("i", $id);
     $stmt->execute();
     $result = $stmt->get_result();

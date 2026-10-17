@@ -47,6 +47,19 @@ if (isset($_POST['ids']) && is_array($_POST['ids'])) {
     $types = str_repeat('i', count($valid_ids));
 
     $stmt = $koneksi->prepare("DELETE FROM imt_history WHERE id IN ($placeholders)");
+
+    // Penjaga: prepare() bisa gagal (mode exception mysqli dimatikan di
+    // includes/db.php, jadi hasilnya `false`). Tanpa pemeriksaan ini,
+    // bind_param() pada nilai false memicu fatal -> respons bukan JSON lagi.
+    if ($stmt === false) {
+        error_log('[InStaGi] delete_record (bulk) prepare gagal: ' . $koneksi->error);
+        http_response_code(500);
+        $response['message'] = 'Gagal menyiapkan penghapusan data. Silakan coba beberapa saat lagi.';
+        $koneksi->close();
+        echo json_encode($response);
+        exit;
+    }
+
     $stmt->bind_param($types, ...$valid_ids);
 
     if ($stmt->execute()) {
@@ -72,6 +85,17 @@ if (isset($_POST['ids']) && is_array($_POST['ids'])) {
     }
 
     $stmt = $koneksi->prepare("DELETE FROM imt_history WHERE id = ?");
+
+    // Penjaga yang sama dengan penghapusan massal di atas.
+    if ($stmt === false) {
+        error_log('[InStaGi] delete_record (single) prepare gagal: ' . $koneksi->error);
+        http_response_code(500);
+        $response['message'] = 'Gagal menyiapkan penghapusan data. Silakan coba beberapa saat lagi.';
+        $koneksi->close();
+        echo json_encode($response);
+        exit;
+    }
+
     $stmt->bind_param("i", $id);
 
     if ($stmt->execute()) {

@@ -14,6 +14,11 @@ require_once 'includes/dbmp.php';
 // Modul contoh menu — galeri contoh menu sesuai kebutuhan kalori
 require_once 'includes/menu.php';
 
+// Modul akun responden (untuk tautan ke menu Monitoring)
+require_once 'includes/responden.php';
+
+$nav_active = 'hitung';
+
 // Redirect jika tidak ada data hasil analisis di session
 if (!isset($_SESSION['imt_result'])) {
     header("location: imt.php");
@@ -137,6 +142,8 @@ foreach (instagi_menu_list() as $kkal => $meta) {
     <title>InStaGi - Hasil Analisis IMT</title>
     <link rel="shortcut icon" href="assets/favicon.ico" type="image/x-icon">
     <link rel="stylesheet" href="css/result.css">
+    <link rel="stylesheet" href="css/nav.css">
+    <link rel="stylesheet" href="css/pages.css">
 
     <meta name="description" content="Hasil analisis IMT dan status gizi Anda, lengkap dengan berat badan ideal, estimasi kebutuhan kalori harian, serta saran gizi praktis dari InStaGi.">
     <meta name="theme-color" content="#e74c3c">
@@ -159,6 +166,8 @@ foreach (instagi_menu_list() as $kkal => $meta) {
 </head>
 
 <body>
+
+    <?php require __DIR__ . '/includes/nav.php'; ?>
 
     <div class="container">
         <div style="text-align: center;" id="page-logo">
@@ -255,6 +264,23 @@ foreach (instagi_menu_list() as $kkal => $meta) {
                 Simpan ke PDF
             </button>
             <a href="imt.php" class="back-btn">Hitung Ulang / Kembali</a>
+        </div>
+
+        <?php $responden_aktif = instagi_responden_saat_ini(); ?>
+        <div class="account-box">
+            <?php if ($responden_aktif): ?>
+                <h3>Riwayat tersimpan untuk akun: <?= htmlspecialchars($responden_aktif['nama'], ENT_QUOTES, 'UTF-8') ?></h3>
+                <p>Hasil ini otomatis masuk ke riwayat Anda. Lihat perkembangan status gizi Anda di menu Monitoring.</p>
+                <div class="account-actions">
+                    <a class="btn-primary" href="monitoring.php">Lihat Monitoring Saya</a>
+                </div>
+            <?php else: ?>
+                <h3>Simpan & pantau hasil Anda</h3>
+                <p>Buka menu <strong>Monitoring</strong> lalu masukkan Nama dan No. HP yang sama untuk melihat riwayat pengukuran Anda.</p>
+                <div class="account-actions">
+                    <a class="btn-secondary" href="monitoring.php">Buka Monitoring</a>
+                </div>
+            <?php endif; ?>
         </div>
 
         <?php if (!empty($leaflets)): ?>

@@ -354,3 +354,108 @@ kodenya. Yang paling penting:
    `@media (max-width: 768px)` (2×). Bisa digabung tanpa mengubah tampilan.
 8. **SRI (`integrity`) pada skrip CDN** — `html2pdf.js`, jQuery, dan DataTables
    dimuat dari CDN tanpa pengaman integritas.
+
+---
+
+## 7. Ronde Perbaikan Kritis (17 Okt 2026)
+
+Semua perubahan di bawah ini **tidak menyentuh `includes/gizi.php`** (rumus IMT,
+kalori Harris-Benedict, dan ambang klasifikasi tetap persis seperti semula —
+diverifikasi: `diff` terhadap HEAD kosong). Backup berkas sebelum perubahan ada
+di `_backup-v3/kritis-20261017/` (di luar paket upload).
+
+### K1 — Jalur API bisa "mati" dengan halaman kosong (paling kritis)
+
+**Masalah.** `includes/db.php` sengaja mematikan mode exception mysqli, sehingga
+`prepare()` yang gagal mengembalikan `false`. Di `api/get_record.php`,
+`api/update_record.php`, dan `api/delete_record.php` nilai itu langsung dipakai
+(`$stmt->bind_param(...)`), sehingga PHP melempar fatal
+*"Call to a member function bind_param() on bool"*. Karena `display_errors` mati,
+pengguna/admin hanya melihat halaman putih — dan karena responsnya bukan JSON,
+antarmuka admin menampilkan *"Error parsing server response"*. `imt.php` sudah
+memakai penjaga ini sejak awal; ketiga endpoint API belum.
+
+**Perbaikan.** Penjaga `if ($stmt === false) { error_log(...); http_response_code(500); JSON pesan ramah }`
+di **semua** pemanggilan `prepare()` pada ketiga endpoint (5 titik), dengan pola
+dan gaya yang sama seperti `imt.php`. Detail teknis tetap hanya masuk log server.
+
+### K2 — Satu sumber aturan validasi: `includes/validasi.php` (baru)
+
+**Masalah.** Aturan validasi lengkap hanya ada di `imt.php`; `api/update_record.php`
+hanya memeriksa `> 0`. Akibatnya jalur edit admin bisa menyimpan nilai yang tidak
+mungkin diketik responden sendiri:
+
+| Celah | Dampak |
+|-------|--------|
+| `aktivitas` tidak diperiksa | nilai apa pun (mis. `999`) tersimpan → kalori tidak masuk akal |
+| `jenis_kelamin` tidak diperiksa | salah tulis satu huruf dianggap Perempuan oleh rumus |
+| No. HP tidak mengikuti aturan login Monitoring | akun responden terbentuk tetapi **tidak pernah bisa dipakai masuk** (mis. `81234567890` tanpa awalan 0) |
+| `tanggal` diambil apa adanya dari POST | kolom `readonly` hanya pengaman peramban → nilai bisa dipalsukan/kosong dan membuat penyimpanan gagal |
+
+**Perbaikan.** Modul baru `includes/validasi.php` (prinsip sama dengan `gizi.php`:
+satu sumber kebenaran) dipakai **kedua** jalur — `imt.php` dan `api/update_record.php`:
+
+- `nama` 1–100 karakter; `usia` 1–120; `bb` 2–500 kg; `tb` 40–250 cm **dan wajib bilangan bulat**;
+- `jenis_kelamin` wajib tepat `Laki-laki` / `Perempuan`;
+- `aktivitas` wajib salah satu dari `1.2 · 1.375 · 1.55 · 1.725 · 1.9` (toleran terhadap penulisan `1.550` dari database);
+- `no_hp` dinormalkan (satu fungsi dengan halaman Monitoring) dan wajib cocok `^0\d{7,14}$`;
+- `tanggal` wajib tanggal nyata `YYYY-MM-DD`; pada form publik tanggal masa depan ditolak, sedangkan pada jalur admin tanggal rusak **tidak menolak** penyimpanan — nilai lama dipertahankan lewat `IFNULL(NULLIF(?, ''), tanggal)` supaya baris lama bertanggal rusak tidak menjadi mustahil diperbaiki;
+- kiriman berbentuk array (mis. `no_hp[]=...`) tidak lagi memicu peringatan PHP *"Array to string conversion"*.
+
+Petunjuk No. HP di `imt.php` ikut disesuaikan agar sama dengan aturan servernya.
+
+### K3 — Halaman Monitoring: pembatas percobaan & pesan seragam
+
+**Masalah.** Halaman Monitoring memakai prinsip "1 nama + 1 No. HP = 1 akun"
+tanpa password dan tanpa batas percobaan: nama & nomor bisa dicoba sebanyak apa
+pun sampai cocok, lalu riwayat gizi orang lain terbaca.
+
+**Perbaikan.** Pembatas percobaan berbasis sesi (sama seperti login admin):
+**maksimal 5 percobaan gagal → jeda 15 menit**, penghitung direset saat berhasil
+masuk, dan pesan kegagalan diseragamkan ("Nama atau No. HP tidak cocok dengan
+data kami") agar tidak memudahkan menebak akun mana yang terdaftar.
+
+> Catatan: ini mengurangi penyalahgunaan, **bukan** menggantikan autentikasi.
+> Perlindungan penuh (mis. PIN/password ringan) adalah keputusan produk —
+> belum dikerjakan.
+
+### K4 — Status HTTP API yang lebih tepat
+
+| Endpoint | Sebelum | Sesudah |
+|----------|---------|---------|
+| `api/update_record.php` | selalu 200 (`success:false`) | **400** ID tidak sah · **422** input tidak lolos validasi · **404** ID tidak ada · **500** gagal query |
+| `api/get_record.php`, `api/delete_record.php` | 200 walau query gagal | **500** + JSON pesan ramah |
+
+### K5 — Inkonsistensi kecil yang ikut dirapikan
+
+- `api/update_record.php`: bila tidak ada baris yang berubah, dipastikan dulu
+  datanya masih ada — ID yang sudah dihapus kini menghasilkan pesan
+  "Data tidak ditemukan atau sudah dihapus" alih-alih "berhasil diperbarui".
+
+### Verifikasi ronde ini
+
+| Uji | Hasil |
+|-----|-------|
+| `php -l` seluruh berkas PHP (28 berkas) | bersih |
+| `diff includes/gizi.php` vs HEAD | identik — rumus utuh |
+| Uji unit `includes/validasi.php` (68 kasus: sah/tolak/pesan/format HP/aktivitas/tanggal/fuzz) | **69/69 lulus**, tanpa warning PHP |
+| Uji end-to-end dengan MariaDB 10.4 + server PHP lokal (input → hasil → login admin → API get/update/delete/export → Monitoring) | **61/61 lulus** |
+| Paksa `prepare()` gagal (kolom `saran` di-rename **di DB uji**) | respons **JSON 500** dengan pesan ramah, tanpa bocoran detail SQL — bukan halaman kosong |
+
+Skrip ujinya disimpan di `_backup-v3/uji-20261017/` (`uji_validasi.php`,
+`uji_e2e.sh`, `hasil_e2e.txt`) dan bisa dijalankan ulang; `uji_e2e.sh` membuat
+ulang database ujinya sendiri secara otomatis.
+
+### Masih MENUNGGU KEPUTUSAN (tidak diubah karena menyentuh rumus/ambang)
+
+1. **Celah ambang `instagi_kategori_gizi()`** — IMT mentah di antara `18,49–18,5`
+   atau `24,9–25` jatuh ke cabang terakhir sehingga berlabel **Obesitas**
+   (terbukti: `24.9001` → Obesitas). Saat ini **laten**, karena kedua pemanggil
+   selalu mengirim nilai yang sudah dibulatkan 1 desimal dan grid 0,1 tidak punya
+   nilai di dalam celah itu. Menjadi berbahaya bila item "klasifikasi pakai nilai
+   mentah" dikerjakan apa adanya: 0,46% kombinasi BB/TB wajar (199 dari 42.761)
+   akan salah dilabeli Obesitas.
+2. **Pembulatan sebelum klasifikasi** — IMT mentah `18,47` → tersimpan `18,5` →
+   "normal" (seharusnya underweight); `24,95` → `25,0` → "overweight".
+   Perbaikan keduanya berarti mengubah ambang batas → butuh persetujuan pemilik
+   proyek.

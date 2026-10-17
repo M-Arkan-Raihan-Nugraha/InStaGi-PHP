@@ -1,9 +1,9 @@
 -- =============================================================================
 -- InStaGi — Skema Database
 -- -----------------------------------------------------------------------------
--- File ini OPSIONAL. Tabel `imt_history` sudah dibuat OTOMATIS oleh aplikasi
--- saat pertama kali dibuka (lihat includes/db.php). Gunakan file ini hanya
--- bila Anda lebih suka membuat tabel secara manual lewat phpMyAdmin.
+-- File ini OPSIONAL. Tabel `imt_history` dan `responden` sudah dibuat OTOMATIS
+-- oleh aplikasi saat pertama kali dibuka (lihat includes/db.php). Gunakan file
+-- ini hanya bila Anda lebih suka membuat tabel secara manual lewat phpMyAdmin.
 --
 -- PENTING (nama tabel versi lama):
 --   Bila di database Anda sudah ada tabel lama `bmi_history` berisi data,
@@ -20,6 +20,7 @@
 
 CREATE TABLE IF NOT EXISTS `imt_history` (
     `id`            INT(11)      NOT NULL AUTO_INCREMENT,
+    `responden_id`  INT(11)      NULL,
     `tanggal`       DATE         NOT NULL,
     `nama`          VARCHAR(255) NOT NULL,
     `usia`          INT(3)       NOT NULL,
@@ -33,8 +34,24 @@ CREATE TABLE IF NOT EXISTS `imt_history` (
     `status_gizi`   VARCHAR(50)  NOT NULL,
     `saran`         TEXT,
     `created_at`    TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    PRIMARY KEY (`id`)
+    PRIMARY KEY (`id`),
+    INDEX `idx_tanggal`   (`tanggal`),
+    INDEX `idx_responden` (`responden_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- Opsional (disarankan bila data sudah banyak): percepat ORDER BY tanggal.
+-- 2) Akun responden — sistem "1 nama + 1 nomor HP = 1 akun".
+--    Dibuat OTOMATIS saat responden mengisi form IMT. Login halaman Monitoring
+--    memakai pasangan (nama, no_hp) ini (tanpa password).
+CREATE TABLE IF NOT EXISTS `responden` (
+    `id`         INT(11)      NOT NULL AUTO_INCREMENT,
+    `nama`       VARCHAR(255) NOT NULL,
+    `no_hp`      VARCHAR(30)  NOT NULL,
+    `created_at` TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (`id`),
+    UNIQUE KEY `uniq_nama_hp` (`nama`, `no_hp`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- Bila tabel lama sudah ada dan ingin menambah kolom/index secara manual:
+-- ALTER TABLE `imt_history` ADD COLUMN `responden_id` INT(11) NULL AFTER `id`;
 -- ALTER TABLE `imt_history` ADD INDEX `idx_tanggal` (`tanggal`);
+-- ALTER TABLE `imt_history` ADD INDEX `idx_responden` (`responden_id`);

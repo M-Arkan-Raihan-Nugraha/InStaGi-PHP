@@ -12,6 +12,15 @@ $instagi_base = htmlspecialchars(instagi_base_url(), ENT_QUOTES, 'UTF-8');
 // Modul perhitungan gizi (satu sumber kebenaran untuk IMT/kalori/saran).
 require_once 'includes/gizi.php';
 
+// Modul akun responden (1 nama + 1 nomor HP = 1 akun) untuk menu Monitoring.
+require_once 'includes/responden.php';
+
+// Modul validasi input (satu sumber aturan; dipakai juga oleh API admin
+// api/update_record.php agar aturan form publik dan edit admin sama).
+require_once 'includes/validasi.php';
+
+$nav_active = 'hitung';
+
 // Inisialisasi variabel hasil agar tidak error saat halaman pertama kali dibuka
 $nama = '';
 $usia = '';
@@ -20,6 +29,14 @@ $bb = '';
 $tb = '';
 $no_hp = '';
 $tanggal_input = date('Y-m-d'); // Pre-fill dengan tanggal hari ini
+
+// Bila responden sudah "login" (akun Monitoring), isi otomatis nama & No. HP
+// agar tidak perlu mengetik ulang. Nilai dari POST tetap menang.
+$responden_aktif = instagi_responden_saat_ini();
+if ($responden_aktif) {
+    $nama  = (string) $responden_aktif['nama'];
+    $no_hp = (string) $responden_aktif['no_hp'];
+}
 
 $imt = null;
 $status_gizi = '';
@@ -33,19 +50,21 @@ $error_message = '';
 
 // Cek jika form sudah di-submit (metode POST)
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // 1. Ambil data dari form.
-    //    CATATAN: data disimpan APA ADANYA (mentah) ke database, TIDAK
+    // 1. Ambil data dari form APA ADANYA (mentah) untuk mengisi ulang form bila
+    //    ada yang tidak valid. CATATAN: data disimpan mentah ke database, TIDAK
     //    di-htmlspecialchars di sini. Escaping hanya dilakukan saat MENAMPILKAN
     //    data (result.php / admin.php). Jika di-escape di sini, nama seperti
     //    "A & B" akan tersimpan sebagai "A &amp; B" dan rusak saat ditampilkan.
     $nama = trim($_POST['nama'] ?? '');
-    $usia = (int)($_POST['usia'] ?? 0);
+    $usia = $_POST['usia'] ?? '';
     $jenis_kelamin = trim($_POST['jenis_kelamin'] ?? '');
-    $bb = (float)($_POST['bb'] ?? 0);
-    $tb = (float)($_POST['tb'] ?? 0);
+    $bb = $_POST['bb'] ?? '';
+    $tb = $_POST['tb'] ?? '';
     $no_hp = trim($_POST['no_hp'] ?? '');
     $tanggal_input = trim($_POST['tanggal_input'] ?? '');
-    $aktivitas = (float)($_POST['aktivitas'] ?? 0);
+    if ($tanggal_input === '') {
+        $tanggal_input = date('Y-m-d');
+    }
 
     // 2. Validasi input
     //    Termasuk token CSRF: form ini publik, jadi submit lintas situs ditolak.
@@ -55,21 +74,31 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $error_message = 'Sesi form tidak valid. Silakan muat ulang halaman lalu coba lagi.';
     } elseif (empty($_POST['submitted'])) {
         $error_message = 'Formulir sudah dikirim. Silakan tunggu sebentar atau muat ulang halaman.';
-    } elseif ($usia < 1 || $usia > 120) {
-        $error_message = 'Usia harus antara 1 sampai 120 tahun.';
-    } elseif ($bb < 2 || $bb > 500) {
-        $error_message = 'Berat Badan harus antara 2 sampai 500 kg.';
-    } elseif ($tb < 40 || $tb > 250) {
-        $error_message = 'Tinggi Badan harus antara 40 sampai 250 cm.';
-    } elseif (abs($tb - round($tb)) > 0.001) {
-        // Kolom tinggi_badan bertipe INT, jadi desimal akan dibulatkan oleh
-        // database dan membuat nilai tersimpan berbeda dari yang dihitung.
-        // Lebih baik ditolak dengan pesan jelas daripada tersimpan keliru.
-        $error_message = 'Tinggi Badan dalam cm harus bilangan bulat (tanpa koma), mis. 165.';
     } else {
+        // Aturan validasi dipakai bersama dengan api/update_record.php
+        // (satu sumber: includes/validasi.php) supaya hasil input pengguna dan
+        // hasil edit admin selalu tunduk pada aturan yang sama.
+        // >>> RUMUS TIDAK DIUBAH: validasi hanya memeriksa input.
+        $validasi = instagi_validasi_input($_POST);
+
+        if (!$validasi['valid']) {
+            $error_message = $validasi['error'];
+        } else {
         // 3. Lakukan Perhitungan jika data valid
         //    Semua rumus ada di includes/gizi.php agar identik dengan
         //    api/update_record.php (tidak lagi duplikat & tidak lagi berbeda).
+        //    Nilai dipakai dari hasil validasi (sudah dirapikan & dipastikan sah).
+        $data          = $validasi['data'];
+        $nama          = $data['nama'];
+        $usia          = $data['usia'];
+        $jenis_kelamin = $data['jenis_kelamin'];
+        $bb            = $data['bb'];
+        $tb            = $data['tb'];
+        $no_hp         = $data['no_hp'];
+        $tanggal_input = $data['tanggal'];
+        $aktivitas     = $data['aktivitas'];
+        $hp_norm       = $data['hp_norm'];
+
         $hasil = instagi_hitung_semua($bb, $tb, $usia, $jenis_kelamin, $aktivitas);
 
         $imt            = $hasil['imt'];
@@ -81,10 +110,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $bb_sehat_min   = $hasil['bb_sehat_min'];
         $bb_sehat_max   = $hasil['bb_sehat_max'];
 
-        // 4. Simpan data ke database
+        // 4. Akun responden (1 nama + 1 nomor HP = 1 akun) dibuat otomatis di
+        //    sini, lalu ID-nya ikut disimpan agar menu Monitoring bisa
+        //    menampilkan riwayat milik akun ini.
+        //    ($hp_norm sudah dihitung & diperiksa di includes/validasi.php.)
+        $responden_id = instagi_responden_find_or_create($koneksi, $nama, $hp_norm);
+
+        // 5. Simpan data ke database
         $stmt = $koneksi->prepare(
-            "INSERT INTO imt_history (tanggal, nama, usia, jenis_kelamin, no_hp, berat_badan, tinggi_badan, aktivitas, kalori, imt, status_gizi, saran) 
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
+            "INSERT INTO imt_history (responden_id, tanggal, nama, usia, jenis_kelamin, no_hp, berat_badan, tinggi_badan, aktivitas, kalori, imt, status_gizi, saran) 
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
         );
 
         // Penjaga: bila prepare gagal (mis. tabel belum ada), tampilkan pesan
@@ -94,7 +129,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $error_message = 'Gagal menyiapkan penyimpanan data. Silakan coba beberapa saat lagi.';
             $koneksi->close();
         } else {
-            $stmt->bind_param("ssissdddidss", $tanggal_input, $nama, $usia, $jenis_kelamin, $no_hp, $bb, $tb, $aktivitas, $kalori_harian, $imt, $status_gizi, $saran);
+            $stmt->bind_param("ississdddidss", $responden_id, $tanggal_input, $nama, $usia, $jenis_kelamin, $no_hp, $bb, $tb, $aktivitas, $kalori_harian, $imt, $status_gizi, $saran);
 
             if($stmt->execute()) {
                 // $success_message = "Data Anda berhasil dihitung dan disimpan!"; // Moved to session for result.php
@@ -114,6 +149,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     'success_message' => "Data Anda berhasil dihitung dan disimpan!"
                 ];
 
+                // Tandai akun responden aktif agar menu Monitoring langsung siap.
+                if (!empty($responden_id)) {
+                    instagi_responden_set_session($responden_id, $nama, $hp_norm);
+                }
+
                 $stmt->close();
                 $koneksi->close();
                 header("location: result.php"); // Redirect ke halaman hasil
@@ -127,7 +167,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $koneksi->close(); // Close connection on error
             }
         }
-    }
+        }   // akhir "else" validasi: data valid -> sudah dihitung & disimpan
+    }       // akhir pemeriksaan validasi input
 } else {
     $koneksi->close(); // Close connection if form is not submitted
 }
@@ -141,6 +182,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <title>InStaGi - Input Data</title>
     <link rel="shortcut icon" href="assets/favicon.ico" type="image/x-icon">
     <link rel="stylesheet" href="css/imt.css">
+    <link rel="stylesheet" href="css/nav.css">
 
     <meta name="description" content="Masukkan nama, usia, jenis kelamin, berat dan tinggi badan untuk menghitung IMT (Indeks Massa Tubuh), status gizi, serta estimasi kebutuhan kalori harian Anda.">
     <meta name="theme-color" content="#e74c3c">
@@ -162,6 +204,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <meta name="twitter:image" content="<?= $instagi_base ?>/assets/og-image.jpg">
 </head>
 <body>
+
+    <?php require __DIR__ . '/includes/nav.php'; ?>
 
     <div class="container">
         <div style="text-align: center;">
@@ -204,9 +248,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             </div>
             <div class="form-group">
                  <label for="no_hp">No. HP</label>
+                <small class="field-hint">8&ndash;15 digit (boleh diawali 0 atau +62)</small>
                 <input type="tel" id="no_hp" name="no_hp" value="<?= htmlspecialchars($no_hp) ?>"
                        inputmode="tel" autocomplete="tel" pattern="[0-9+\(\)\- ]{8,20}"
-                       title="Masukkan nomor HP yang valid (8-20 digit, boleh + - spasi)" required>
+                       title="Masukkan nomor HP Indonesia yang valid, mis. 081234567890 atau +6281234567890" required>
             </div>
             <div class="form-group">
                 <label for="bb">Berat Badan (kg)</label>

@@ -1,7 +1,7 @@
 /* InStaGi - Landing Page Styles */
 :root {
     --primary-color: #e74c3c;
-    --secondary-color: #F8F9FC;
+    --secondary-color: #CFE8FF; /* biru langit terang (background halaman) */
     --text-color: #333;
     --border-color: #E5E6EB;
 }
@@ -15,6 +15,16 @@ body {
     display: flex;
     flex-direction: column;
     min-height: 100vh;
+    /* Teks halaman utama dibuat tebal sesuai permintaan. */
+    font-weight: 600;
+}
+
+/* Pertegas seluruh teks di halaman utama (paragraf, daftar, catatan). */
+p,
+ul li,
+.disclaimer,
+.header h2 {
+    font-weight: 600;
 }
 
 .container {

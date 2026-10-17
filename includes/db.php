@@ -165,9 +165,12 @@ try {
     }
 
     // 4) Buat tabel bila belum ada (aman diulang, IF NOT EXISTS).
+    // responden_id menautkan tiap riwayat ke akun responden (1 nama + 1 nomor HP).
+    // Boleh NULL: data lama / data yang belum tertaut tetap sah.
     $sql_create_table = "
     CREATE TABLE IF NOT EXISTS imt_history (
         id INT(11) AUTO_INCREMENT PRIMARY KEY,
+        responden_id INT(11) NULL,
         tanggal DATE NOT NULL,
         nama VARCHAR(255) NOT NULL,
         usia INT(3) NOT NULL,
@@ -180,12 +183,34 @@ try {
         imt DECIMAL(4,1) NOT NULL,
         status_gizi VARCHAR(50) NOT NULL,
         saran TEXT,
-        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        INDEX idx_tanggal (tanggal),
+        INDEX idx_responden (responden_id)
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
     ";
     if (!@$koneksi->query($sql_create_table)) {
         instagi_db_fail(
             'Tabel aplikasi tidak dapat disiapkan.',
+            $wants_json,
+            $koneksi->error
+        );
+    }
+
+    // 4b) Tabel akun responden (sistem "1 nama + 1 nomor HP = 1 akun").
+    //     UNIQUE(nama, no_hp) mencegah akun kembar; login responden memakai
+    //     pasangan ini (tanpa password).
+    $sql_create_responden = "
+    CREATE TABLE IF NOT EXISTS responden (
+        id INT(11) AUTO_INCREMENT PRIMARY KEY,
+        nama VARCHAR(255) NOT NULL,
+        no_hp VARCHAR(30) NOT NULL,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        UNIQUE KEY uniq_nama_hp (nama, no_hp)
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+    ";
+    if (!@$koneksi->query($sql_create_responden)) {
+        instagi_db_fail(
+            'Tabel akun responden tidak dapat disiapkan.',
             $wants_json,
             $koneksi->error
         );
@@ -205,11 +230,35 @@ try {
     }
 
     $column_migrations = [
-        'aktivitas' => "ALTER TABLE imt_history ADD COLUMN aktivitas DECIMAL(4,3) NOT NULL DEFAULT 0 AFTER tinggi_badan",
-        'kalori'    => "ALTER TABLE imt_history ADD COLUMN kalori INT(11) NOT NULL DEFAULT 0 AFTER aktivitas",
+        'aktivitas'    => "ALTER TABLE imt_history ADD COLUMN aktivitas DECIMAL(4,3) NOT NULL DEFAULT 0 AFTER tinggi_badan",
+        'kalori'       => "ALTER TABLE imt_history ADD COLUMN kalori INT(11) NOT NULL DEFAULT 0 AFTER aktivitas",
+        // Tautan ke akun responden (fitur Monitoring per-akun).
+        'responden_id' => "ALTER TABLE imt_history ADD COLUMN responden_id INT(11) NULL AFTER id",
     ];
     foreach ($column_migrations as $column => $sql) {
         if (!isset($existing_columns[$column])) {
+            @$koneksi->query($sql);
+        }
+    }
+
+    // 6) Index untuk mempercepat ORDER BY tanggal dan filter per responden.
+    //    Dipisah & idempoten: cek INFORMATION_SCHEMA.STATISTICS lebih dulu,
+    //    karena CREATE TABLE IF NOT EXISTS tidak menambah index pada tabel lama.
+    $existing_indexes = [];
+    $res_idx = @$koneksi->query("SELECT INDEX_NAME FROM INFORMATION_SCHEMA.STATISTICS
+                                 WHERE TABLE_SCHEMA = '" . $koneksi->real_escape_string($db_name) . "'
+                                 AND TABLE_NAME = 'imt_history'");
+    if ($res_idx) {
+        while ($row = $res_idx->fetch_row()) {
+            $existing_indexes[$row[0]] = true;
+        }
+    }
+    $index_migrations = [
+        'idx_tanggal'   => "ALTER TABLE imt_history ADD INDEX idx_tanggal (tanggal)",
+        'idx_responden' => "ALTER TABLE imt_history ADD INDEX idx_responden (responden_id)",
+    ];
+    foreach ($index_migrations as $index => $sql) {
+        if (!isset($existing_indexes[$index])) {
             @$koneksi->query($sql);
         }
     }

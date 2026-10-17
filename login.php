@@ -87,6 +87,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 // Token CSRF untuk form di bawah.
 $csrf_token = instagi_csrf_token();
+$nav_active = 'admin';
 ?>
 
 <!DOCTYPE html>
@@ -97,8 +98,10 @@ $csrf_token = instagi_csrf_token();
     <title>InStaGi - Login Admin</title>
     <link rel="shortcut icon" href="assets/favicon.ico" type="image/x-icon">
     <link rel="stylesheet" href="css/login.css">
+    <link rel="stylesheet" href="css/nav.css">
 </head>
 <body>
+    <?php require __DIR__ . '/includes/nav.php'; ?>
     <main class="main-content">
         <div class="login-container">
             <h1>Login Admin</h1>

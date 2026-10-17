@@ -9,9 +9,10 @@
  * *.iceiy.com ke *.aeonfree.com). Dengan URL dinamis, pratinjau tautan
  * WhatsApp/Facebook tetap benar di domain mana pun tanpa mengedit kode.
  */
-require_once __DIR__ . '/includes/config.php';
+require_once __DIR__ . '/includes/session.php';
 
 $instagi_base = htmlspecialchars(instagi_base_url(), ENT_QUOTES, 'UTF-8');
+$nav_active = '';
 ?>
 <!DOCTYPE html>
 <html lang="id">
@@ -21,6 +22,8 @@ $instagi_base = htmlspecialchars(instagi_base_url(), ENT_QUOTES, 'UTF-8');
     <title>InStaGi - Cek dan Pantau Status Gizi Anda</title>
     <link rel="shortcut icon" href="assets/favicon.ico" type="image/x-icon">
     <link rel="stylesheet" href="css/index.css">
+    <link rel="stylesheet" href="css/nav.css">
+    <link rel="stylesheet" href="css/pages.css">
 
     <meta name="description" content="InStaGi membantu Anda cek dan memantau status gizi (IMT) serta kebutuhan kalori harian secara cepat dan gratis. Hasil skrining awal lengkap dengan saran gizi praktis.">
     <meta name="theme-color" content="#e74c3c">
@@ -42,6 +45,8 @@ $instagi_base = htmlspecialchars(instagi_base_url(), ENT_QUOTES, 'UTF-8');
     <meta name="twitter:image" content="<?= $instagi_base ?>/assets/og-image.jpg">
 </head>
 <body>
+    <?php require __DIR__ . '/includes/nav.php'; ?>
+
     <div class="container">
         <div class="header">
             <div class="logo"><img src="assets/logo.png" alt="InStaGi Logo" width="512" height="466"></div>
@@ -55,10 +60,31 @@ $instagi_base = htmlspecialchars(instagi_base_url(), ENT_QUOTES, 'UTF-8');
             <li>Pantau perubahan setiap bulan</li>
             <li>Dapatkan saran gizi praktis</li>
         </ul>
-        <p class="disclaimer">Hasil merupakan skrining awal, bukan diagnosis medis.</p>
-        <div class="button-wrapper">
-            <a href="imt.php" class="button">Mulai cek status gizi</a>
+        <!-- ===== PILIHAN MENU DI AWAL ===== -->
+        <div class="home-menu">
+            <a class="home-menu-card" href="imt.php">
+                <span class="home-menu-ico" aria-hidden="true">📊</span>
+                <h3>Hitung IMT</h3>
+                <p>Hitung Indeks Massa Tubuh, status gizi, dan kebutuhan kalori harian Anda.</p>
+            </a>
+            <a class="home-menu-card" href="informasi.php">
+                <span class="home-menu-ico" aria-hidden="true">📄</span>
+                <h3>Informasi</h3>
+                <p>Leaflet gizi, contoh menu sesuai kalori, dan Daftar Bahan Makanan Penukar (DBMP).</p>
+            </a>
+            <a class="home-menu-card" href="monitoring.php">
+                <span class="home-menu-ico" aria-hidden="true">📈</span>
+                <h3>Monitoring</h3>
+                <p>Lihat riwayat pengukuran status gizi milik akun Anda dari waktu ke waktu.</p>
+            </a>
+            <a class="home-menu-card" href="login.php">
+                <span class="home-menu-ico" aria-hidden="true">🔐</span>
+                <h3>Login Admin</h3>
+                <p>Masuk sebagai admin untuk mengelola seluruh data responden.</p>
+            </a>
         </div>
+
+        <p class="disclaimer">Hasil merupakan skrining awal, bukan diagnosis medis.</p>
     </div>
     <footer class="main-footer">
         <p>Copyright © 2026 InStaGi | Created With ❤️</p>
