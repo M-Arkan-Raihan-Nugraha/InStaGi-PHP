@@ -140,7 +140,7 @@ require __DIR__ . '/includes/layout_head.php';
 ?>
     <div class="container">
         <div style="text-align: center;" id="page-logo">
-            <img src="assets/logo.png" alt="InStaGi Logo" width="512" height="466" style="max-width: 150px; height: auto; margin-bottom: 10px;">
+            <img src="assets/logo.webp" alt="InStaGi Logo" width="512" height="466" style="max-width: 150px; height: auto; margin-bottom: 10px;">
         </div>
         <h1>Hasil Analisis IMT (Indeks Massa Tubuh) Anda</h1>
 
@@ -535,7 +535,7 @@ require __DIR__ . '/includes/layout_head.php';
             pdfHeader.style.padding = '10px 0 12px 0';
             pdfHeader.style.borderBottom = '2px solid #e74c3c';
             pdfHeader.innerHTML = `
-                <img src="assets/logo.png" width="512" height="466" alt="Logo InStaGi" style="max-width: 80px; height: auto; margin-bottom: 8px; display: block; margin-left: auto; margin-right: auto;">
+                <img src="assets/logo.webp" width="512" height="466" alt="Logo InStaGi" style="max-width: 80px; height: auto; margin-bottom: 8px; display: block; margin-left: auto; margin-right: auto;">
                 <h1 style="color: #e74c3c; font-size: 16px; margin: 0 0 3px 0; font-family: Arial, sans-serif; font-weight: bold;">Hasil Analisis InStaGi</h1>
                 <p style="color: #555; font-size: 11px; margin: 0; font-family: Arial, sans-serif;">Informasi Status Gizi</p>
             `;

@@ -59,7 +59,7 @@ require __DIR__ . '/includes/layout_head.php';
 ?>
     <div class="container">
         <div class="header">
-            <div class="logo"><img src="assets/logo.png" alt="InStaGi Logo" width="512" height="466"></div>
+            <div class="logo"><img src="assets/logo.webp" alt="InStaGi Logo" width="512" height="466"></div>
             <h2>Cek dan Pantau Status Gizi Anda Secara Berkala</h2>
         </div>
         <p>InStaGi membantu Anda mengetahui dan memantau status gizi secara cepat dan mudah. Memantau status gizi membantu mengenali risiko kesehatan sejak dini. Dengan pemantauan rutin, perubahan berat badan dapat dikendalikan dan kesehatan tetap terjaga.</p>

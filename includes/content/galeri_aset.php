@@ -58,7 +58,7 @@ if (!function_exists('instagi_galeri_find')) {
             return null;
         }
         $dir = instagi_galeri_dir($galeri);
-        foreach (['jpeg', 'jpg', 'png', 'webp'] as $ext) {
+        foreach (['webp', 'jpeg', 'jpg', 'png'] as $ext) {
             if (is_file($dir . '/' . $slug . '.' . $ext)) {
                 return $slug . '.' . $ext;
             }
@@ -79,7 +79,7 @@ if (!function_exists('instagi_galeri_thumb_find')) {
             return null;
         }
         $dir = instagi_galeri_dir($galeri) . '/thumbs';
-        foreach (['jpg', 'jpeg', 'png', 'webp'] as $ext) {
+        foreach (['webp', 'jpg', 'jpeg', 'png'] as $ext) {
             if (is_file($dir . '/' . $slug . '.' . $ext)) {
                 return $slug . '.' . $ext;
             }

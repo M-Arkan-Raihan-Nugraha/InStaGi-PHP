@@ -47,35 +47,35 @@ if (!function_exists('instagi_menu_list')) {
                 'subjudul' => '3 kali makan utama + 2 kali selingan',
                 'ringkas'  => 'Contoh menu sehari ±1.400 kkal lengkap dengan porsi ukuran rumah tangga (URT) dan contoh bahan penukar.',
                 'tag'      => '±1.400 kkal',
-                'unduh'    => 'Leaflet-InStaGi-Contoh-Menu-1400-kkal.jpeg',
+                'unduh'    => 'Leaflet-InStaGi-Contoh-Menu-1400-kkal.webp',
             ],
             1500 => [
                 'judul'    => 'Contoh Menu 1.500 kkal',
                 'subjudul' => '3 kali makan utama + 2 kali selingan',
                 'ringkas'  => 'Contoh menu sehari ±1.500 kkal dengan porsi berimbang, pilihan buah, serta lauk rendah lemak.',
                 'tag'      => '±1.500 kkal',
-                'unduh'    => 'Leaflet-InStaGi-Contoh-Menu-1500-kkal.jpeg',
+                'unduh'    => 'Leaflet-InStaGi-Contoh-Menu-1500-kkal.webp',
             ],
             1700 => [
                 'judul'    => 'Contoh Menu 1.700 kkal',
                 'subjudul' => '3 kali makan utama + 2 kali selingan',
                 'ringkas'  => 'Contoh menu sehari ±1.700 kkal untuk kebutuhan sedang, lengkap distribusi energi tiap waktu makan.',
                 'tag'      => '±1.700 kkal',
-                'unduh'    => 'Leaflet-InStaGi-Contoh-Menu-1700-kkal.jpeg',
+                'unduh'    => 'Leaflet-InStaGi-Contoh-Menu-1700-kkal.webp',
             ],
             2000 => [
                 'judul'    => 'Contoh Menu 2.000 kkal',
                 'subjudul' => '3 kali makan utama + 2 kali selingan',
                 'ringkas'  => 'Contoh menu sehari ±2.000 kkal dengan porsi lebih besar serta variasi lauk hewani dan nabati.',
                 'tag'      => '±2.000 kkal',
-                'unduh'    => 'Leaflet-InStaGi-Contoh-Menu-2000-kkal.jpeg',
+                'unduh'    => 'Leaflet-InStaGi-Contoh-Menu-2000-kkal.webp',
             ],
             2400 => [
                 'judul'    => 'Contoh Menu 2.400 kkal',
                 'subjudul' => '3 kali makan utama + 2 kali selingan',
                 'ringkas'  => 'Contoh menu sehari ±2.400 kkal untuk kebutuhan tinggi, cocok bagi aktivitas berat atau masa pemulihan.',
                 'tag'      => '±2.400 kkal',
-                'unduh'    => 'Leaflet-InStaGi-Contoh-Menu-2400-kkal.jpeg',
+                'unduh'    => 'Leaflet-InStaGi-Contoh-Menu-2400-kkal.webp',
             ],
         ];
     }
@@ -93,7 +93,7 @@ if (!function_exists('instagi_menu_find')) {
     /**
      * Cari file gambar contoh menu berdasarkan total kalori.
      *
-     * @return string|null Nama file (mis. "1400kkal.jpeg") atau null bila tidak ada.
+     * @return string|null Nama file (mis. "1400kkal.webp") atau null bila tidak ada.
      */
     function instagi_menu_find($kkal)
     {
@@ -104,7 +104,7 @@ if (!function_exists('instagi_menu_find')) {
         }
 
         $dir = instagi_menu_dir();
-        foreach (['jpeg', 'jpg', 'png', 'webp'] as $ext) {
+        foreach (['webp', 'jpeg', 'jpg', 'png'] as $ext) {
             $file = $dir . '/' . $slug . '.' . $ext;
             if (is_file($file)) {
                 return $slug . '.' . $ext;
@@ -119,7 +119,7 @@ if (!function_exists('instagi_menu_thumb_find')) {
      * Cari file thumbnail contoh menu. Bila belum ada, kembalikan null
      * (pemanggil akan memakai gambar ukuran penuh sebagai gantinya).
      *
-     * @return string|null Nama file di dalam subfolder thumbs/, mis. "1400kkal.jpg"
+     * @return string|null Nama file di dalam subfolder thumbs/, mis. "1400kkal.webp"
      */
     function instagi_menu_thumb_find($kkal)
     {
@@ -129,7 +129,7 @@ if (!function_exists('instagi_menu_thumb_find')) {
         }
 
         $dir = instagi_menu_dir() . '/thumbs';
-        foreach (['jpg', 'jpeg', 'png', 'webp'] as $ext) {
+        foreach (['webp', 'jpg', 'jpeg', 'png'] as $ext) {
             if (is_file($dir . '/' . $slug . '.' . $ext)) {
                 return $slug . '.' . $ext;
             }

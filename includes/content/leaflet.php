@@ -40,56 +40,56 @@ if (!function_exists('instagi_leaflet_list')) {
                 'subjudul' => 'Panduan pola makan sehat untuk hidup lebih sehat',
                 'ringkas'  => 'Prinsip gizi seimbang, Tumpeng Gizi Seimbang, Piring Makanku, dan contoh menu sehari (±1800 kkal).',
                 'tag'      => 'Dasar',
-                'unduh'    => 'Leaflet-InStaGi-Gizi-Seimbang.jpeg',
+                'unduh'    => 'Leaflet-InStaGi-Gizi-Seimbang.webp',
             ],
             'sumber_karbohidrat' => [
                 'judul'    => 'Sumber Karbohidrat Pangan Lokal',
                 'subjudul' => 'Pilihan makanan sumber energi untuk menu sehari-hari',
                 'ringkas'  => 'Pilihan sumber energi dari serealia, umbi-umbian, dan buah, lengkap dengan kandungan energinya.',
                 'tag'      => 'Karbohidrat',
-                'unduh'    => 'Leaflet-InStaGi-Sumber-Karbohidrat.jpeg',
+                'unduh'    => 'Leaflet-InStaGi-Sumber-Karbohidrat.webp',
             ],
             'sumber_protein' => [
                 'judul'    => 'Sumber Protein Pangan Lokal',
                 'subjudul' => 'Pilihan lauk hewani dan nabati untuk menu gizi seimbang',
                 'ringkas'  => 'Pilihan lauk hewani dan nabati, contoh porsi sajian, serta pesan gizi seimbang.',
                 'tag'      => 'Protein',
-                'unduh'    => 'Leaflet-InStaGi-Sumber-Protein.jpeg',
+                'unduh'    => 'Leaflet-InStaGi-Sumber-Protein.webp',
             ],
             'sumber_lemak' => [
                 'judul'    => 'Kandungan Lemak & Kolesterol',
                 'subjudul' => 'Per 100 gram bahan makanan',
                 'ringkas'  => 'Daftar makanan menurut kadar lemak total dan kolesterol, plus tips mengurangi lemak jahat.',
                 'tag'      => 'Lemak',
-                'unduh'    => 'Leaflet-InStaGi-Lemak-dan-Kolesterol.jpeg',
+                'unduh'    => 'Leaflet-InStaGi-Lemak-dan-Kolesterol.webp',
             ],
             'sumber_vitamin' => [
                 'judul'    => 'Sumber Vitamin & Serat',
                 'subjudul' => 'Buah-buahan dan sayuran pangan lokal Indonesia',
                 'ringkas'  => 'Buah dan sayur lokal kaya vitamin, mineral, dan serat beserta anjuran konsumsi harian.',
                 'tag'      => 'Vitamin & Serat',
-                'unduh'    => 'Leaflet-InStaGi-Vitamin-dan-Serat.jpeg',
+                'unduh'    => 'Leaflet-InStaGi-Vitamin-dan-Serat.webp',
             ],
             'sumber_natrium' => [
                 'judul'    => 'Kandungan Natrium (Garam)',
                 'subjudul' => 'mg natrium per 100 gram bahan makanan',
                 'ringkas'  => 'Kadar natrium pada makanan, sumber natrium tersembunyi, dan batas konsumsi harian WHO.',
                 'tag'      => 'Batasi',
-                'unduh'    => 'Leaflet-InStaGi-Natrium.jpeg',
+                'unduh'    => 'Leaflet-InStaGi-Natrium.webp',
             ],
             'sumber_gula' => [
                 'judul'    => 'Gula & Indeks Glikemik',
                 'subjudul' => 'Kandungan gula dan nilai IG makanan',
                 'ringkas'  => 'Kadar gula dan nilai indeks glikemik makanan, serta contoh minuman dan olahan tinggi gula.',
                 'tag'      => 'Batasi',
-                'unduh'    => 'Leaflet-InStaGi-Gula-dan-Indeks-Glikemik.jpeg',
+                'unduh'    => 'Leaflet-InStaGi-Gula-dan-Indeks-Glikemik.webp',
             ],
             'sumber_purin' => [
                 'judul'    => 'Kandungan Purin (Asam Urat)',
                 'subjudul' => 'mg purin per 100 gram bahan makanan',
                 'ringkas'  => 'Daftar makanan menurut kadar purin, mitos vs fakta, dan tips pencegahan asam urat.',
                 'tag'      => 'Batasi',
-                'unduh'    => 'Leaflet-InStaGi-Purin.jpeg',
+                'unduh'    => 'Leaflet-InStaGi-Purin.webp',
             ],
         ];
     }
@@ -99,7 +99,7 @@ if (!function_exists('instagi_leaflet_find')) {
     /**
      * Cari file gambar leaflet berdasarkan slug (tanpa ekstensi).
      *
-     * @return string|null Nama file (mis. "sumber_protein.jpeg") atau null bila tidak ada.
+     * @return string|null Nama file (mis. "sumber_protein.webp") atau null bila tidak ada.
      */
     function instagi_leaflet_find($slug)
     {
@@ -109,7 +109,7 @@ if (!function_exists('instagi_leaflet_find')) {
         }
 
         $dir = instagi_leaflet_dir();
-        foreach (['jpeg', 'jpg', 'png', 'webp'] as $ext) {
+        foreach (['webp', 'jpeg', 'jpg', 'png'] as $ext) {
             $file = $dir . '/' . $slug . '.' . $ext;
             if (is_file($file)) {
                 return $slug . '.' . $ext;
@@ -124,7 +124,7 @@ if (!function_exists('instagi_leaflet_thumb_find')) {
      * Cari file thumbnail leaflet. Bila belum ada, kembalikan null
      * (pemanggil akan memakai gambar ukuran penuh sebagai gantinya).
      *
-     * @return string|null Nama file di dalam subfolder thumbs/, mis. "sumber_protein.jpg"
+     * @return string|null Nama file di dalam subfolder thumbs/, mis. "sumber_protein.webp"
      */
     function instagi_leaflet_thumb_find($slug)
     {
@@ -133,7 +133,7 @@ if (!function_exists('instagi_leaflet_thumb_find')) {
         }
 
         $dir = instagi_leaflet_dir() . '/thumbs';
-        foreach (['jpg', 'jpeg', 'png', 'webp'] as $ext) {
+        foreach (['webp', 'jpg', 'jpeg', 'png'] as $ext) {
             if (is_file($dir . '/' . $slug . '.' . $ext)) {
                 return $slug . '.' . $ext;
             }

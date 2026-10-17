@@ -58,7 +58,7 @@ if (!function_exists('instagi_dbmp_cover')) {
     function instagi_dbmp_cover()
     {
         $dir = instagi_dbmp_dir();
-        foreach (['dbmp-cover.jpg', 'dbmp-cover.jpeg', 'dbmp-cover.png', 'dbmp-cover.webp'] as $name) {
+        foreach (['dbmp-cover.webp', 'dbmp-cover.jpg', 'dbmp-cover.jpeg', 'dbmp-cover.png'] as $name) {
             if (is_file($dir . '/' . $name)) {
                 return 'assets/dbmp/' . $name;
             }

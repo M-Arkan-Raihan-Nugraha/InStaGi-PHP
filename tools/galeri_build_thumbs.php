@@ -54,8 +54,8 @@ if (!extension_loaded('gd')) {
     exit("Ekstensi PHP 'gd' tidak aktif. Thumbnail dilewati; galeri akan memakai gambar ukuran penuh.\n");
 }
 $info = gd_info();
-if (empty($info['JPEG Support'])) {
-    exit("Dukungan JPEG pada GD tidak aktif. Thumbnail dilewati.\n");
+if (empty($info['WebP Support']) && empty($info['JPEG Support'])) {
+    exit("Dukungan WebP/JPEG pada GD tidak aktif. Thumbnail dilewati.\n");
 }
 
 $total_buat = 0;
@@ -90,7 +90,9 @@ foreach ($daftar_galeri as $galeri => $atur) {
         }
 
         $src_path = $src_dir . '/' . $berkas;
-        $dst_path = $thumb_dir . '/' . $slug . '.jpg';
+        $use_webp = function_exists('imagewebp');
+        $dst_ext  = $use_webp ? 'webp' : 'jpg';
+        $dst_path = $thumb_dir . '/' . $slug . '.' . $dst_ext;
         $ext      = strtolower(pathinfo($berkas, PATHINFO_EXTENSION));
 
         // Lewati bila thumbnail sudah lebih baru dari gambar sumbernya.
@@ -132,7 +134,7 @@ foreach ($daftar_galeri as $galeri => $atur) {
         imagefilledrectangle($dst_img, 0, 0, $new_w, $new_h, $putih);
         imagecopyresampled($dst_img, $src_img, 0, 0, 0, 0, $new_w, $new_h, $src_w, $src_h);
 
-        $ok = imagejpeg($dst_img, $dst_path, $atur['mutu']);
+        $ok = $use_webp ? imagewebp($dst_img, $dst_path, $atur['mutu']) : imagejpeg($dst_img, $dst_path, $atur['mutu']);
 
         // imagedestroy() tidak diperlukan sejak PHP 8.0 (dan memicu deprecation
         // di PHP 8.5+); cukup lepaskan referensinya.

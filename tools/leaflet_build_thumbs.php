@@ -45,8 +45,8 @@ if (!extension_loaded('gd')) {
 }
 
 $info = gd_info();
-if (empty($info['JPEG Support'])) {
-    exit("Dukungan JPEG pada GD tidak aktif. Thumbnail dilewati.\n");
+if (empty($info['WebP Support']) && empty($info['JPEG Support'])) {
+    exit("Dukungan WebP/JPEG pada GD tidak aktif. Thumbnail dilewati.\n");
 }
 
 $made = 0;
@@ -61,8 +61,10 @@ foreach (array_keys(instagi_leaflet_list()) as $slug) {
         continue;
     }
 
+    $use_webp  = function_exists('imagewebp');
+    $dst_ext   = $use_webp ? 'webp' : 'jpg';
     $src_path  = $src_dir . '/' . $file;
-    $dst_path  = $thumb_dir . '/' . $slug . '.jpg';
+    $dst_path  = $thumb_dir . '/' . $slug . '.' . $dst_ext;
     $ext       = strtolower(pathinfo($file, PATHINFO_EXTENSION));
 
     // Lewati bila thumbnail sudah lebih baru dari gambar sumber.
@@ -107,7 +109,7 @@ foreach (array_keys(instagi_leaflet_list()) as $slug) {
 
     imagecopyresampled($dst_img, $src_img, 0, 0, 0, 0, $new_w, $new_h, $src_w, $src_h);
 
-    $ok = imagejpeg($dst_img, $dst_path, THUMB_QUALITY);
+    $ok = $use_webp ? imagewebp($dst_img, $dst_path, THUMB_QUALITY) : imagejpeg($dst_img, $dst_path, THUMB_QUALITY);
 
     // Catatan: imagedestroy() sudah tidak diperlukan sejak PHP 8.0 dan
     // memicu deprecation di PHP 8.5+. Cukup lepaskan referensinya.

@@ -41,7 +41,7 @@ $nav_admin  = (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] === true);
 <header class="site-nav">
     <div class="site-nav-inner">
         <a class="site-nav-brand" href="/">
-            <img src="assets/logo.png" alt="Logo InStaGi" width="512" height="466">
+            <img src="assets/logo.webp" alt="Logo InStaGi" width="512" height="466">
             <span>InStaGi</span>
         </a>
         <nav class="site-nav-links" aria-label="Navigasi utama">
