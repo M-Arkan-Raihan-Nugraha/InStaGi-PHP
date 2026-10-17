@@ -44,14 +44,14 @@ if (!function_exists('instagi_ikon_bentuk')) {
                 . '<circle cx="16.6" cy="5.9" r="2.6"/>'
                 . '<path d="M16.6 9.1c-2.3 0-3.8 1.6-3.8 3.8v3.4a1 1 0 0 0 1 1h5.6a1 1 0 0 0 1-1v-3.4c0-2.2-1.5-3.8-3.8-3.8z"/>',
 
-            // Piring di tengah, garpu di kiri, sendok di kanan.
+            // Piring di tengah, garpu di kiri, sendok di kanan (jarak direnggangkan rapi).
             'informasi' =>
-                '<circle cx="12" cy="12.4" r="6.5"/>'
-                . '<circle cx="12" cy="12.4" r="3.4"/>'
-                . '<path d="M3.2 3.4v3.2M4.4 3.4v3.2M5.6 3.4v3.2"/>'
-                . '<path d="M4.4 6.6v14"/>'
-                . '<path d="M19.6 3.4c-1.4 0-2.4 1.2-2.4 2.9s1 2.7 2.4 2.7 2.4-1 2.4-2.7-1-2.9-2.4-2.9z"/>'
-                . '<path d="M19.6 9v11.6"/>',
+                '<circle cx="12" cy="12" r="4.8"/>'
+                . '<circle cx="12" cy="12" r="2.4"/>'
+                . '<path d="M2.2 4v3M3.2 4v3M4.2 4v3"/>'
+                . '<path d="M3.2 7v13"/>'
+                . '<path d="M20.8 4c-1.1 0-2 1.1-2 2.6s.9 2.5 2 2.5 2-1 2-2.5-.9-2.6-2-2.6z"/>'
+                . '<path d="M20.8 9.1v10.9"/>',
 
             // Grafik garis naik dengan sumbu dan dua titik data.
             'monitoring' =>
@@ -79,6 +79,11 @@ if (!function_exists('instagi_ikon_bentuk')) {
                 . '<path d="M5.4 17.8a6.6 6.6 0 0 1 13.2 0"/>'
                 . '<path d="M12 11.2V9.6"/>'
                 . '<circle cx="12" cy="8.5" r="1.1"/>',
+
+            // Amplop surat (email Bestie InStaGi).
+            'email' =>
+                '<path d="M3.4 5.4h17.2a1.4 1.4 0 0 1 1.4 1.4v10.4a1.4 1.4 0 0 1-1.4 1.4H3.4a1.4 1.4 0 0 1-1.4-1.4V6.8a1.4 1.4 0 0 1 1.4-1.4z"/>'
+                . '<path d="M2.6 7l9.4 6.8L21.4 7"/>',
 
             // Segitiga peringatan.
             'perhatian' =>

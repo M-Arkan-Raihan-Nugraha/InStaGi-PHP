@@ -51,11 +51,6 @@ $nav_admin  = (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] === true);
                     <span class="site-nav-ico" aria-hidden="true"><?= instagi_ikon($item['icon']) ?></span><?= htmlspecialchars($item['label'], ENT_QUOTES, 'UTF-8') ?>
                 </a>
             <?php endforeach; ?>
-            <?php if ($nav_admin): ?>
-                <a class="site-nav-link<?= $nav_active === 'admin' ? ' is-active' : '' ?>" href="/admin">
-                    <span class="site-nav-ico" aria-hidden="true"><?= instagi_ikon('admin') ?></span>Admin
-                </a>
-            <?php endif; ?>
         </nav>
     </div>
 </header>

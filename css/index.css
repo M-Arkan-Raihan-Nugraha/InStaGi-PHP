@@ -33,12 +33,13 @@ ul li,
 }
 
 .logo img {
-    max-width: 100%;
+    width: auto;
+    max-width: 150px;
     height: auto;
+    max-height: 140px;
+    object-fit: contain;
     display: block;
     margin: 0 auto;
-    /* Logo beranda diperkecil sesuai permintaan agar tidak memakan layar. */
-    max-height: 170px;
 }
 
 h2 {
@@ -117,14 +118,13 @@ ul li::before {
 }
 
 @media (max-width: 768px) {
-    body {
-        padding: 15px;
-    }
     .container {
-        padding: 25px;
+        margin: 15px 12px;
+        padding: 25px 20px;
     }
     .logo img {
-        max-height: 130px;
+        max-width: 120px;
+        max-height: 110px;
     }
     h2 {
         font-size: 1.5em;

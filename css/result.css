@@ -33,8 +33,9 @@ h1, h2 {
     margin-top: 30px;
     padding: 25px;
     border-radius: 12px;
-    background-color: var(--secondary-color);
+    background-color: #ffffff;
     border: 1px dashed var(--primary-color);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
 }
 
 .result-grid {

@@ -59,7 +59,7 @@ require __DIR__ . '/includes/layout_head.php';
 ?>
     <div class="container">
         <div class="header">
-            <div class="logo"><img src="assets/logo.webp" alt="InStaGi Logo" width="512" height="466"></div>
+            <div class="logo"><img src="assets/logo.webp" alt="InStaGi Logo" width="512" height="466" style="max-width: 150px; height: auto;"></div>
             <h2>Cek dan Pantau Status Gizi Anda Secara Berkala</h2>
         </div>
         <p>InStaGi membantu Anda mengetahui dan memantau status gizi secara cepat dan mudah. Memantau status gizi membantu mengenali risiko kesehatan sejak dini. Dengan pemantauan rutin, perubahan berat badan dapat dikendalikan dan kesehatan tetap terjaga.</p>
@@ -92,26 +92,26 @@ require __DIR__ . '/includes/layout_head.php';
 
         <!-- ===== LAYANAN: KONSULTASI & CATERING GIZI ===== -->
         <section class="layanan-section" id="layanan">
-            <h2>Layanan Kami</h2>
-            <p class="layanan-intro">Butuh pendampingan langsung? Hubungi kami lewat WhatsApp untuk konsultasi gizi maupun pemesanan catering gizi.</p>
+            <h2>Layanan Konsultasi & Catering Gizi</h2>
+            <p class="layanan-intro">Butuh pendampingan langsung? Kami siap mendampingi pola makan sehat dan menyediakan menu catering sesuai kebutuhan kalori Anda.</p>
 
-            <div class="layanan-grid">
-                <article class="layanan-card">
-                    <span class="layanan-ico" aria-hidden="true"><?= instagi_ikon('konsultasi') ?></span>
-                    <h3>Konsultasi Gizi</h3>
-                    <p>Konsultasikan hasil cek status gizi Anda dengan ahli gizi: pola makan, kebutuhan kalori, dan target berat badan yang realistis.</p>
-                    <a class="layanan-btn layanan-btn-wa" href="<?= htmlspecialchars($wa_konsultasi, ENT_QUOTES, 'UTF-8') ?>" target="_blank" rel="noopener">
-                        Hubungi via WhatsApp
-                    </a>
-                </article>
-
-                <article class="layanan-card">
-                    <span class="layanan-ico" aria-hidden="true"><?= instagi_ikon('catering') ?></span>
-                    <h3>Catering Gizi</h3>
-                    <p>Menu harian yang disusun sesuai kebutuhan kalori dan kondisi Anda — praktis untuk program penurunan, kenaikan, atau pemeliharaan berat badan.</p>
-                    <a class="layanan-btn layanan-btn-wa" href="<?= htmlspecialchars($wa_catering, ENT_QUOTES, 'UTF-8') ?>" target="_blank" rel="noopener">
-                        Pesan via WhatsApp
-                    </a>
+            <div class="layanan-grid layanan-grid-single">
+                <article class="layanan-card layanan-card-unified">
+                    <div class="layanan-ico-group">
+                        <span class="layanan-ico" aria-hidden="true"><?= instagi_ikon('konsultasi') ?></span>
+                        <span class="layanan-ico-plus" aria-hidden="true">+</span>
+                        <span class="layanan-ico" aria-hidden="true"><?= instagi_ikon('catering') ?></span>
+                    </div>
+                    <h3>Konsultasi & Catering Gizi Personal</h3>
+                    <p>Konsultasikan status gizi, pola makan, dan target kesehatan Anda bersama ahli gizi, serta nikmati menu catering harian yang dihitung tepat sesuai estimasi kebutuhan kalori Anda (program penurunan, kenaikan, atau pemeliharaan berat badan).</p>
+                    <div class="layanan-actions-group">
+                        <a class="layanan-btn layanan-btn-wa" href="<?= htmlspecialchars($wa_konsultasi, ENT_QUOTES, 'UTF-8') ?>" target="_blank" rel="noopener">
+                            Konsultasi via WhatsApp
+                        </a>
+                        <a class="layanan-btn layanan-btn-wa" href="<?= htmlspecialchars($wa_catering, ENT_QUOTES, 'UTF-8') ?>" target="_blank" rel="noopener">
+                            Pesan Catering Gizi
+                        </a>
+                    </div>
                 </article>
             </div>
         </section>
@@ -137,14 +137,14 @@ require __DIR__ . '/includes/layout_head.php';
                 </div>
             <?php else: ?>
                 <div class="bestie-empty">
-                    Slot mitra masih kosong. Jadilah <strong>Bestie InStaGi</strong> pertama — hubungi kami untuk
+                    Slot mitra masih kosong. Jadilah <strong>Bestie InStaGi</strong> pertama — hubungi kami via email untuk
                     menempatkan logo dan tautan usaha Anda di sini.
                 </div>
             <?php endif; ?>
 
             <div class="bestie-actions">
-                <a class="layanan-btn layanan-btn-wa" href="<?= htmlspecialchars($wa_bestie, ENT_QUOTES, 'UTF-8') ?>" target="_blank" rel="noopener">
-                    Jadi Bestie InStaGi
+                <a class="layanan-btn layanan-btn-email" href="mailto:instagiadmin@gmail.com?subject=Kerja%20Sama%20Bestie%20InStaGi">
+                    <span class="site-nav-ico" aria-hidden="true"><?= instagi_ikon('email') ?></span> Hubungi via Email (instagiadmin@gmail.com)
                 </a>
             </div>
         </section>
