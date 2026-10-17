@@ -204,6 +204,7 @@ try {
         id INT(11) AUTO_INCREMENT PRIMARY KEY,
         nama VARCHAR(255) NOT NULL,
         no_hp VARCHAR(30) NOT NULL,
+        password_hash VARCHAR(255) NULL,
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         UNIQUE KEY uniq_nama_hp (nama, no_hp)
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -214,6 +215,26 @@ try {
             $wants_json,
             $koneksi->error
         );
+    }
+
+    // 4c) Kolom password_hash pada tabel responden (akun Monitoring yang aman).
+    //     Diperiksa lewat INFORMATION_SCHEMA untuk tabel responden — daftar
+    //     migrasi kolom di bawah khusus tabel imt_history, jadi tidak bisa
+    //     dipakai bersama. Aman diulang dan aman di MySQL 8 (bukan
+    //     "ADD COLUMN IF NOT EXISTS" yang hanya ada di MariaDB).
+    $kolom_responden = [];
+    $res_kolom_responden = @$koneksi->query("SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS
+                                              WHERE TABLE_SCHEMA = '" . $koneksi->real_escape_string($db_name) . "'
+                                              AND TABLE_NAME = 'responden'");
+    if ($res_kolom_responden) {
+        while ($row = $res_kolom_responden->fetch_row()) {
+            $kolom_responden[$row[0]] = true;
+        }
+    }
+    if (!isset($kolom_responden['password_hash'])) {
+        // Boleh gagal tanpa fatal: aplikasi tetap jalan dengan akun lama
+        // (nama + No. HP) dan fitur password sekadar tidak aktif.
+        @$koneksi->query("ALTER TABLE responden ADD COLUMN password_hash VARCHAR(255) NULL AFTER no_hp");
     }
 
     // 5) Tambah kolom aktivitas/kalori bila belum ada (data dari versi lama).

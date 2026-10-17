@@ -81,9 +81,28 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         // >>> RUMUS TIDAK DIUBAH: validasi hanya memeriksa input.
         $validasi = instagi_validasi_input($_POST);
 
-        if (!$validasi['valid']) {
+        // 2b. Akun aman (opsional): bila pengguna mencentang "Simpan dengan akun
+        //     aman", passwordnya diperiksa lebih dulu. Ini hanya soal keamanan
+        //     akses riwayat di halaman Monitoring — tidak menyentuh rumus apa pun.
+        $password_error = '';
+        $password_hash  = '';
+        if (!empty($_POST['buat_akun'])) {
+            $pass1 = (string) ($_POST['password'] ?? '');
+            $pass2 = (string) ($_POST['password_ulang'] ?? '');
+            $password_error = instagi_validasi_password($pass1, $pass2);
+            if ($password_error === '' && $pass1 === '') {
+                $password_error = 'Isi password akun (minimal 8 karakter), atau hilangkan centang "Simpan dengan akun aman".';
+            }
+        }
+
+        if ($password_error !== '') {
+            $error_message = $password_error;
+        } elseif (!$validasi['valid']) {
             $error_message = $validasi['error'];
         } else {
+            if (!empty($_POST['buat_akun'])) {
+                $password_hash = instagi_hash_password((string) ($_POST['password'] ?? ''));
+            }
         // 3. Lakukan Perhitungan jika data valid
         //    Semua rumus ada di includes/gizi.php agar identik dengan
         //    api/update_record.php (tidak lagi duplikat & tidak lagi berbeda).
@@ -111,10 +130,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $bb_sehat_max   = $hasil['bb_sehat_max'];
 
         // 4. Akun responden (1 nama + 1 nomor HP = 1 akun) dibuat otomatis di
-        //    sini, lalu ID-nya ikut disimpan agar menu Monitoring bisa
-        //    menampilkan riwayat milik akun ini.
+        //    sini, lalu ID-nya ikut disimpan agar menu Monitoring Status Gizi
+        //    bisa menampilkan riwayat milik akun ini.
+        //    Bila pengguna memilih "akun aman", akun dibuat/dilengkapi password
+        //    sekaligus (password TIDAK ditimpa bila akun sudah punya password).
         //    ($hp_norm sudah dihitung & diperiksa di includes/validasi.php.)
-        $responden_id = instagi_responden_find_or_create($koneksi, $nama, $hp_norm);
+        $responden_id = instagi_responden_find_or_create($koneksi, $nama, $hp_norm, $password_hash !== '' ? $password_hash : null);
 
         // 5. Simpan data ke database
         $stmt = $koneksi->prepare(
@@ -179,7 +200,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>InStaGi - Input Data</title>
+    <title>InStaGi - Cek Status Gizi</title>
     <link rel="shortcut icon" href="assets/favicon.ico" type="image/x-icon">
     <link rel="stylesheet" href="css/imt.css">
     <link rel="stylesheet" href="css/nav.css">
@@ -190,8 +211,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <!-- Pratinjau tautan (WhatsApp, Facebook, X/Twitter) -->
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="InStaGi">
-    <meta property="og:title" content="InStaGi - Input Data Diri">
-    <meta property="og:description" content="Masukkan nama, usia, jenis kelamin, berat dan tinggi badan untuk menghitung IMT (Indeks Massa Tubuh), status gizi, serta estimasi kebutuhan kalori harian Anda.">
+    <meta property="og:title" content="InStaGi - Cek Status Gizi">
+    <meta property="og:description" content="Masukkan nama, usia, jenis kelamin, berat dan tinggi badan untuk cek status gizi (IMT), status gizi, serta estimasi kebutuhan kalori harian Anda.">
     <meta property="og:url" content="<?= $instagi_base ?>/imt.php">
     <meta property="og:image" content="<?= $instagi_base ?>/assets/og-image.jpg">
     <meta property="og:image:width" content="1200">
@@ -199,7 +220,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <meta property="og:image:alt" content="Logo InStaGi">
     <meta property="og:locale" content="id_ID">
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="InStaGi - Input Data Diri">
+    <meta name="twitter:title" content="InStaGi - Cek Status Gizi">
     <meta name="twitter:description" content="Masukkan nama, usia, jenis kelamin, berat dan tinggi badan untuk menghitung IMT (Indeks Massa Tubuh), status gizi, serta estimasi kebutuhan kalori harian Anda.">
     <meta name="twitter:image" content="<?= $instagi_base ?>/assets/og-image.jpg">
 </head>
@@ -211,7 +232,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <div style="text-align: center;">
             <img src="assets/logo.png" alt="InStaGi Logo" width="512" height="466" style="max-width: 150px; height: auto; margin-bottom: 10px;">
         </div>
-        <h1>Input Data Diri Anda</h1>
+        <h1>Cek Status Gizi Anda</h1>
 
         <?php if ($error_message): ?>
             <div class="message error-message"><?= $error_message ?></div>
@@ -275,13 +296,40 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <option value="1.9">Sangat Berat: Aktivitas fisik sangat intensif (atlet, pekerjaan fisik berat) atau olahraga dua kali sehari.</option>
                 </select>
             </div>
-            <button type="submit" class="submit-btn">Hitung IMT & Simpan</button>
+            <!-- ===== AKUN AMAN (OPSIONAL) ===== -->
+            <fieldset class="akun-aman full-width">
+                <legend>Akun Monitoring (opsional)</legend>
+                <label class="akun-aman-cek" for="buat_akun">
+                    <input type="checkbox" id="buat_akun" name="buat_akun" value="1" <?= !empty($_POST['buat_akun']) ? 'checked' : '' ?>>
+                    <span>Simpan dengan akun aman (pakai password)</span>
+                </label>
+                <small class="field-hint">
+                    Tanpa password, riwayat Anda hanya dilindungi Nama + No. HP.
+                    Dengan password, hanya Anda yang bisa membukanya di menu <strong>Monitoring Status Gizi</strong>.
+                </small>
+
+                <div class="akun-aman-pass" id="akunAmanPass" <?= empty($_POST['buat_akun']) ? 'hidden' : '' ?>>
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <small class="field-hint">Minimal 8 karakter</small>
+                        <input type="password" id="password" name="password" minlength="8"
+                               autocomplete="new-password">
+                    </div>
+                    <div class="form-group">
+                        <label for="password_ulang">Ulangi Password</label>
+                        <small class="field-hint">Harus sama dengan di atas</small>
+                        <input type="password" id="password_ulang" name="password_ulang" minlength="8"
+                               autocomplete="new-password">
+                    </div>
+                </div>
+            </fieldset>
+
+            <button type="submit" class="submit-btn">Cek Status Gizi &amp; Simpan</button>
         </form>
 
     </div>
     
     <footer class="main-footer">
-        <p>Halaman data responden hanya bisa diakses oleh admin. <a href="login.php">Login Admin</a></p>
         <p>Copyright © 2026 InStaGi | Created With ❤️</p>
     </footer>
 
@@ -324,6 +372,27 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 btn.textContent = original;
             }
         });
+
+        // ===================================================================
+        // Kolom password "akun aman": hanya ditampilkan (dan diwajibkan) bila
+        // kotak centangnya dipilih, supaya pengguna yang tidak ingin memakai
+        // password tidak terganggu.
+        // ===================================================================
+        var cekAkun = document.getElementById('buat_akun');
+        var kotakPass = document.getElementById('akunAmanPass');
+        if (cekAkun && kotakPass) {
+            var sinkronAkun = function () {
+                kotakPass.hidden = !cekAkun.checked;
+                ['password', 'password_ulang'].forEach(function (id) {
+                    var el = document.getElementById(id);
+                    if (!el) { return; }
+                    if (cekAkun.checked) { el.setAttribute('required', 'required'); }
+                    else { el.removeAttribute('required'); }
+                });
+            };
+            cekAkun.addEventListener('change', sinkronAkun);
+            sinkronAkun();
+        }
     })();
     </script>
 </body>

@@ -239,3 +239,36 @@ if (!function_exists('instagi_validasi_input')) {
         ];
     }
 }
+
+if (!function_exists('instagi_validasi_password')) {
+    /**
+     * Periksa password akun Monitoring (opsional — hanya bila dikirim).
+     *
+     * Aturan: minimal 8 karakter, dan (bila konfirmasi dikirim) harus sama.
+     * Sengaja TIDAK memaksa simbol/angka: pengguna aplikasi ini banyak yang
+     * mengakses dari ponsel, dan yang penting panjang + tidak mudah ditebak.
+     *
+     * @param string $password   Isi kolom password.
+     * @param string $konfirmasi Isi kolom ulangi-password ('' bila tidak ada).
+     * @return string Pesan kesalahan, atau '' bila sah / tidak diisi.
+     */
+    function instagi_validasi_password($password, $konfirmasi = '')
+    {
+        $password   = (string) $password;
+        $konfirmasi = (string) $konfirmasi;
+
+        if ($password === '') {
+            return ''; // tidak ada password = fitur akun aman tidak dipakai
+        }
+        if (strlen($password) < 8) {
+            return 'Password minimal 8 karakter.';
+        }
+        if (strlen($password) > 100) {
+            return 'Password maksimal 100 karakter.';
+        }
+        if ($konfirmasi !== '' && $password !== $konfirmasi) {
+            return 'Password dan ulangi password tidak sama.';
+        }
+        return '';
+    }
+}

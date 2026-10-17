@@ -2,8 +2,13 @@
 /**
  * Partial navigasi utama InStaGi.
  * -----------------------------------------------------------------------------
- * Dipakai oleh halaman publik & admin agar pilihan menu konsisten:
- *   Hitung IMT · Informasi · Monitoring · Login Admin
+ * Dipakai oleh halaman publik agar pilihan menu konsisten:
+ *   Cek Status Gizi · Informasi Gizi · Monitoring Status Gizi
+ *
+ * CATATAN: tautan "Login Admin" SENGAJA TIDAK ditampilkan di navigasi (atas
+ * permintaan pemilik proyek: pintu masuk admin jangan tampil untuk umum).
+ * Halaman admin tetap ada di alamat login.php, dan tautan "Admin" hanya muncul
+ * setelah admin benar-benar sudah masuk.
  *
  * Cara pakai (setelah session.php dimuat):
  *   $nav_active = 'hitung';
@@ -17,9 +22,9 @@ if (!function_exists('instagi_nav_items')) {
     function instagi_nav_items()
     {
         return [
-            'hitung'     => ['label' => 'Hitung IMT',  'href' => 'imt.php',        'icon' => '📊'],
-            'informasi'  => ['label' => 'Informasi',   'href' => 'informasi.php',  'icon' => '📄'],
-            'monitoring' => ['label' => 'Monitoring',  'href' => 'monitoring.php', 'icon' => '📈'],
+            'hitung'     => ['label' => 'Cek Status Gizi',        'href' => 'imt.php',        'icon' => '📊'],
+            'informasi'  => ['label' => 'Informasi Gizi',         'href' => 'informasi.php',  'icon' => '📄'],
+            'monitoring' => ['label' => 'Monitoring Status Gizi', 'href' => 'monitoring.php', 'icon' => '📈'],
         ];
     }
 }
@@ -44,10 +49,6 @@ $nav_admin  = (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] === true);
             <?php if ($nav_admin): ?>
                 <a class="site-nav-link<?= $nav_active === 'admin' ? ' is-active' : '' ?>" href="admin.php">
                     <span class="site-nav-ico" aria-hidden="true">🛠️</span>Admin
-                </a>
-            <?php else: ?>
-                <a class="site-nav-link<?= $nav_active === 'admin' ? ' is-active' : '' ?>" href="login.php">
-                    <span class="site-nav-ico" aria-hidden="true">🔐</span>Login Admin
                 </a>
             <?php endif; ?>
         </nav>

@@ -40,16 +40,23 @@ CREATE TABLE IF NOT EXISTS `imt_history` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- 2) Akun responden — sistem "1 nama + 1 nomor HP = 1 akun".
---    Dibuat OTOMATIS saat responden mengisi form IMT. Login halaman Monitoring
---    memakai pasangan (nama, no_hp) ini (tanpa password).
+--    Dibuat OTOMATIS saat responden mengisi form Cek Status Gizi. Halaman
+--    Monitoring memakai pasangan (nama, no_hp) ini; kolom password_hash
+--    bersifat OPSIONAL: bila diisi, akun wajib memasukkan password saat masuk
+--    (akun lama tanpa password tetap bisa masuk seperti sebelumnya).
 CREATE TABLE IF NOT EXISTS `responden` (
-    `id`         INT(11)      NOT NULL AUTO_INCREMENT,
-    `nama`       VARCHAR(255) NOT NULL,
-    `no_hp`      VARCHAR(30)  NOT NULL,
-    `created_at` TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    `id`            INT(11)      NOT NULL AUTO_INCREMENT,
+    `nama`          VARCHAR(255) NOT NULL,
+    `no_hp`         VARCHAR(30)  NOT NULL,
+    `password_hash` VARCHAR(255) NULL,
+    `created_at`    TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (`id`),
     UNIQUE KEY `uniq_nama_hp` (`nama`, `no_hp`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- Bila tabel `responden` sudah ada dan ingin menambah kolom password manual:
+-- ALTER TABLE `responden` ADD COLUMN `password_hash` VARCHAR(255) NULL AFTER `no_hp`;
+-- (Biasanya tidak perlu: includes/db.php menambahkannya otomatis.)
 
 -- Bila tabel lama sudah ada dan ingin menambah kolom/index secara manual:
 -- ALTER TABLE `imt_history` ADD COLUMN `responden_id` INT(11) NULL AFTER `id`;

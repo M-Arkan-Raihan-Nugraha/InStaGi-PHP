@@ -1,0 +1,3 @@
+Letakkan logo mitra/sponsor di folder ini (mis. apotek-sehat.png).
+Semua gambar (.jpg .jpeg .png .webp .gif) otomatis tampil di bagian "Bestie InStaGi" pada halaman utama, diurutkan menurut nama berkas.
+Ukuran yang rapi: tinggi sekitar 68 piksel, latar transparan (PNG) bila memungkinkan.

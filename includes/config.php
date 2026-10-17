@@ -59,6 +59,49 @@ if (!defined('INSTAGI_WA_LABEL')) {
     define('INSTAGI_WA_LABEL', 'RS Paru dr. H. A. Rotinsulu');
 }
 
+// --- Nomor WhatsApp per layanan (satu sumber, bisa dioverride env) -----------
+// InStaGi menawarkan beberapa layanan lewat WhatsApp: konsultasi gizi, catering
+// gizi, dan kerja sama sponsor/iklan ("Bestie InStaGi"). Nomornya dikumpulkan
+// di sini agar tidak ditulis ulang di tiap halaman; bila satu layanan punya
+// nomor berbeda, cukup isi environment variable-nya tanpa mengedit kode.
+if (!defined('INSTAGI_WA_KONSULTASI')) {
+    define('INSTAGI_WA_KONSULTASI', getenv('INSTAGI_WA_KONSULTASI') ?: INSTAGI_WA_NUMBER);
+}
+if (!defined('INSTAGI_WA_CATERING')) {
+    define('INSTAGI_WA_CATERING', getenv('INSTAGI_WA_CATERING') ?: INSTAGI_WA_NUMBER);
+}
+if (!defined('INSTAGI_WA_KERJASAMA')) {
+    define('INSTAGI_WA_KERJASAMA', getenv('INSTAGI_WA_KERJASAMA') ?: INSTAGI_WA_NUMBER);
+}
+
+if (!function_exists('instagi_wa_tampil')) {
+    /** Ubah format internasional 62812… menjadi tampilan lokal 0812… */
+    function instagi_wa_tampil($nomor)
+    {
+        $nomor = (string) $nomor;
+        return (strpos($nomor, '62') === 0) ? '0' . substr($nomor, 2) : $nomor;
+    }
+}
+
+if (!function_exists('instagi_wa_url')) {
+    /**
+     * Tautan wa.me siap kirim dengan pesan yang sudah terisi.
+     *
+     * Pesan memakai teks MENTAH + http_build_query() (spasi -> '+', '&' -> %26),
+     * jadi nama/teks yang mengandung '&' tidak rusak seperti bila di-urlencode
+     * setelah di-htmlspecialchars.
+     *
+     * @param string      $pesan  Isi pesan WhatsApp.
+     * @param string|null $nomor  Nomor tujuan; kosong = INSTAGI_WA_NUMBER.
+     */
+    function instagi_wa_url($pesan, $nomor = null)
+    {
+        $nomor = ($nomor === null || $nomor === '') ? INSTAGI_WA_NUMBER : $nomor;
+        return 'https://wa.me/' . preg_replace('/\D+/', '', (string) $nomor)
+            . '?' . http_build_query(['text' => (string) $pesan]);
+    }
+}
+
 // --- Alamat dasar situs (dinamis) -------------------------------------------
 // Dipakai untuk tautan Open Graph (og:url / og:image) dan tautan absolut lain.
 //
