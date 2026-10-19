@@ -60,15 +60,18 @@ if (!defined('INSTAGI_WA_LABEL')) {
 }
 
 // --- Nomor WhatsApp per layanan (satu sumber, bisa dioverride env) -----------
-// InStaGi menawarkan beberapa layanan lewat WhatsApp: konsultasi gizi, catering
+// InStaGi menawarkan beberapa layanan lewat WhatsApp: konsultasi gizi, katering
 // gizi, dan kerja sama sponsor/iklan ("Bestie InStaGi"). Nomornya dikumpulkan
 // di sini agar tidak ditulis ulang di tiap halaman; bila satu layanan punya
 // nomor berbeda, cukup isi environment variable-nya tanpa mengedit kode.
 if (!defined('INSTAGI_WA_KONSULTASI')) {
     define('INSTAGI_WA_KONSULTASI', getenv('INSTAGI_WA_KONSULTASI') ?: INSTAGI_WA_NUMBER);
 }
+if (!defined('INSTAGI_WA_KATERING')) {
+    define('INSTAGI_WA_KATERING', getenv('INSTAGI_WA_KATERING') ?: (getenv('INSTAGI_WA_CATERING') ?: INSTAGI_WA_NUMBER));
+}
 if (!defined('INSTAGI_WA_CATERING')) {
-    define('INSTAGI_WA_CATERING', getenv('INSTAGI_WA_CATERING') ?: INSTAGI_WA_NUMBER);
+    define('INSTAGI_WA_CATERING', INSTAGI_WA_KATERING);
 }
 if (!defined('INSTAGI_WA_KERJASAMA')) {
     define('INSTAGI_WA_KERJASAMA', getenv('INSTAGI_WA_KERJASAMA') ?: INSTAGI_WA_NUMBER);

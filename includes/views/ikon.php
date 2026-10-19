@@ -21,7 +21,7 @@
  *   monitoring  grafik garis naik           (menu Monitoring Status Gizi)
  *   admin       pengatur (slider)           (tautan Admin)
  *   konsultasi  gelembung percakapan        (layanan Konsultasi Gizi)
- *   catering    tudung saji                 (layanan Catering Gizi)
+ *   katering    tudung saji                 (layanan Katering Gizi)
  *   perhatian   segitiga peringatan         (badge peringatan)
  *   hati        hati penuh                  (footer)
  *
@@ -73,7 +73,12 @@ if (!function_exists('instagi_ikon_bentuk')) {
                 . '<circle cx="12" cy="11" r=".9"/>'
                 . '<circle cx="15.2" cy="11" r=".9"/>',
 
-            // Tudung saji (catering).
+            // Tudung saji (katering).
+            'katering' =>
+                '<path d="M3.4 17.8h17.2"/>'
+                . '<path d="M5.4 17.8a6.6 6.6 0 0 1 13.2 0"/>'
+                . '<path d="M12 11.2V9.6"/>'
+                . '<circle cx="12" cy="8.5" r="1.1"/>',
             'catering' =>
                 '<path d="M3.4 17.8h17.2"/>'
                 . '<path d="M5.4 17.8a6.6 6.6 0 0 1 13.2 0"/>'

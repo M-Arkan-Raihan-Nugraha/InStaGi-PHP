@@ -475,7 +475,7 @@ Delapan permintaan pemilik proyek, semuanya sudah dikerjakan. **Rumus di
 | 4 | Opsi pembuatan akun dengan password | Form Cek Status Gizi punya bagian **"Akun Monitoring (opsional)"**: centang "Simpan dengan akun aman" → muncul kolom Password + Ulangi (min. 8 karakter, di-hash `password_hash`). Riwayat jadi hanya bisa dibuka dengan password |
 | 5 | Rapikan halaman Monitoring | Tata letak dibagi jelas: Ringkasan → Grafik → Riwayat → Keamanan Akun; ringkasan diperluas (jumlah, IMT terakhir, status, rata-rata, rentang IMT, perubahan IMT, tanggal) |
 | 6 | Grafik statistik Monitoring | Grafik garis Chart.js (`cdn.jsdelivr.net`, versi mayor 4) berisi IMT per tanggal, titik berwarna sesuai status gizi, plus garis panduan 18,5 / 25 / 27 (digambar plugin kecil sendiri, bukan plugin tambahan). 12 pengukuran terakhir. Bila pustaka gagal dimuat, halaman tetap utuh dan riwayat tetap terbaca |
-| 7 | Konsultasi gizi & catering gizi dengan tombol WhatsApp | Bagian **Layanan Kami** di beranda: kartu Konsultasi Gizi & Catering Gizi masing-masing dengan tombol WhatsApp berisi pesan siap kirim. Nomor diambil dari `includes/config.php` (`INSTAGI_WA_KONSULTASI`, `INSTAGI_WA_CATERING`) dan bisa dioverride lewat environment variable |
+| 7 | Konsultasi gizi & katering gizi dengan tombol WhatsApp | Bagian **Layanan Kami** di beranda: kartu Konsultasi Gizi & Katering Gizi masing-masing dengan tombol WhatsApp berisi pesan siap kirim. Nomor diambil dari `includes/config.php` (`INSTAGI_WA_KONSULTASI`, `INSTAGI_WA_KATERING`) dan bisa dioverride lewat environment variable |
 | 8 | Bestie InStaGi (wadah sponsor/kerja sama iklan) | Bagian **Bestie InStaGi** di beranda + tombol WhatsApp kerja sama (`INSTAGI_WA_KERJASAMA`). Logo mitra cukup diletakkan di `assets/bestie/` dan tampil otomatis; bila kosong muncul ajakan (bukan error) |
 | 9 | Responsive cross-platform | Semua bagian baru memakai grid `auto-fit`, grafik `responsive` dengan tinggi tetap, tabel/riwayat tetap kartu; diuji lebar 360 / 414 / 768 / 1280 px tanpa geser horizontal |
 
@@ -662,7 +662,7 @@ berupa SVG di `includes/ikon.php` (warna mengikuti teks, ukuran mengikuti huruf)
 | 📈 kartu & menu "Monitoring" | `monitoring` | grafik garis naik |
 | 🛠️ tautan Admin | `admin` | pengatur (slider) |
 | 🥗 kartu layanan Konsultasi Gizi | `konsultasi` | gelembung percakapan |
-| 🍱 kartu layanan Catering Gizi | `catering` | tudung saji |
+| 🍱 kartu layanan Katering Gizi | `katering` | tudung saji |
 | 🔒 badge "Akun aman" | **badge dihapus** | sesuai permintaan |
 | ⚠️ badge "Belum memakai password" | `perhatian` | segitiga peringatan |
 | ❤️ footer "Created With" | `hati` | hati penuh berwarna |

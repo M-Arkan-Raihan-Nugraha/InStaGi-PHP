@@ -7,7 +7,7 @@
  *
  * Isi halaman:
  *   1. Pilihan menu utama: Cek Status Gizi · Informasi Gizi · Monitoring Status Gizi
- *   2. Layanan: Konsultasi Gizi & Catering Gizi (tombol WhatsApp)
+ *   2. Layanan: Konsultasi Gizi & Katering Gizi (tombol WhatsApp)
  *   3. Bestie InStaGi: wadah sponsor / kerja sama iklan
  *
  * CATATAN: tautan "Login Admin" tidak lagi ditampilkan (lihat includes/nav.php).
@@ -20,8 +20,8 @@ $nav_active = '';
 // --- Layanan via WhatsApp ----------------------------------------------------
 // Nomor diambil dari includes/config.php (satu sumber, bisa dioverride env).
 $wa_layanan = instagi_wa_url(
-    'Halo InStaGi, saya ingin berkonsultasi mengenai gizi dan memesan catering gizi. Mohon informasinya.',
-    INSTAGI_WA_KONSULTASI
+    'Halo InStaGi, saya ingin berkonsultasi mengenai gizi dan memesan katering gizi. Mohon informasinya.',
+    INSTAGI_WA_KATERING
 );
 $wa_bestie = instagi_wa_url(
     'Halo InStaGi, saya ingin bekerja sama / memasang iklan di InStaGi (Bestie InStaGi). Mohon informasinya.',
@@ -47,7 +47,7 @@ if (is_dir($bestie_dir)) {
 // Semua bagian <head> (meta, Open Graph, Twitter Card, CSS) kini ada di satu
 // tempat: includes/layout_head.php.
 $judul     = 'InStaGi - Cek dan Pantau Status Gizi Anda';
-$deskripsi = 'InStaGi membantu Anda cek status gizi (IMT), kebutuhan kalori harian, dan memantaunya dari waktu ke waktu. Tersedia juga layanan konsultasi gizi dan catering gizi.';
+$deskripsi = 'InStaGi membantu Anda cek status gizi (IMT), kebutuhan kalori harian, dan memantaunya dari waktu ke waktu. Tersedia juga layanan konsultasi gizi dan katering gizi.';
 $og_path   = '/';
 $css       = ['index.css', 'nav.css', 'pages.css'];
 require __DIR__ . '/includes/layout_head.php';
@@ -85,23 +85,23 @@ require __DIR__ . '/includes/layout_head.php';
             </a>
         </div>
 
-        <!-- ===== LAYANAN: KONSULTASI & CATERING GIZI ===== -->
+        <!-- ===== LAYANAN: KONSULTASI & KATERING GIZI ===== -->
         <section class="layanan-section" id="layanan">
-            <h2>Layanan Konsultasi & Catering Gizi</h2>
-            <p class="layanan-intro">Butuh pendampingan langsung? Kami siap mendampingi pola makan sehat dan menyediakan menu catering sesuai kebutuhan kalori Anda.</p>
+            <h2>Layanan Konsultasi & Katering Gizi</h2>
+            <p class="layanan-intro">Butuh pendampingan langsung? Kami siap mendampingi pola makan sehat dan menyediakan menu katering sesuai kebutuhan kalori Anda.</p>
 
             <div class="layanan-grid layanan-grid-single">
                 <article class="layanan-card layanan-card-unified">
                     <div class="layanan-ico-group">
                         <span class="layanan-ico" aria-hidden="true"><?= instagi_ikon('konsultasi') ?></span>
                         <span class="layanan-ico-plus" aria-hidden="true">+</span>
-                        <span class="layanan-ico" aria-hidden="true"><?= instagi_ikon('catering') ?></span>
+                        <span class="layanan-ico" aria-hidden="true"><?= instagi_ikon('katering') ?></span>
                     </div>
-                    <h3>Konsultasi & Catering Gizi Personal</h3>
-                    <p>Konsultasikan status gizi, pola makan, dan target kesehatan Anda bersama ahli gizi, serta nikmati menu catering harian yang dihitung tepat sesuai estimasi kebutuhan kalori Anda (program penurunan, kenaikan, atau pemeliharaan berat badan).</p>
+                    <h3>Konsultasi & Katering Gizi Personal</h3>
+                    <p>Konsultasikan status gizi, pola makan, dan target kesehatan Anda bersama ahli gizi, serta nikmati menu katering harian yang dihitung tepat sesuai estimasi kebutuhan kalori Anda (program penurunan, kenaikan, atau pemeliharaan berat badan).</p>
                     <div class="layanan-actions">
                         <a class="layanan-btn layanan-btn-wa" href="<?= htmlspecialchars($wa_layanan, ENT_QUOTES, 'UTF-8') ?>" target="_blank" rel="noopener">
-                            <span class="site-nav-ico" aria-hidden="true"><?= instagi_ikon('whatsapp') ?></span> Konsultasi & Pesan Catering via WhatsApp
+                            <span class="site-nav-ico" aria-hidden="true"><?= instagi_ikon('whatsapp') ?></span> Konsultasi & Pesan Katering via WhatsApp
                         </a>
                     </div>
                 </article>

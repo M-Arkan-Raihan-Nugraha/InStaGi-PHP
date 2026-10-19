@@ -24,7 +24,7 @@ ada "tanpa kartu Login Admin"          "$(echo "$IDX" | grep -c 'Login Admin'; t
 ada "tanpa tautan ke login.php"        "$(echo "$IDX" | grep -c 'href="login.php"'; true)" "0"
 ada "bagian Layanan Kami"              "$IDX" "Layanan Kami"
 ada "layanan Konsultasi Gizi"          "$IDX" "Konsultasi Gizi"
-ada "layanan Catering Gizi"            "$IDX" "Catering Gizi"
+ada "layanan Katering Gizi"            "$IDX" "Katering Gizi"
 ada "bagian Bestie InStaGi"            "$IDX" "Bestie InStaGi"
 ada "tombol WhatsApp kerja sama"       "$IDX" "Jadi Bestie InStaGi"
 JAJAK=$(echo "$IDX" | grep -o 'https://wa.me/[0-9]*' | sort -u | wc -l)
