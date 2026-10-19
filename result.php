@@ -69,9 +69,6 @@ $whatsapp_message = http_build_query([
 // URL WhatsApp
 $whatsapp_url = "https://wa.me/{$whatsapp_number}?{$whatsapp_message}";
 
-?>
-
-<?php
 // Judul, deskripsi, alamat rapi (tanpa .php), dan daftar CSS halaman ini.
 $judul     = 'InStaGi - Hasil Analisis IMT';
 $deskripsi = 'Hasil analisis IMT dan status gizi Anda, lengkap dengan berat badan ideal, estimasi kebutuhan kalori harian, serta saran gizi praktis dari InStaGi.';
@@ -182,13 +179,13 @@ require __DIR__ . '/includes/layout_head.php';
                 <h3>Riwayat tersimpan untuk akun: <?= htmlspecialchars($responden_aktif['nama'], ENT_QUOTES, 'UTF-8') ?></h3>
                 <p>Hasil ini otomatis masuk ke riwayat Anda. Lihat perkembangan status gizi Anda di menu Monitoring.</p>
                 <div class="account-actions">
-                    <a class="btn-primary" href="/monitoring">Lihat Monitoring Saya</a>
+                    <a class="back-btn" href="/monitoring">Lihat Monitoring Saya</a>
                 </div>
             <?php else: ?>
                 <h3>Simpan & pantau hasil Anda</h3>
                 <p>Buka menu <strong>Monitoring</strong> lalu masukkan Nama dan No. HP yang sama untuk melihat riwayat pengukuran Anda.</p>
                 <div class="account-actions">
-                    <a class="btn-secondary" href="/monitoring">Buka Monitoring</a>
+                    <a class="back-btn" href="/monitoring">Buka Monitoring</a>
                 </div>
             <?php endif; ?>
         </div>
@@ -198,7 +195,7 @@ require __DIR__ . '/includes/layout_head.php';
             <h3 style="color: var(--primary-color); margin-bottom: 8px;">Pelajari Informasi & Panduan Gizi Lengkap</h3>
             <p style="margin-bottom: 16px;">Temukan Leaflet Informasi Gizi, Contoh Menu Kalori Harian, Kumpulan Resep Sehat, dan Buku DBMP di halaman khusus Informasi Gizi.</p>
             <div class="account-actions" style="justify-content: center;">
-                <a class="btn-primary" href="/informasi">Buka Halaman Informasi Gizi</a>
+                <a class="back-btn" href="/informasi">Buka Halaman Informasi Gizi</a>
             </div>
         </div>
     </div>

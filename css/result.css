@@ -190,6 +190,17 @@ h1, h2 {
     color: white;
 }
 
+.account-actions .back-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 12px 20px;
+    height: auto;
+    min-width: 200px;
+    max-width: 350px;
+    width: 100%;
+}
+
 .disclaimer {
     text-align: center;
     font-size: 1.1em;

@@ -68,5 +68,4 @@ $instagi_gambar  = $instagi_dasar . '/assets/og-image.jpg';
     <meta name="twitter:description" content="<?= htmlspecialchars($deskripsi, ENT_QUOTES, 'UTF-8') ?>">
     <meta name="twitter:image" content="<?= htmlspecialchars($instagi_gambar, ENT_QUOTES, 'UTF-8') ?>">
 </head>
-<body>
-<?php require __DIR__ . '/nav.php'; ?>
+<body><?php require __DIR__ . '/nav.php'; ?>

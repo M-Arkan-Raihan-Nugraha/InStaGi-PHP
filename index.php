@@ -19,13 +19,9 @@ $nav_active = '';
 
 // --- Layanan via WhatsApp ----------------------------------------------------
 // Nomor diambil dari includes/config.php (satu sumber, bisa dioverride env).
-$wa_konsultasi = instagi_wa_url(
-    'Halo InStaGi, saya ingin menggunakan layanan Konsultasi Gizi. Mohon informasinya.',
+$wa_layanan = instagi_wa_url(
+    'Halo InStaGi, saya ingin berkonsultasi mengenai gizi dan memesan catering gizi. Mohon informasinya.',
     INSTAGI_WA_KONSULTASI
-);
-$wa_catering = instagi_wa_url(
-    'Halo InStaGi, saya ingin bertanya tentang layanan Catering Gizi. Mohon informasinya.',
-    INSTAGI_WA_CATERING
 );
 $wa_bestie = instagi_wa_url(
     'Halo InStaGi, saya ingin bekerja sama / memasang iklan di InStaGi (Bestie InStaGi). Mohon informasinya.',
@@ -46,8 +42,7 @@ if (is_dir($bestie_dir)) {
     }
     sort($bestie_logo, SORT_NATURAL | SORT_FLAG_CASE);
 }
-?>
-<?php
+
 // Judul, deskripsi, alamat rapi (tanpa .php), dan daftar CSS halaman ini.
 // Semua bagian <head> (meta, Open Graph, Twitter Card, CSS) kini ada di satu
 // tempat: includes/layout_head.php.
@@ -104,12 +99,9 @@ require __DIR__ . '/includes/layout_head.php';
                     </div>
                     <h3>Konsultasi & Catering Gizi Personal</h3>
                     <p>Konsultasikan status gizi, pola makan, dan target kesehatan Anda bersama ahli gizi, serta nikmati menu catering harian yang dihitung tepat sesuai estimasi kebutuhan kalori Anda (program penurunan, kenaikan, atau pemeliharaan berat badan).</p>
-                    <div class="layanan-actions-group">
-                        <a class="layanan-btn layanan-btn-wa" href="<?= htmlspecialchars($wa_konsultasi, ENT_QUOTES, 'UTF-8') ?>" target="_blank" rel="noopener">
-                            Konsultasi via WhatsApp
-                        </a>
-                        <a class="layanan-btn layanan-btn-wa" href="<?= htmlspecialchars($wa_catering, ENT_QUOTES, 'UTF-8') ?>" target="_blank" rel="noopener">
-                            Pesan Catering Gizi
+                    <div class="layanan-actions">
+                        <a class="layanan-btn layanan-btn-wa" href="<?= htmlspecialchars($wa_layanan, ENT_QUOTES, 'UTF-8') ?>" target="_blank" rel="noopener">
+                            <span class="site-nav-ico" aria-hidden="true"><?= instagi_ikon('whatsapp') ?></span> Konsultasi & Pesan Catering via WhatsApp
                         </a>
                     </div>
                 </article>

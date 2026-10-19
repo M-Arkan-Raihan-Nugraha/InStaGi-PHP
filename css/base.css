@@ -24,10 +24,13 @@
     --whatsapp-green: #25D366;
 }
 
+*, *::before, *::after {
+    box-sizing: border-box;
+}
+
 html {
     margin: 0;
     padding: 0;
-    box-sizing: border-box;
 }
 
 body {

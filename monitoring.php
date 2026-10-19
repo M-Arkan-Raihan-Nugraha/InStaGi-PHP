@@ -255,8 +255,7 @@ $grafik_pita = [
 
 $riwayat_tampil = array_reverse($riwayat); // terbaru di atas
 $csrf_token = instagi_csrf_token();
-?>
-<?php
+
 // Judul, deskripsi, alamat rapi (tanpa .php), dan daftar CSS halaman ini.
 $judul     = 'InStaGi - Monitoring Status Gizi';
 $deskripsi = 'Lihat riwayat dan grafik perkembangan status gizi (IMT) milik akun Anda dari waktu ke waktu melalui InStaGi.';
@@ -325,7 +324,7 @@ require __DIR__ . '/includes/layout_head.php';
                    <?php endif; ?>
                 </p>
                 <div class="account-actions">
-                    <a class="btn-primary" href="/imt">+ Cek Status Gizi Baru</a>
+                    <a class="btn-primary" href="/imt">Cek Gizi Baru</a>
                     <form method="post" action="/monitoring" style="display:inline;">
                         <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($csrf_token, ENT_QUOTES, 'UTF-8') ?>">
                         <input type="hidden" name="action" value="logout">
@@ -461,27 +460,32 @@ require __DIR__ . '/includes/layout_head.php';
                     <div class="error-message" style="margin:12px 0;"><?= htmlspecialchars($pesan_keamanan, ENT_QUOTES, 'UTF-8') ?></div>
                 <?php endif; ?>
 
-                <form method="post" action="/monitoring" class="account-form-3">
+                <form method="post" action="/monitoring" class="password-form-grid">
                     <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($csrf_token, ENT_QUOTES, 'UTF-8') ?>">
                     <input type="hidden" name="action" value="password">
                     <?php if ($akun_punya_password): ?>
-                        <div class="form-group">
-                            <label for="password_lama">Password Lama</label>
-                            <input type="password" id="password_lama" name="password_lama" autocomplete="current-password" required>
+                        <div class="password-row-full">
+                            <div class="form-group">
+                                <label for="password_lama">Password Lama</label>
+                                <input type="password" id="password_lama" name="password_lama" autocomplete="current-password" required>
+                            </div>
                         </div>
                     <?php endif; ?>
-                    <div class="form-group">
-                        <label for="password_baru">Password Baru</label>
-                        <input type="password" id="password_baru" name="password_baru" minlength="8"
-                               autocomplete="new-password" required>
-                        <small class="field-hint">Minimal 8 karakter</small>
+                    <div class="password-row-split">
+                        <div class="form-group">
+                            <label for="password_baru">Password Baru</label>
+                            <input type="password" id="password_baru" name="password_baru" minlength="8"
+                                   autocomplete="new-password" placeholder="Minimal 8 karakter" required>
+                            <small class="field-hint">Minimal 8 karakter</small>
+                        </div>
+                        <div class="form-group">
+                            <label for="password_ulang">Ulangi Password Baru</label>
+                            <input type="password" id="password_ulang" name="password_ulang" minlength="8"
+                                   autocomplete="new-password" placeholder="Ulangi password baru" required>
+                            <small class="field-hint">&nbsp;</small>
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <label for="password_ulang">Ulangi Password Baru</label>
-                        <input type="password" id="password_ulang" name="password_ulang" minlength="8"
-                               autocomplete="new-password" required>
-                    </div>
-                    <div class="form-group form-group-tombol">
+                    <div class="password-form-actions">
                         <button type="submit" class="btn-primary">Simpan Password</button>
                     </div>
                 </form>
@@ -520,7 +524,7 @@ require __DIR__ . '/includes/layout_head.php';
             var batasBawah = Math.min(16, Math.floor(Math.min.apply(null, nilaiImt)) - 1);
             var batasAtas  = Math.max(30, Math.ceil(Math.max.apply(null, nilaiImt)) + 1);
 
-            // Pita kategori (latar berwarna) — di gambar SEBELUM garis data.
+            // Pita kategori (latar berwarna) — digambar SEBELUM garis data.
             var pitaKategori = {
                 id: 'pitaKategori',
                 beforeDatasetsDraw: function (chart) {
@@ -539,15 +543,12 @@ require __DIR__ . '/includes/layout_head.php';
                         ctx.save();
                         ctx.fillStyle = p.warna;
                         ctx.fillRect(area.left, atas, area.right - area.left, bawah - atas);
-                        ctx.fillStyle = 'rgba(0, 0, 0, 0.45)';
-                        ctx.font = '11px sans-serif';
-                        ctx.fillText(p.label, area.left + 6, atas + 13);
                         ctx.restore();
                     });
                 }
             };
 
-            // Garis panduan kategori (tampilan saja).
+            // Garis panduan batas kategori (angka ambang di sisi kanan agar rapi).
             var garisPanduan = {
                 id: 'garisPanduan',
                 afterDatasetsDraw: function (chart, args, opsi) {
@@ -558,17 +559,18 @@ require __DIR__ . '/includes/layout_head.php';
                         if (y < area.top || y > area.bottom) { return; }
                         var ctx = chart.ctx;
                         ctx.save();
-                        ctx.setLineDash([6, 6]);
-                        ctx.strokeStyle = l.warna || '#999';
+                        ctx.setLineDash([4, 4]);
+                        ctx.strokeStyle = l.warna || '#cbd5e1';
                         ctx.lineWidth = 1.2;
                         ctx.beginPath();
                         ctx.moveTo(area.left, y);
                         ctx.lineTo(area.right, y);
                         ctx.stroke();
                         ctx.setLineDash([]);
-                        ctx.fillStyle = l.warna || '#999';
-                        ctx.font = '11px sans-serif';
-                        ctx.fillText(l.label, area.left + 6, y - 4);
+                        ctx.fillStyle = l.warna || '#64748b';
+                        ctx.font = '600 11px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
+                        ctx.textAlign = 'right';
+                        ctx.fillText('Batas ' + l.label, area.right - 8, y - 5);
                         ctx.restore();
                     });
                 }
@@ -582,15 +584,15 @@ require __DIR__ . '/includes/layout_head.php';
                         label: 'IMT',
                         data: data.imt,
                         borderColor: '#e74c3c',
-                        backgroundColor: 'rgba(231, 76, 60, 0.10)',
-                        borderWidth: 2,
-                        tension: 0.25,
+                        backgroundColor: 'rgba(231, 76, 60, 0.08)',
+                        borderWidth: 2.5,
+                        tension: 0.35,
                         fill: true,
                         pointBackgroundColor: data.warna,
-                        pointBorderColor: '#fff',
+                        pointBorderColor: '#ffffff',
                         pointBorderWidth: 2,
-                        pointRadius: 5,
-                        pointHoverRadius: 7
+                        pointRadius: 6,
+                        pointHoverRadius: 8
                     }]
                 },
                 options: {
@@ -600,8 +602,13 @@ require __DIR__ . '/includes/layout_head.php';
                     plugins: {
                         legend: { display: false },
                         tooltip: {
+                            backgroundColor: '#1e293b',
+                            padding: 10,
+                            cornerRadius: 8,
+                            titleFont: { size: 12, weight: '600' },
+                            bodyFont: { size: 13 },
                             callbacks: {
-                                label: function (ctx) { return 'IMT: ' + angkaImt(ctx.parsed.y); }
+                                label: function (ctx) { return ' IMT: ' + angkaImt(ctx.parsed.y); }
                             }
                         },
                         garisPanduan: { lines: ambang }
@@ -611,10 +618,32 @@ require __DIR__ . '/includes/layout_head.php';
                             beginAtZero: false,
                             min: batasBawah,
                             max: batasAtas,
-                            ticks: { maxTicksLimit: 9 },
-                            title: { display: true, text: 'IMT' }
+                            grid: { color: 'rgba(0, 0, 0, 0.05)' },
+                            ticks: {
+                                maxTicksLimit: 9,
+                                color: '#64748b',
+                                font: { size: 12 }
+                            },
+                            title: {
+                                display: true,
+                                text: 'Nilai IMT',
+                                color: '#475569',
+                                font: { weight: '600', size: 12 }
+                            }
                         },
-                        x: { title: { display: true, text: 'Tanggal pengukuran' } }
+                        x: {
+                            grid: { display: false },
+                            ticks: {
+                                color: '#64748b',
+                                font: { size: 11 }
+                            },
+                            title: {
+                                display: true,
+                                text: 'Tanggal Pengukuran',
+                                color: '#475569',
+                                font: { weight: '600', size: 12 }
+                            }
+                        }
                     }
                 },
                 plugins: [pitaKategori, garisPanduan]

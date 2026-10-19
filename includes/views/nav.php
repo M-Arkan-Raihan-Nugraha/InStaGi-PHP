@@ -36,9 +36,7 @@ if (!function_exists('instagi_nav_items')) {
 
 $nav_active = isset($nav_active) ? $nav_active : '';
 $nav_items  = instagi_nav_items();
-$nav_admin  = (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] === true);
-?>
-<header class="site-nav">
+?><header class="site-nav">
     <div class="site-nav-inner">
         <a class="site-nav-brand" href="/">
             <img src="assets/logo.webp" alt="Logo InStaGi" width="512" height="466">
