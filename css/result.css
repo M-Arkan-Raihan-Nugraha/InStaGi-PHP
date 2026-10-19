@@ -714,6 +714,7 @@ h1, h2 {
     /* Batasi maksimal 2 baris agar kartu tidak memanjang ke bawah */
     display: -webkit-box;
     -webkit-line-clamp: 2;
+    line-clamp: 2;
     -webkit-box-orient: vertical;
     overflow: hidden;
 }
@@ -1493,6 +1494,7 @@ body.dbmp-open {
     /* Batasi maksimal 2 baris agar kartu tidak memanjang ke bawah */
     display: -webkit-box;
     -webkit-line-clamp: 2;
+    line-clamp: 2;
     -webkit-box-orient: vertical;
     overflow: hidden;
 }
