@@ -188,6 +188,8 @@ h1, h2 {
 .back-btn:hover {
     background-color: var(--primary-color);
     color: white;
+}
+
 .sub-action-buttons {
     display: flex;
     gap: 10px;
