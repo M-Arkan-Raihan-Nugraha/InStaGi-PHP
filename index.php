@@ -108,11 +108,11 @@ require __DIR__ . '/includes/layout_head.php';
             </div>
         </section>
 
-        <!-- ===== BESTIE INSTAGI: SPONSOR & KERJA SAMA IKLAN ===== -->
+        <!-- ===== BESTIE INSTAGI: SPONSORSHIP, KEMITRAAN, DAN KERJA SAMA ===== -->
         <section class="bestie-section" id="bestie">
             <h2>Bestie InStaGi</h2>
             <p class="bestie-intro">
-                Ruang untuk <strong>sponsor</strong> dan <strong>kerja sama iklan</strong>: produk kesehatan,
+                Ruang untuk <strong>sponsorship, kemitraan, dan kerja sama</strong>: produk kesehatan,
                 jasa katering, klinik, apotek, komunitas olahraga, dan usaha lain yang sejalan dengan hidup sehat.
                 Logo mitra tampil di halaman ini dan ikut terbawa saat tautan InStaGi dibagikan.
             </p>
@@ -127,20 +127,11 @@ require __DIR__ . '/includes/layout_head.php';
                         </div>
                     <?php endforeach; ?>
                 </div>
-            <?php else: ?>
-                <div class="bestie-empty">
-                    Slot mitra masih kosong. Jadilah <strong>Bestie InStaGi</strong> pertama — hubungi kami via email untuk
-                    menempatkan logo dan tautan usaha Anda di sini.
-                </div>
             <?php endif; ?>
 
-            <div class="bestie-actions">
-                <a class="layanan-btn layanan-btn-email" href="mailto:instagiadmin@gmail.com?subject=Kerja%20Sama%20Bestie%20InStaGi">
-                    <span class="site-nav-ico" aria-hidden="true"><?= instagi_ikon('email') ?></span> Hubungi via Email (instagiadmin@gmail.com)
-                </a>
-            </div>
+            <p class="bestie-contact">
+                Untuk menjadi Bestie InStaGi hubungi kami via email: <a href="mailto:instagiadmin@gmail.com">instagiadmin@gmail.com</a>
+            </p>
         </section>
-
-        <p class="disclaimer">Hasil merupakan skrining awal, bukan diagnosis medis.</p>
     </div>
 <?php require __DIR__ . '/includes/layout_footer.php'; ?>

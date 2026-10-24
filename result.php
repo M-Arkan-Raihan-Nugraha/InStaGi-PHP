@@ -157,6 +157,7 @@ require __DIR__ . '/includes/layout_head.php';
                     <p><?= $saran ?></p>
                 </div>
             </div>
+            <p class="skrining-disclaimer">Hasil merupakan skrining awal, bukan diagnosis medis.</p>
             <h3 class="disclaimer">
                 Bila Anda ingin mendapatkan informasi gizi lebih lanjut dan membutuhkan layanan katering diet silahkan
                 menghubungi nomor WA <?= htmlspecialchars($whatsapp_display) ?>

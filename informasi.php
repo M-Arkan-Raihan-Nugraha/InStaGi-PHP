@@ -17,16 +17,18 @@ require_once 'includes/leaflet.php';
 require_once 'includes/menu.php';
 require_once 'includes/resep.php';
 require_once 'includes/panduan.php';
+require_once 'includes/aktivitas.php';
 require_once 'includes/dbmp.php';
 
 $nav_active = 'informasi';
 
 // --- Kumpulkan daftar siap tampil untuk tiap galeri ---
 // (helper bersama: includes/galeri_aset.php — hanya entri yang gambarnya ada)
-$leaflets = instagi_galeri_daftar_tampil('leaflet', instagi_leaflet_list());
-$menus    = instagi_galeri_daftar_tampil('menu', instagi_menu_list(), 'instagi_menu_slug');
-$reseps   = instagi_resep_daftar();
-$panduans = instagi_panduan_daftar();
+$leaflets  = instagi_galeri_daftar_tampil('leaflet', instagi_leaflet_list());
+$menus     = instagi_galeri_daftar_tampil('menu', instagi_menu_list(), 'instagi_menu_slug');
+$reseps    = instagi_resep_daftar();
+$panduans  = instagi_panduan_daftar();
+$aktivitas = instagi_aktivitas_daftar();
 
 // --- DBMP (satu berkas PDF) ---
 $dbmp_pdf   = instagi_dbmp_pdf();
@@ -50,6 +52,7 @@ require __DIR__ . '/includes/layout_head.php';
             <a href="#menu">Contoh Menu</a>
             <a href="#resep">Kumpulan Resep</a>
             <a href="#panduan">Panduan &amp; Edukasi</a>
+            <a href="#aktivitas">Aktivitas Fisik</a>
             <a href="#dbmp">DBMP</a>
         </nav>
 
@@ -94,6 +97,17 @@ $kartu_intro  = 'Panduan diet untuk kondisi tertentu, daftar bahan makanan pilih
 $kartu_daftar = $panduans;
 $kartu_alt    = 'Panduan';
 $kartu_kosong = 'Belum ada panduan yang tersedia.';
+require __DIR__ . '/includes/galeri_kartu.php';
+?>
+
+        <!-- ===== AKTIVITAS FISIK ===== -->
+<?php
+$kartu_id     = 'aktivitas';
+$kartu_judul  = 'Aktivitas Fisik';
+$kartu_intro  = 'Panduan dan infografis kebugaran, peregangan harian, serta aktivitas fisik untuk mendukung gaya hidup sehat dan bugar.';
+$kartu_daftar = $aktivitas;
+$kartu_alt    = 'Aktivitas Fisik';
+$kartu_kosong = 'Belum ada materi aktivitas fisik yang tersedia.';
 require __DIR__ . '/includes/galeri_kartu.php';
 ?>
 

@@ -503,7 +503,7 @@
     background: #1a252f;
 }
 
-/* --- Bestie InStaGi (sponsor & kerja sama iklan) ---------------------------- */
+/* --- Bestie InStaGi (sponsorship, kemitraan, dan kerja sama) ---------------- */
 .bestie-section {
     margin: 34px 0;
 }
@@ -544,25 +544,17 @@
     display: block;
 }
 
-.bestie-empty {
-    background: #fff;
-    border: 1px dashed var(--border-color);
-    border-radius: 12px;
-    padding: 20px;
-    color: #555;
+.bestie-contact {
+    margin-top: 14px;
     font-size: 0.95em;
-    line-height: 1.55;
-    margin-bottom: 16px;
+    color: #444;
+    line-height: 1.5;
 }
 
-.bestie-actions {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-}
-
-.bestie-actions .layanan-btn {
-    margin-top: 0;
+.bestie-contact a {
+    color: var(--primary-color);
+    font-weight: 600;
+    text-decoration: underline;
 }
 
 /* --- Monitoring: ringkasan, grafik, keamanan akun --------------------------- */

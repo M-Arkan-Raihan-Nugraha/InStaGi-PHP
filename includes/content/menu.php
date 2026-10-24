@@ -42,6 +42,13 @@ if (!function_exists('instagi_menu_list')) {
     function instagi_menu_list()
     {
         return [
+            1200 => [
+                'judul'    => 'Contoh Menu 1.200 kkal',
+                'subjudul' => '3 kali makan utama + 2 kali selingan',
+                'ringkas'  => 'Contoh menu sehari ±1.200 kkal lengkap dengan porsi bahan makanan penukar dan pembagian waktu makan.',
+                'tag'      => '±1.200 kkal',
+                'unduh'    => 'Leaflet-InStaGi-Contoh-Menu-1200-kkal.webp',
+            ],
             1400 => [
                 'judul'    => 'Contoh Menu 1.400 kkal',
                 'subjudul' => '3 kali makan utama + 2 kali selingan',
@@ -56,12 +63,26 @@ if (!function_exists('instagi_menu_list')) {
                 'tag'      => '±1.500 kkal',
                 'unduh'    => 'Leaflet-InStaGi-Contoh-Menu-1500-kkal.webp',
             ],
+            1600 => [
+                'judul'    => 'Contoh Menu 1.600 kkal',
+                'subjudul' => '3 kali makan utama + 2 kali selingan',
+                'ringkas'  => 'Contoh menu sehari ±1.600 kkal dengan susunan menu seimbang, aneka lauk pauk, sayuran, dan selingan sehat.',
+                'tag'      => '±1.600 kkal',
+                'unduh'    => 'Leaflet-InStaGi-Contoh-Menu-1600-kkal.webp',
+            ],
             1700 => [
                 'judul'    => 'Contoh Menu 1.700 kkal',
                 'subjudul' => '3 kali makan utama + 2 kali selingan',
                 'ringkas'  => 'Contoh menu sehari ±1.700 kkal untuk kebutuhan sedang, lengkap distribusi energi tiap waktu makan.',
                 'tag'      => '±1.700 kkal',
                 'unduh'    => 'Leaflet-InStaGi-Contoh-Menu-1700-kkal.webp',
+            ],
+            1800 => [
+                'judul'    => 'Contoh Menu 1.800 kkal',
+                'subjudul' => '3 kali makan utama + 2 kali selingan',
+                'ringkas'  => 'Contoh menu sehari ±1.800 kkal untuk pemenuhan energi harian dengan gizi lengkap dan porsi teratur.',
+                'tag'      => '±1.800 kkal',
+                'unduh'    => 'Leaflet-InStaGi-Contoh-Menu-1800-kkal.webp',
             ],
             2000 => [
                 'judul'    => 'Contoh Menu 2.000 kkal',

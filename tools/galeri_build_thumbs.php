@@ -33,6 +33,7 @@ require_once dirname(__DIR__) . '/includes/content/leaflet.php';
 require_once dirname(__DIR__) . '/includes/content/menu.php';
 require_once dirname(__DIR__) . '/includes/content/resep.php';
 require_once dirname(__DIR__) . '/includes/content/panduan.php';
+require_once dirname(__DIR__) . '/includes/content/aktivitas.php';
 
 /**
  * Daftar galeri yang diproses.
@@ -44,10 +45,11 @@ require_once dirname(__DIR__) . '/includes/content/panduan.php';
  * lebarnya dibuat lebih kecil agar kartu di ponsel tidak berat.
  */
 $daftar_galeri = [
-    'leaflet' => ['nama_tampil' => 'Leaflet Informasi Gizi',   'fungsi_daftar' => 'instagi_leaflet_list', 'lebar' => 600, 'mutu' => 78],
-    'menu'    => ['nama_tampil' => 'Contoh Menu Kalori',       'fungsi_daftar' => 'instagi_menu_list',    'lebar' => 600, 'mutu' => 78, 'fungsi_slug' => 'instagi_menu_slug'],
-    'resep'   => ['nama_tampil' => 'Kumpulan Resep',           'fungsi_daftar' => 'instagi_resep_list',   'lebar' => 480, 'mutu' => 76],
-    'panduan' => ['nama_tampil' => 'Panduan & Edukasi Gizi',   'fungsi_daftar' => 'instagi_panduan_list', 'lebar' => 480, 'mutu' => 76],
+    'leaflet'   => ['nama_tampil' => 'Leaflet Informasi Gizi',   'fungsi_daftar' => 'instagi_leaflet_list',   'lebar' => 600, 'mutu' => 78],
+    'menu'      => ['nama_tampil' => 'Contoh Menu Kalori',       'fungsi_daftar' => 'instagi_menu_list',      'lebar' => 600, 'mutu' => 78, 'fungsi_slug' => 'instagi_menu_slug'],
+    'resep'     => ['nama_tampil' => 'Kumpulan Resep',           'fungsi_daftar' => 'instagi_resep_list',     'lebar' => 480, 'mutu' => 76],
+    'panduan'   => ['nama_tampil' => 'Panduan & Edukasi Gizi',   'fungsi_daftar' => 'instagi_panduan_list',   'lebar' => 480, 'mutu' => 76],
+    'aktivitas' => ['nama_tampil' => 'Aktivitas Fisik',          'fungsi_daftar' => 'instagi_aktivitas_list', 'lebar' => 480, 'mutu' => 76],
 ];
 
 if (!extension_loaded('gd')) {

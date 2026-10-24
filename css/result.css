@@ -201,6 +201,14 @@ h1, h2 {
     width: 100%;
 }
 
+.skrining-disclaimer {
+    text-align: center;
+    font-size: 0.95em;
+    color: #6c757d;
+    margin: 20px auto 4px auto;
+    font-style: italic;
+}
+
 .disclaimer {
     text-align: center;
     font-size: 1.1em;
@@ -572,6 +580,13 @@ h1, h2 {
 #printable-area.is-printing .saran-item p {
     font-size: 12px !important;
     line-height: 1.4 !important;
+}
+
+#printable-area.is-printing .skrining-disclaimer {
+    font-size: 10px !important;
+    margin: 8px auto 2px auto !important;
+    color: #666 !important;
+    font-style: italic !important;
 }
 
 #printable-area.is-printing .disclaimer {

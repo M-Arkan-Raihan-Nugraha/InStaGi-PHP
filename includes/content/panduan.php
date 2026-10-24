@@ -75,6 +75,20 @@ if (!function_exists('instagi_panduan_list')) {
                 'tag'      => 'Pencernaan',
                 'unduh'    => 'Panduan-InStaGi-Prebiotik-dan-Probiotik.webp',
             ],
+            'contoh-menu-modifikasi-bagi-lansia' => [
+                'judul'    => 'Contoh Menu Modifikasi Bagi Lansia',
+                'subjudul' => 'Makanan lunak yang mudah dikunyah',
+                'ringkas'  => 'Pedoman menu makanan lunak bergizi lengkap untuk lansia dengan tekstur yang mudah dikunyah, mudah dicerna, serta padat gizi.',
+                'tag'      => 'Menu Lansia',
+                'unduh'    => 'Panduan-InStaGi-Contoh-Menu-Modifikasi-Bagi-Lansia.webp',
+            ],
+            'panduan-gula-garam-minyak' => [
+                'judul'    => 'Panduan Gula, Garam, dan Minyak (G4 G1 L5)',
+                'subjudul' => 'Batasi konsumsi harian untuk mencegah penyakit tidak menular',
+                'ringkas'  => 'Aturan anjuran konsumsi harian per orang: maksimal 4 sendok makan gula, 1 sendok teh garam, dan 5 sendok makan lemak/minyak untuk menjaga kesehatan.',
+                'tag'      => 'G4 G1 L5',
+                'unduh'    => 'Panduan-InStaGi-Panduan-Gula-Garam-Minyak.webp',
+            ],
         ];
     }
 }
