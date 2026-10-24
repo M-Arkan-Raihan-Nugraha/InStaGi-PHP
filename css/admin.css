@@ -22,30 +22,75 @@ h1 {
     margin: 0;
 }
 
-.logout-btn, .export-btn {
-    padding: 10px 20px;
-    border: none;
-    background-color: var(--primary-color);
-    color: white;
-    font-size: 14px;
-    font-weight: 600;
-    border-radius: 8px;
-    cursor: pointer;
-    text-decoration: none;
-    transition: background-color 0.3s;
+.header-actions {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
 }
 
-.logout-btn:hover {
-    background-color: #c0392b;
+.header-btn,
+.logout-btn,
+.export-btn,
+.delete-selected-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: 40px;
+    padding: 9px 18px;
+    border: 1px solid transparent;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    font-family: inherit;
+    line-height: 1.4;
+    cursor: pointer;
+    text-decoration: none;
+    box-sizing: border-box;
+    transition: background-color 0.2s, border-color 0.2s, color 0.2s, box-shadow 0.2s, transform 0.1s;
+}
+
+.header-btn:active,
+.logout-btn:active,
+.export-btn:active,
+.delete-selected-btn:active {
+    transform: scale(0.98);
 }
 
 .export-btn {
-    background-color: #28a745;
-    margin-right: 10px;
+    background-color: #27ae60;
+    border-color: #27ae60;
+    color: #ffffff;
 }
 
 .export-btn:hover {
-    background-color: #218838;
+    background-color: #219653;
+    border-color: #219653;
+    box-shadow: 0 2px 8px rgba(39, 174, 96, 0.3);
+}
+
+.logout-btn {
+    background-color: #ffffff;
+    border-color: var(--primary-color);
+    color: var(--primary-color);
+}
+
+.logout-btn:hover {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+    color: #ffffff;
+    box-shadow: 0 2px 8px rgba(231, 76, 60, 0.25);
+}
+
+.delete-selected-btn {
+    background-color: #e74c3c;
+    border-color: #e74c3c;
+    color: #ffffff;
+}
+
+.delete-selected-btn:hover {
+    background-color: #c0392b;
+    border-color: #c0392b;
 }
 
 /* Status Gizi Styles */

@@ -475,7 +475,7 @@ require __DIR__ . '/includes/layout_head.php';
                         <div class="form-group">
                             <label for="password_baru">Password Baru</label>
                             <input type="password" id="password_baru" name="password_baru" minlength="8"
-                                   autocomplete="new-password" placeholder="Minimal 8 karakter" required>
+                                   autocomplete="new-password" placeholder="Masukkan password baru" required>
                             <small class="field-hint">Minimal 8 karakter</small>
                         </div>
                         <div class="form-group">

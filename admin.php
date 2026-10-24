@@ -45,10 +45,10 @@ require __DIR__ . '/includes/layout_head.php';
     <div class="container">
         <div class="header">
             <h1>Data Responden</h1>
-            <div>
-                <button id="delete-selected-btn" class="action-btn delete-btn" style="display: none; margin-right: 10px;">Hapus Terpilih</button>
-                <a href="api/export_csv.php" class="action-btn export-btn">Export ke CSV</a>
-                <a href="/logout" class="logout-btn">Logout</a>
+            <div class="header-actions">
+                <button id="delete-selected-btn" class="header-btn delete-selected-btn" style="display: none;">Hapus Terpilih</button>
+                <a href="api/export_csv.php" class="header-btn export-btn">Export ke CSV</a>
+                <a href="/logout" class="header-btn logout-btn">Logout</a>
             </div>
         </div>
 

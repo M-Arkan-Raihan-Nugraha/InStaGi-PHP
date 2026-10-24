@@ -766,10 +766,32 @@
 }
 
 .password-form-actions .btn-primary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
     min-width: 160px;
-    text-align: center;
-    padding: 10px 20px;
+    height: 42px;
+    padding: 10px 24px;
     font-size: 0.95em;
+    font-weight: 600;
+    font-family: inherit;
+    border-radius: 8px;
+    cursor: pointer;
+    border: 1px solid var(--primary-color);
+    background: var(--primary-color);
+    color: #fff;
+    box-sizing: border-box;
+    transition: background 0.2s, border-color 0.2s, box-shadow 0.2s, transform 0.1s;
+}
+
+.password-form-actions .btn-primary:hover {
+    background: #c0392b;
+    border-color: #c0392b;
+    box-shadow: 0 2px 8px rgba(231, 76, 60, 0.3);
+}
+
+.password-form-actions .btn-primary:active {
+    transform: scale(0.98);
 }
 
 @media (max-width: 600px) {

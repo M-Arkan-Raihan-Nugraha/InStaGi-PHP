@@ -152,12 +152,12 @@ require __DIR__ . '/includes/layout_head.php';
                         <?php endif; ?>
                     </p>
                 </div>
+                <p class="skrining-disclaimer">Hasil merupakan skrining awal, bukan diagnosis medis.</p>
                 <div class="saran-item">
                     <h3>Saran untuk Anda</h3>
                     <p><?= $saran ?></p>
                 </div>
             </div>
-            <p class="skrining-disclaimer">Hasil merupakan skrining awal, bukan diagnosis medis.</p>
             <h3 class="disclaimer">
                 Bila Anda ingin mendapatkan informasi gizi lebih lanjut dan membutuhkan layanan katering diet silahkan
                 menghubungi nomor WA <?= htmlspecialchars($whatsapp_display) ?>
@@ -171,32 +171,10 @@ require __DIR__ . '/includes/layout_head.php';
             <button onclick="downloadPDF()" class="pdf-btn">
                 Simpan ke PDF
             </button>
-            <a href="/imt" class="back-btn">Hitung Ulang / Kembali</a>
-        </div>
-
-        <?php $responden_aktif = instagi_responden_saat_ini(); ?>
-        <div class="account-box">
-            <?php if ($responden_aktif): ?>
-                <h3>Riwayat tersimpan untuk akun: <?= htmlspecialchars($responden_aktif['nama'], ENT_QUOTES, 'UTF-8') ?></h3>
-                <p>Hasil ini otomatis masuk ke riwayat Anda. Lihat perkembangan status gizi Anda di menu Monitoring.</p>
-                <div class="account-actions">
-                    <a class="back-btn" href="/monitoring">Lihat Monitoring Saya</a>
-                </div>
-            <?php else: ?>
-                <h3>Simpan & pantau hasil Anda</h3>
-                <p>Buka menu <strong>Monitoring</strong> lalu masukkan Nama dan No. HP yang sama untuk melihat riwayat pengukuran Anda.</p>
-                <div class="account-actions">
-                    <a class="back-btn" href="/monitoring">Buka Monitoring</a>
-                </div>
-            <?php endif; ?>
-        </div>
-
-        <!-- Banner Menuju Informasi Gizi -->
-        <div class="account-box" style="margin-top: 25px; text-align: center;">
-            <h3 style="color: var(--primary-color); margin-bottom: 8px;">Pelajari Informasi & Panduan Gizi Lengkap</h3>
-            <p style="margin-bottom: 16px;">Temukan Leaflet Informasi Gizi, Contoh Menu Kalori Harian, Kumpulan Resep Sehat, dan Buku DBMP di halaman khusus Informasi Gizi.</p>
-            <div class="account-actions" style="justify-content: center;">
-                <a class="back-btn" href="/informasi">Buka Halaman Informasi Gizi</a>
+            <div class="sub-action-buttons">
+                <a href="/imt" class="back-btn">Hitung Ulang</a>
+                <a href="/monitoring" class="back-btn">Monitoring</a>
+                <a href="/informasi" class="back-btn">Informasi Gizi</a>
             </div>
         </div>
     </div>

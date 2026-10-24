@@ -188,24 +188,31 @@ h1, h2 {
 .back-btn:hover {
     background-color: var(--primary-color);
     color: white;
+.sub-action-buttons {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    width: 100%;
+    max-width: 540px;
 }
 
-.account-actions .back-btn {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    padding: 12px 20px;
-    height: auto;
-    min-width: 200px;
-    max-width: 350px;
-    width: 100%;
+.sub-action-buttons .back-btn {
+    flex: 1 1 130px;
+    max-width: 170px;
+    min-width: 110px;
+    padding: 12px 12px;
+    font-size: 13.5px;
+    white-space: nowrap;
 }
 
 .skrining-disclaimer {
+    grid-column: 1 / -1;
     text-align: center;
     font-size: 0.95em;
     color: #6c757d;
-    margin: 20px auto 4px auto;
+    margin: 10px auto 2px auto;
     font-style: italic;
 }
 
@@ -583,8 +590,9 @@ h1, h2 {
 }
 
 #printable-area.is-printing .skrining-disclaimer {
+    grid-column: 1 / -1 !important;
     font-size: 10px !important;
-    margin: 8px auto 2px auto !important;
+    margin: 4px auto 2px auto !important;
     color: #666 !important;
     font-style: italic !important;
 }
