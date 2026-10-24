@@ -123,7 +123,7 @@ require __DIR__ . '/includes/layout_head.php';
                         <div class="bestie-logo">
                             <img src="assets/bestie/<?= htmlspecialchars(rawurlencode($logo), ENT_QUOTES, 'UTF-8') ?>"
                                  alt="Mitra InStaGi: <?= htmlspecialchars(pathinfo($logo, PATHINFO_FILENAME), ENT_QUOTES, 'UTF-8') ?>"
-                                 loading="lazy" decoding="async">
+                                 decoding="async">
                         </div>
                     <?php endforeach; ?>
                 </div>

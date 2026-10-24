@@ -39,7 +39,7 @@ $kartu_kosong = isset($kartu_kosong) ? $kartu_kosong : 'Belum ada materi yang te
                         <a href="<?= htmlspecialchars($kt['full'], ENT_QUOTES, 'UTF-8') ?>" target="_blank" rel="noopener">
                             <img src="<?= htmlspecialchars($kt['thumb'], ENT_QUOTES, 'UTF-8') ?>"
                                  alt="<?= htmlspecialchars(trim($kartu_alt . ' ' . $kt['judul']), ENT_QUOTES, 'UTF-8') ?>"
-                                 loading="lazy" decoding="async">
+                                 decoding="async">
                         </a>
                         <div class="info-card-body">
                             <span class="info-tag"><?= htmlspecialchars($kt['tag'], ENT_QUOTES, 'UTF-8') ?></span>

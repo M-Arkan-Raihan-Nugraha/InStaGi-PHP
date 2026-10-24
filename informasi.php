@@ -121,7 +121,7 @@ require __DIR__ . '/includes/galeri_kartu.php';
                     <article class="info-card">
                         <?php if ($dbmp_cover !== null): ?>
                             <img src="<?= htmlspecialchars($dbmp_cover, ENT_QUOTES, 'UTF-8') ?>"
-                                 alt="Sampul DBMP" loading="lazy" decoding="async">
+                                 alt="Sampul DBMP" decoding="async">
                         <?php endif; ?>
                         <div class="info-card-body">
                             <span class="info-tag">Panduan Diet</span>

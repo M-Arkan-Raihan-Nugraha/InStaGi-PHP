@@ -180,7 +180,7 @@ require __DIR__ . '/includes/layout_head.php';
     </div>
 
     <!-- html2pdf.js library -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <script src="assets/js/html2pdf.bundle.min.js"></script>
     <script>
         function downloadPDF() {
             const btn = document.querySelector('.pdf-btn');
