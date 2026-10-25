@@ -43,41 +43,47 @@
     line-height: 1;
 }
 
-/* Warna merah, kuning, hijau yang soft (pastel berkelas dengan kontras tinggi) */
-.home-btn-red {
-    background-color: #fee2e2;
-    color: #b91c1c;
-    border: 1.5px solid #fca5a5;
+/* Warna tombol beranda: Burgundy, Yellow Baby, Sage Green (soft, elegan, dan kontras) */
+.home-btn-red,
+.home-btn-burgundy {
+    background-color: #f8ecee;
+    color: #6b1d2f;
+    border: 1.5px solid #dfb6be;
 }
 
-.home-btn-red:hover {
-    background-color: #fecaca;
-    border-color: #f87171;
-    color: #991b1b;
+.home-btn-red:hover,
+.home-btn-burgundy:hover {
+    background-color: #f1d8dd;
+    border-color: #cd8a97;
+    color: #541222;
 }
 
-.home-btn-yellow {
-    background-color: #fef3c7;
-    color: #92400e;
-    border: 1.5px solid #fcd34d;
+.home-btn-yellow,
+.home-btn-baby-yellow {
+    background-color: #fefce8;
+    color: #854d0e;
+    border: 1.5px solid #fef08a;
 }
 
-.home-btn-yellow:hover {
-    background-color: #fde68a;
-    border-color: #fbbf24;
-    color: #78350f;
+.home-btn-yellow:hover,
+.home-btn-baby-yellow:hover {
+    background-color: #fef9c3;
+    border-color: #fde047;
+    color: #713f12;
 }
 
-.home-btn-green {
-    background-color: #d1fae5;
-    color: #065f46;
-    border: 1.5px solid #6ee7b7;
+.home-btn-green,
+.home-btn-sage-green {
+    background-color: #e8f0eb;
+    color: #2d5a3c;
+    border: 1.5px solid #adc4b5;
 }
 
-.home-btn-green:hover {
-    background-color: #a7f3d0;
-    border-color: #34d399;
-    color: #044e39;
+.home-btn-green:hover,
+.home-btn-sage-green:hover {
+    background-color: #dfece2;
+    border-color: #97b7a1;
+    color: #20452d;
 }
 
 /* --- Kotak akun responden --------------------------------------------------- */

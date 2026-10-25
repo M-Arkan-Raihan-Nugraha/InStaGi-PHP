@@ -68,15 +68,15 @@ require __DIR__ . '/includes/layout_head.php';
 
         <!-- ===== PILIHAN MENU DI AWAL ===== -->
         <div class="home-menu-buttons">
-            <a class="home-btn home-btn-red" href="/imt">
+            <a class="home-btn home-btn-burgundy" href="/imt">
                 <span class="home-btn-ico" aria-hidden="true"><?= instagi_ikon('cek-gizi') ?></span>
                 <span>CEK STATUS GIZI</span>
             </a>
-            <a class="home-btn home-btn-yellow" href="/informasi">
+            <a class="home-btn home-btn-baby-yellow" href="/informasi">
                 <span class="home-btn-ico" aria-hidden="true"><?= instagi_ikon('informasi') ?></span>
                 <span>INFORMASI GIZI</span>
             </a>
-            <a class="home-btn home-btn-green" href="/monitoring">
+            <a class="home-btn home-btn-sage-green" href="/monitoring">
                 <span class="home-btn-ico" aria-hidden="true"><?= instagi_ikon('monitoring') ?></span>
                 <span>MONITORING STATUS GIZI</span>
             </a>

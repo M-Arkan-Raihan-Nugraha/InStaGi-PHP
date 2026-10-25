@@ -38,8 +38,8 @@
 }
 
 .site-nav-brand span {
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
+    text-transform: none;
+    letter-spacing: normal;
 }
 
 .site-nav-brand img {
