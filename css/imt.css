@@ -301,6 +301,11 @@ footer a:hover {
     margin: 6px 0 0 26px;
 }
 
+.akun-aman > .field-hint-warning {
+    color: #c0392b;
+    line-height: 1.45;
+}
+
 .akun-aman-pass {
     display: grid;
     grid-template-columns: 1fr 1fr;

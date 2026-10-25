@@ -292,9 +292,8 @@ require __DIR__ . '/includes/layout_head.php';
                     <input type="checkbox" id="buat_akun" name="buat_akun" value="1" <?= !empty($_POST['buat_akun']) ? 'checked' : '' ?>>
                     <span>Simpan dengan akun aman (pakai password)</span>
                 </label>
-                <small class="field-hint">
-                    Tanpa password, riwayat Anda hanya dilindungi Nama + No. HP.
-                    Dengan password, hanya Anda yang bisa membukanya di menu <strong>Monitoring Status Gizi</strong>.
+                <small class="field-hint field-hint-warning">
+                    <strong>Peringatan:</strong> Jika tidak berpassword, riwayat status gizi Anda bisa dilihat oleh orang lain yang mengetahui No. HP atau Email Anda di menu Monitoring.
                 </small>
 
                 <div class="akun-aman-pass" id="akunAmanPass" <?= empty($_POST['buat_akun']) ? 'hidden' : '' ?>>

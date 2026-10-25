@@ -111,7 +111,6 @@ require __DIR__ . '/includes/layout_head.php';
             <p class="bestie-intro">
                 Ruang untuk <strong>sponsorship, kemitraan, dan kerja sama</strong>: produk kesehatan,
                 jasa katering, klinik, apotek, komunitas olahraga, dan usaha lain yang sejalan dengan hidup sehat.
-                Logo mitra tampil di halaman ini dan ikut terbawa saat tautan InStaGi dibagikan.
             </p>
 
             <?php if (!empty($bestie_logo)): ?>

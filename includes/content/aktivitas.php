@@ -1,8 +1,8 @@
 <?php
 /**
- * Modul Aktivitas Fisik InStaGi
+ * Modul Tips Bugar InStaGi
  * -----------------------------------------------------------------------------
- * Sumber data untuk galeri "Aktivitas Fisik" di halaman Informasi Gizi.
+ * Sumber data untuk galeri "Tips Bugar" di halaman Informasi Gizi.
  *
  * Tiap entri adalah panduan/infografis kebugaran, peregangan, dan gaya hidup aktif.
  */

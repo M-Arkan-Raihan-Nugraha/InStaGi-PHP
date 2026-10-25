@@ -443,8 +443,7 @@ require __DIR__ . '/includes/layout_head.php';
                     <p>Akun Anda sudah memakai password. Untuk menggantinya, masukkan password lama Anda.</p>
                 <?php else: ?>
                     <h3>Pasang password (disarankan)</h3>
-                    <p>Akun Anda saat ini hanya dilindungi Nama + No. HP, sehingga siapa pun yang tahu keduanya
-                       bisa melihat riwayat. Pasang password agar riwayat Anda lebih aman.</p>
+                    <p><strong>Peringatan:</strong> Akun Anda saat ini belum berpassword, sehingga riwayat status gizi Anda bisa dilihat oleh orang lain yang mengetahui No. HP atau Email Anda. Pasang password agar riwayat Anda aman dan pribadi.</p>
                 <?php endif; ?>
 
                 <?php if ($pesan_keamanan): ?>
@@ -485,9 +484,8 @@ require __DIR__ . '/includes/layout_head.php';
     </div>
 
     <?php if ($responden && $stat['jumlah'] > 0): ?>
-    <!-- Grafik memakai Chart.js dari CDN; bila gagal dimuat, halaman tetap utuh
-         dan daftar riwayat tetap bisa dibaca (lihat grafikFallback). -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@4/dist/chart.umd.min.js"></script>
+    <!-- Pustaka Chart.js lokal (mencegah Tracking Prevention browser memblokir CDN) -->
+    <script src="assets/js/chart.umd.min.js"></script>
     <script>
         (function () {
             var data = <?= json_encode($grafik, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_HEX_TAG | JSON_HEX_AMP) ?>;

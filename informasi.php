@@ -43,7 +43,7 @@ $dbmp_cover = instagi_dbmp_cover();
 <?php
 // Judul, deskripsi, alamat rapi (tanpa .php), dan daftar CSS halaman ini.
 $judul     = 'InStaGi - Informasi Gizi';
-$deskripsi = 'Materi edukasi gizi InStaGi: leaflet, panduan diet & edukasi gizi, Daftar Bahan Makanan Penukar (DBMP), contoh menu sesuai kebutuhan kalori, kumpulan resep, serta panduan aktivitas fisik.';
+$deskripsi = 'Materi edukasi gizi InStaGi: leaflet, panduan diet & edukasi gizi, Daftar Bahan Makanan Penukar (DBMP), contoh menu sesuai kebutuhan kalori, kumpulan resep, serta tips bugar.';
 $og_path   = '/informasi';
 $css       = ['index.css', 'nav.css', 'pages.css'];
 require __DIR__ . '/includes/layout_head.php';
@@ -57,7 +57,7 @@ require __DIR__ . '/includes/layout_head.php';
                     <?= instagi_ikon('perhatian') ?>
                 </div>
                 <h1>Akses Informasi Gizi Dibatasi</h1>
-                <p>Anda wajib melakukan <strong>Cek Status Gizi</strong> terlebih dahulu untuk dapat mengakses seluruh materi edukasi, leaflet, panduan, contoh menu, kumpulan resep, dan aktivitas fisik di InStaGi.</p>
+                <p>Anda wajib melakukan <strong>Cek Status Gizi</strong> terlebih dahulu untuk dapat mengakses seluruh materi edukasi, leaflet, panduan, contoh menu, kumpulan resep, dan tips bugar di InStaGi.</p>
                 <a href="/imt" class="btn-primary">
                     <?= instagi_ikon('cek-gizi') ?>
                     <span>CEK STATUS GIZI SEKARANG</span>
@@ -65,7 +65,7 @@ require __DIR__ . '/includes/layout_head.php';
             </div>
         <?php else: ?>
             <h1 style="text-align:left;color:var(--primary-color);">Informasi Gizi</h1>
-            <p class="info-intro">Materi edukasi gizi InStaGi: leaflet, panduan diet &amp; edukasi gizi, Daftar Bahan Makanan Penukar (DBMP), contoh menu sesuai kebutuhan kalori, kumpulan resep, serta panduan aktivitas fisik. Klik gambar untuk membuka versi besar, atau unduh untuk disimpan.</p>
+            <p class="info-intro">Materi edukasi gizi InStaGi: leaflet, panduan diet &amp; edukasi gizi, Daftar Bahan Makanan Penukar (DBMP), contoh menu sesuai kebutuhan kalori, kumpulan resep, serta tips bugar. Klik gambar untuk membuka versi besar, atau unduh untuk disimpan.</p>
 
             <nav class="info-jump" aria-label="Lompat ke bagian">
                 <a href="#leaflet">Leaflet</a>
@@ -73,7 +73,7 @@ require __DIR__ . '/includes/layout_head.php';
                 <a href="#dbmp">DBMP</a>
                 <a href="#menu">Contoh Menu</a>
                 <a href="#resep">Kumpulan Resep</a>
-                <a href="#aktivitas">Aktivitas Fisik</a>
+                <a href="#aktivitas">Tips Bugar</a>
             </nav>
 
             <!-- ===== 1. LEAFLET INFORMASI GIZI ===== -->
@@ -149,14 +149,14 @@ $kartu_kosong = 'Belum ada lembar resep yang tersedia.';
 require __DIR__ . '/includes/galeri_kartu.php';
 ?>
 
-            <!-- ===== 6. AKTIVITAS FISIK ===== -->
+            <!-- ===== 6. TIPS BUGAR ===== -->
 <?php
 $kartu_id     = 'aktivitas';
-$kartu_judul  = 'Aktivitas Fisik';
+$kartu_judul  = 'Tips Bugar';
 $kartu_intro  = 'Panduan dan infografis kebugaran, peregangan harian, serta aktivitas fisik untuk mendukung gaya hidup sehat dan bugar.';
 $kartu_daftar = $aktivitas;
-$kartu_alt    = 'Aktivitas Fisik';
-$kartu_kosong = 'Belum ada materi aktivitas fisik yang tersedia.';
+$kartu_alt    = 'Tips Bugar';
+$kartu_kosong = 'Belum ada materi tips bugar yang tersedia.';
 require __DIR__ . '/includes/galeri_kartu.php';
 ?>
 

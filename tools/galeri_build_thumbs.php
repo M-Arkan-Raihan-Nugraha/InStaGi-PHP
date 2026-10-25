@@ -49,7 +49,7 @@ $daftar_galeri = [
     'menu'      => ['nama_tampil' => 'Contoh Menu Kalori',       'fungsi_daftar' => 'instagi_menu_list',      'lebar' => 600, 'mutu' => 78, 'fungsi_slug' => 'instagi_menu_slug'],
     'resep'     => ['nama_tampil' => 'Kumpulan Resep',           'fungsi_daftar' => 'instagi_resep_list',     'lebar' => 480, 'mutu' => 76],
     'panduan'   => ['nama_tampil' => 'Panduan & Edukasi Gizi',   'fungsi_daftar' => 'instagi_panduan_list',   'lebar' => 480, 'mutu' => 76],
-    'aktivitas' => ['nama_tampil' => 'Aktivitas Fisik',          'fungsi_daftar' => 'instagi_aktivitas_list', 'lebar' => 480, 'mutu' => 76],
+    'aktivitas' => ['nama_tampil' => 'Tips Bugar',                'fungsi_daftar' => 'instagi_aktivitas_list', 'lebar' => 480, 'mutu' => 76],
 ];
 
 if (!extension_loaded('gd')) {
