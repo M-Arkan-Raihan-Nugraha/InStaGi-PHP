@@ -22,6 +22,12 @@ require_once 'includes/dbmp.php';
 
 $nav_active = 'informasi';
 
+// Cek hak akses: wajib cek status gizi terlebih dahulu (atau sesi admin)
+$akses_diizinkan = !empty($_SESSION['imt_result'])
+    || !empty($_SESSION['responden'])
+    || !empty($_SESSION['sudah_cek_gizi'])
+    || !empty($_SESSION['loggedin']);
+
 // --- Kumpulkan daftar siap tampil untuk tiap galeri ---
 // (helper bersama: includes/galeri_aset.php — hanya entri yang gambarnya ada)
 $leaflets  = instagi_galeri_daftar_tampil('leaflet', instagi_leaflet_list());
@@ -37,26 +43,40 @@ $dbmp_cover = instagi_dbmp_cover();
 <?php
 // Judul, deskripsi, alamat rapi (tanpa .php), dan daftar CSS halaman ini.
 $judul     = 'InStaGi - Informasi Gizi';
-$deskripsi = 'Materi edukasi gizi InStaGi: leaflet, contoh menu sesuai kebutuhan kalori, kumpulan resep, panduan diet & edukasi gizi, serta Daftar Bahan Makanan Penukar (DBMP).';
+$deskripsi = 'Materi edukasi gizi InStaGi: leaflet, panduan diet & edukasi gizi, Daftar Bahan Makanan Penukar (DBMP), contoh menu sesuai kebutuhan kalori, kumpulan resep, serta panduan aktivitas fisik.';
 $og_path   = '/informasi';
 $css       = ['index.css', 'nav.css', 'pages.css'];
 require __DIR__ . '/includes/layout_head.php';
 ?>
 
     <div class="container">
-        <h1 style="text-align:left;color:var(--primary-color);">Informasi Gizi</h1>
-        <p class="info-intro">Materi edukasi gizi InStaGi: leaflet, contoh menu sesuai kebutuhan kalori, kumpulan resep, panduan diet & edukasi gizi, serta Daftar Bahan Makanan Penukar (DBMP). Klik gambar untuk membuka versi besar, atau unduh untuk disimpan.</p>
+        <?php if (!$akses_diizinkan): ?>
+            <!-- Gerbang Akses Dibatasi (Wajib Cek Status Gizi Terlebih Dahulu) -->
+            <div class="info-restricted-gate">
+                <div class="info-restricted-icon" aria-hidden="true">
+                    <?= instagi_ikon('perhatian') ?>
+                </div>
+                <h1>Akses Informasi Gizi Dibatasi</h1>
+                <p>Anda wajib melakukan <strong>Cek Status Gizi</strong> terlebih dahulu untuk dapat mengakses seluruh materi edukasi, leaflet, panduan, contoh menu, kumpulan resep, dan aktivitas fisik di InStaGi.</p>
+                <a href="/imt" class="btn-primary">
+                    <?= instagi_ikon('cek-gizi') ?>
+                    <span>CEK STATUS GIZI SEKARANG</span>
+                </a>
+            </div>
+        <?php else: ?>
+            <h1 style="text-align:left;color:var(--primary-color);">Informasi Gizi</h1>
+            <p class="info-intro">Materi edukasi gizi InStaGi: leaflet, panduan diet &amp; edukasi gizi, Daftar Bahan Makanan Penukar (DBMP), contoh menu sesuai kebutuhan kalori, kumpulan resep, serta panduan aktivitas fisik. Klik gambar untuk membuka versi besar, atau unduh untuk disimpan.</p>
 
-        <nav class="info-jump" aria-label="Lompat ke bagian">
-            <a href="#leaflet">Leaflet</a>
-            <a href="#menu">Contoh Menu</a>
-            <a href="#resep">Kumpulan Resep</a>
-            <a href="#panduan">Panduan &amp; Edukasi</a>
-            <a href="#aktivitas">Aktivitas Fisik</a>
-            <a href="#dbmp">DBMP</a>
-        </nav>
+            <nav class="info-jump" aria-label="Lompat ke bagian">
+                <a href="#leaflet">Leaflet</a>
+                <a href="#panduan">Panduan &amp; Edukasi</a>
+                <a href="#dbmp">DBMP</a>
+                <a href="#menu">Contoh Menu</a>
+                <a href="#resep">Kumpulan Resep</a>
+                <a href="#aktivitas">Aktivitas Fisik</a>
+            </nav>
 
-        <!-- ===== LEAFLET INFORMASI GIZI ===== -->
+            <!-- ===== 1. LEAFLET INFORMASI GIZI ===== -->
 <?php
 $kartu_id     = 'leaflet';
 $kartu_judul  = 'Leaflet Informasi Gizi';
@@ -67,29 +87,7 @@ $kartu_kosong = 'Belum ada leaflet yang tersedia.';
 require __DIR__ . '/includes/galeri_kartu.php';
 ?>
 
-        <!-- ===== CONTOH MENU ===== -->
-<?php
-$kartu_id     = 'menu';
-$kartu_judul  = 'Contoh Menu Sesuai Kebutuhan Kalori';
-$kartu_intro  = 'Contoh menu sehari (3 makan utama + 2 selingan) untuk beberapa tingkat kebutuhan kalori.';
-$kartu_daftar = $menus;
-$kartu_alt    = 'Contoh menu';
-$kartu_kosong = 'Belum ada contoh menu yang tersedia.';
-require __DIR__ . '/includes/galeri_kartu.php';
-?>
-
-        <!-- ===== KUMPULAN RESEP ===== -->
-<?php
-$kartu_id     = 'resep';
-$kartu_judul  = 'Kumpulan Resep';
-$kartu_intro  = 'Lembar resep bergambar: setiap lembar memuat 7 resep lengkap dengan bahan, cara memasak, dan nilai gizinya.';
-$kartu_daftar = $reseps;
-$kartu_alt    = 'Resep';
-$kartu_kosong = 'Belum ada lembar resep yang tersedia.';
-require __DIR__ . '/includes/galeri_kartu.php';
-?>
-
-        <!-- ===== PANDUAN & EDUKASI GIZI ===== -->
+            <!-- ===== 2. PANDUAN & EDUKASI GIZI ===== -->
 <?php
 $kartu_id     = 'panduan';
 $kartu_judul  = 'Panduan & Edukasi Gizi';
@@ -100,7 +98,58 @@ $kartu_kosong = 'Belum ada panduan yang tersedia.';
 require __DIR__ . '/includes/galeri_kartu.php';
 ?>
 
-        <!-- ===== AKTIVITAS FISIK ===== -->
+            <!-- ===== 3. DBMP ===== -->
+            <section class="info-section" id="dbmp">
+                <h2>Daftar Bahan Makanan Penukar (DBMP)</h2>
+                <p class="info-intro">Panduan menukar bahan makanan dengan nilai gizi setara, disusun per golongan pangan.</p>
+
+                <?php if ($dbmp_pdf !== null): ?>
+                    <div class="info-grid">
+                        <article class="info-card">
+                            <?php if ($dbmp_cover !== null): ?>
+                                <img src="<?= htmlspecialchars($dbmp_cover, ENT_QUOTES, 'UTF-8') ?>"
+                                     alt="Sampul DBMP" decoding="async">
+                            <?php endif; ?>
+                            <div class="info-card-body">
+                                <span class="info-tag">Panduan Diet</span>
+                                <h3>Daftar Bahan Makanan Penukar</h3>
+                                <p class="info-desc">Satu berkas PDF — <?= (int) instagi_dbmp_jumlah_halaman() ?> halaman golongan bahan makanan.</p>
+                                <div class="info-card-actions">
+                                    <a href="<?= htmlspecialchars($dbmp_pdf, ENT_QUOTES, 'UTF-8') ?>" target="_blank" rel="noopener">Lihat PDF</a>
+                                    <a class="alt" href="<?= htmlspecialchars($dbmp_pdf, ENT_QUOTES, 'UTF-8') ?>"
+                                       download="DBMP-InStaGi-Daftar-Bahan-Makanan-Penukar.pdf">Unduh</a>
+                                </div>
+                            </div>
+                        </article>
+                    </div>
+                <?php else: ?>
+                    <div class="info-empty">Belum ada berkas DBMP yang tersedia.</div>
+                <?php endif; ?>
+            </section>
+
+            <!-- ===== 4. CONTOH MENU ===== -->
+<?php
+$kartu_id     = 'menu';
+$kartu_judul  = 'Contoh Menu Sesuai Kebutuhan Kalori';
+$kartu_intro  = 'Contoh menu sehari (3 makan utama + 2 selingan) untuk beberapa tingkat kebutuhan kalori.';
+$kartu_daftar = $menus;
+$kartu_alt    = 'Contoh menu';
+$kartu_kosong = 'Belum ada contoh menu yang tersedia.';
+require __DIR__ . '/includes/galeri_kartu.php';
+?>
+
+            <!-- ===== 5. KUMPULAN RESEP ===== -->
+<?php
+$kartu_id     = 'resep';
+$kartu_judul  = 'Kumpulan Resep';
+$kartu_intro  = 'Lembar resep bergambar: setiap lembar memuat 7 resep lengkap dengan bahan, cara memasak, dan nilai gizinya.';
+$kartu_daftar = $reseps;
+$kartu_alt    = 'Resep';
+$kartu_kosong = 'Belum ada lembar resep yang tersedia.';
+require __DIR__ . '/includes/galeri_kartu.php';
+?>
+
+            <!-- ===== 6. AKTIVITAS FISIK ===== -->
 <?php
 $kartu_id     = 'aktivitas';
 $kartu_judul  = 'Aktivitas Fisik';
@@ -111,34 +160,7 @@ $kartu_kosong = 'Belum ada materi aktivitas fisik yang tersedia.';
 require __DIR__ . '/includes/galeri_kartu.php';
 ?>
 
-        <!-- ===== DBMP ===== -->
-        <section class="info-section" id="dbmp">
-            <h2>Daftar Bahan Makanan Penukar (DBMP)</h2>
-            <p class="info-intro">Panduan menukar bahan makanan dengan nilai gizi setara, disusun per golongan pangan.</p>
-
-            <?php if ($dbmp_pdf !== null): ?>
-                <div class="info-grid">
-                    <article class="info-card">
-                        <?php if ($dbmp_cover !== null): ?>
-                            <img src="<?= htmlspecialchars($dbmp_cover, ENT_QUOTES, 'UTF-8') ?>"
-                                 alt="Sampul DBMP" decoding="async">
-                        <?php endif; ?>
-                        <div class="info-card-body">
-                            <span class="info-tag">Panduan Diet</span>
-                            <h3>Daftar Bahan Makanan Penukar</h3>
-                            <p class="info-desc">Satu berkas PDF — <?= (int) instagi_dbmp_jumlah_halaman() ?> halaman golongan bahan makanan.</p>
-                            <div class="info-card-actions">
-                                <a href="<?= htmlspecialchars($dbmp_pdf, ENT_QUOTES, 'UTF-8') ?>" target="_blank" rel="noopener">Lihat PDF</a>
-                                <a class="alt" href="<?= htmlspecialchars($dbmp_pdf, ENT_QUOTES, 'UTF-8') ?>"
-                                   download="DBMP-InStaGi-Daftar-Bahan-Makanan-Penukar.pdf">Unduh</a>
-                            </div>
-                        </div>
-                    </article>
-                </div>
-            <?php else: ?>
-                <div class="info-empty">Belum ada berkas DBMP yang tersedia.</div>
-            <?php endif; ?>
-        </section>
+        <?php endif; ?>
     </div>
 
 <?php require __DIR__ . '/includes/layout_footer.php'; ?>

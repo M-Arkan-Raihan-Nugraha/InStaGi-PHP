@@ -14,12 +14,33 @@
     justify-content: space-between;
     align-items: center;
     margin-bottom: 25px;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+.header-title {
+    display: flex;
+    align-items: center;
+    gap: 14px;
     flex-wrap: wrap;
 }
 
 h1 {
     color: var(--primary-color);
     margin: 0;
+}
+
+.data-count-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 6px 14px;
+    background-color: #e8f5e9;
+    color: var(--primary-color);
+    border: 1px solid rgba(46, 125, 50, 0.25);
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.3px;
 }
 
 .header-actions {

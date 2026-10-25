@@ -2,48 +2,82 @@
    InStaGi — Gaya halaman: menu beranda, akun responden, monitoring, informasi
    ============================================================================= */
 
-/* --- Menu pilihan di beranda ------------------------------------------------ */
-.home-menu {
+/* --- Tombol menu di beranda (merah, kuning, hijau soft) --------------------- */
+.home-menu-buttons {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-    gap: 18px;
-    margin: 30px 0;
+    gap: 16px;
+    margin: 28px 0;
 }
 
-.home-menu-card {
-    display: block;
-    text-decoration: none;
-    color: var(--text-color);
-    background: #fff;
-    border: 1px solid var(--border-color);
+.home-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 16px 20px;
     border-radius: 12px;
-    padding: 22px;
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
-    transition: transform 0.15s, box-shadow 0.15s, border-color 0.15s;
-}
-
-.home-menu-card:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 10px 26px rgba(0, 0, 0, 0.10);
-    border-color: var(--primary-color);
-}
-
-.home-menu-ico {
-    font-size: 2em;
-    display: block;
-    margin-bottom: 8px;
-}
-
-.home-menu-card h3 {
-    margin: 0 0 6px 0;
-    color: var(--primary-color);
-    font-size: 1.15em;
-}
-
-.home-menu-card p {
-    margin: 0;
+    text-decoration: none;
+    font-weight: 700;
     font-size: 0.95em;
-    line-height: 1.5;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+    box-sizing: border-box;
+}
+
+.home-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+}
+
+.home-btn:active {
+    transform: scale(0.98);
+}
+
+.home-btn-ico {
+    display: inline-flex;
+    align-items: center;
+    font-size: 1.25em;
+    line-height: 1;
+}
+
+/* Warna merah, kuning, hijau yang soft (pastel berkelas dengan kontras tinggi) */
+.home-btn-red {
+    background-color: #fee2e2;
+    color: #b91c1c;
+    border: 1.5px solid #fca5a5;
+}
+
+.home-btn-red:hover {
+    background-color: #fecaca;
+    border-color: #f87171;
+    color: #991b1b;
+}
+
+.home-btn-yellow {
+    background-color: #fef3c7;
+    color: #92400e;
+    border: 1.5px solid #fcd34d;
+}
+
+.home-btn-yellow:hover {
+    background-color: #fde68a;
+    border-color: #fbbf24;
+    color: #78350f;
+}
+
+.home-btn-green {
+    background-color: #d1fae5;
+    color: #065f46;
+    border: 1.5px solid #6ee7b7;
+}
+
+.home-btn-green:hover {
+    background-color: #a7f3d0;
+    border-color: #34d399;
+    color: #044e39;
 }
 
 /* --- Kotak akun responden --------------------------------------------------- */
@@ -887,3 +921,59 @@
 .mon-stat .mon-stat-value .status {
     font-size: 0.72em;
 }
+
+/* Gerbang pembatas akses informasi gizi */
+.info-restricted-gate {
+    text-align: center;
+    padding: 48px 24px;
+    max-width: 580px;
+    margin: 40px auto;
+    background: #ffffff;
+    border-radius: 16px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+    border: 1px solid var(--border-color);
+}
+
+.info-restricted-icon {
+    width: 64px;
+    height: 64px;
+    margin: 0 auto 20px;
+    background: #e8f5e9;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--primary-color);
+}
+
+.info-restricted-icon svg {
+    width: 32px;
+    height: 32px;
+}
+
+.info-restricted-gate h1 {
+    color: var(--primary-color);
+    font-size: 24px;
+    margin: 0 0 12px;
+}
+
+.info-restricted-gate p {
+    color: var(--text-color);
+    font-size: 15px;
+    line-height: 1.6;
+    margin: 0 0 24px;
+}
+
+.info-restricted-gate .btn-primary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 12px 28px;
+    font-size: 15px;
+    font-weight: 700;
+    text-transform: uppercase;
+    text-decoration: none;
+    border-radius: 10px;
+}
+

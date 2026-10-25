@@ -44,7 +44,10 @@ require __DIR__ . '/includes/layout_head.php';
 ?>
     <div class="container">
         <div class="header">
-            <h1>Data Responden</h1>
+            <div class="header-title">
+                <h1>Data Responden</h1>
+                <span class="data-count-badge">Total: <?= (int) ($riwayat_result ? $riwayat_result->num_rows : 0) ?> Responden</span>
+            </div>
             <div class="header-actions">
                 <button id="delete-selected-btn" class="header-btn delete-selected-btn" style="display: none;">Hapus Terpilih</button>
                 <a href="api/export_csv.php" class="header-btn export-btn">Export ke CSV</a>
@@ -61,7 +64,7 @@ require __DIR__ . '/includes/layout_head.php';
                         <th>Nama</th>
                         <th>Usia</th>
                         <th>Jenis Kelamin</th>
-                        <th>No. HP</th>
+                        <th>No. HP / Email</th>
                         <th>BB (kg)</th>
                         <th>TB (cm)</th>
                         <th>Aktivitas</th>

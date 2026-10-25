@@ -172,9 +172,9 @@ require __DIR__ . '/includes/layout_head.php';
                 Simpan ke PDF
             </button>
             <div class="sub-action-buttons">
-                <a href="/imt" class="back-btn">Hitung Ulang</a>
-                <a href="/monitoring" class="back-btn">Monitoring</a>
-                <a href="/informasi" class="back-btn">Informasi Gizi</a>
+                <a href="/imt" class="back-btn"><?= instagi_ikon('cek-gizi') ?><span>HITUNG ULANG</span></a>
+                <a href="/monitoring" class="back-btn"><?= instagi_ikon('monitoring') ?><span>MONITORING</span></a>
+                <a href="/informasi" class="back-btn"><?= instagi_ikon('informasi') ?><span>INFORMASI GIZI</span></a>
             </div>
         </div>
     </div>

@@ -53,10 +53,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
 
         if ($action === 'login') {
-            $nama_input = trim($_POST['nama'] ?? '');
             $hp_input   = trim($_POST['hp'] ?? '');
             $pass_input = (string) ($_POST['password'] ?? '');
-            $hp_norm    = instagi_norm_hp($hp_input);
 
             // Periksa apakah sedang dalam masa jeda.
             $percobaan     = $_SESSION['responden_attempts'];
@@ -66,12 +64,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if ($sedang_dijeda) {
                 $sisa = (int) ceil(($buka_pada - time()) / 60);
                 $login_error = "Terlalu banyak percobaan masuk. Coba lagi dalam {$sisa} menit.";
-            } elseif ($nama_input === '' || $hp_norm === '') {
-                $login_error = 'Nama dan No. HP wajib diisi.';
-            } elseif (!preg_match('/^0\d{7,14}$/', $hp_norm)) {
-                $login_error = 'Format No. HP tidak valid. Contoh: 081234567890.';
+            } elseif ($hp_input === '') {
+                $login_error = 'No. HP atau Email wajib diisi.';
             } else {
-                $hasil_login = instagi_responden_login($koneksi, $nama_input, $hp_input, $pass_input);
+                $hasil_login = instagi_responden_login_by_contact($koneksi, $hp_input, $pass_input);
 
                 if ($hasil_login['ok']) {
                     // Berhasil: bersihkan penghitung & lanjutkan ke halaman riwayat.
@@ -94,7 +90,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 } elseif ($hasil_login['alasan'] === 'password_salah') {
                     $login_error = 'Password tidak cocok. Silakan coba lagi.';
                 } else {
-                    $login_error = 'Nama atau No. HP tidak cocok dengan data kami. '
+                    $login_error = 'No. HP atau Email tidak cocok dengan data kami. '
                         . 'Pastikan sama seperti saat mengisi form Cek Status Gizi.';
                 }
             }
@@ -271,9 +267,8 @@ require __DIR__ . '/includes/layout_head.php';
             <!-- ===== Masuk ke akun ===== -->
             <div class="account-box">
                 <h3>Masuk ke akun Anda</h3>
-                <p>Masukkan <strong>Nama</strong> dan <strong>No. HP</strong> yang sama seperti saat mengisi
-                   form Cek Status Gizi. Setiap nama + nomor HP adalah satu akun, sehingga Anda hanya melihat
-                   riwayat milik Anda sendiri.</p>
+                <p>Masukkan <strong>No. HP atau Email</strong> dan <strong>Password</strong> yang sama seperti saat mengisi
+                   form Cek Status Gizi.</p>
 
                 <?php if ($login_error): ?>
                     <div class="error-message" style="margin:12px 0;"><?= htmlspecialchars($login_error, ENT_QUOTES, 'UTF-8') ?></div>
@@ -283,13 +278,9 @@ require __DIR__ . '/includes/layout_head.php';
                     <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($csrf_token, ENT_QUOTES, 'UTF-8') ?>">
                     <input type="hidden" name="action" value="login">
                     <div class="form-group">
-                        <label for="nama">Nama Lengkap</label>
-                        <input type="text" id="nama" name="nama" maxlength="100" autocomplete="name" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="hp">No. HP</label>
-                        <input type="tel" id="hp" name="hp" inputmode="tel" autocomplete="tel"
-                               placeholder="081234567890" required>
+                        <label for="hp">No. HP atau Email</label>
+                        <input type="text" id="hp" name="hp" autocomplete="username"
+                               placeholder="081234567890 atau email@contoh.com" required>
                     </div>
                     <div class="form-group">
                         <label for="password">Password <span class="label-opsional">(bila akun Anda memakai password)</span></label>
@@ -305,7 +296,7 @@ require __DIR__ . '/includes/layout_head.php';
                     Belum punya akun? Akun dibuat otomatis saat Anda
                     <a href="/imt">cek status gizi</a>.
                     Lupa password? Hubungi kami lewat
-                    <a href="<?= htmlspecialchars(instagi_wa_url('Halo InStaGi, saya lupa password akun Monitoring saya. Nama saya: ', INSTAGI_WA_KONSULTASI), ENT_QUOTES, 'UTF-8') ?>"
+                    <a href="<?= htmlspecialchars(instagi_wa_url('Halo InStaGi, saya lupa password akun Monitoring saya.', INSTAGI_WA_KONSULTASI), ENT_QUOTES, 'UTF-8') ?>"
                        target="_blank" rel="noopener">WhatsApp</a>.
                 </p>
             </div>
@@ -314,7 +305,7 @@ require __DIR__ . '/includes/layout_head.php';
             <!-- ===== Ringkasan akun ===== -->
             <div class="account-box">
                 <h3>Akun: <?= htmlspecialchars($responden['nama'], ENT_QUOTES, 'UTF-8') ?></h3>
-                <p>No. HP: <?= htmlspecialchars($responden['no_hp'], ENT_QUOTES, 'UTF-8') ?></p>
+                <p>No. HP / Email: <?= htmlspecialchars($responden['no_hp'], ENT_QUOTES, 'UTF-8') ?></p>
                 <p>
                    <?php if ($akun_punya_password): ?>
                        <!-- Badge "Akun aman" dihapus sesuai permintaan; status password

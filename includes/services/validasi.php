@@ -184,13 +184,17 @@ if (!function_exists('instagi_validasi_input')) {
             return $gagal('Tinggi Badan dalam cm harus bilangan bulat (tanpa koma), mis. 165.');
         }
 
-        // --- 5. No. HP -------------------------------------------------------
-        // Aturan sama dengan yang dipakai halaman Monitoring saat masuk, supaya
-        // akun responden yang terbentuk selalu bisa dipakai login.
+        // --- 5. No. HP atau Email --------------------------------------------
+        // Pengguna dapat mengisi nomor HP WhatsApp atau alamat email.
         $no_hp   = trim(instagi_input_str($in['no_hp'] ?? ''));
-        $hp_norm = instagi_norm_hp($no_hp);
-        if (!preg_match('/^0\d{7,14}$/', $hp_norm)) {
-            return $gagal('No. HP tidak valid. Masukkan 8-15 digit dan boleh diawali 0 atau +62 (mis. 081234567890).');
+        $hp_norm = '';
+        if (filter_var($no_hp, FILTER_VALIDATE_EMAIL)) {
+            $hp_norm = strtolower($no_hp);
+        } else {
+            $hp_norm = instagi_norm_hp($no_hp);
+            if (!preg_match('/^0\d{7,14}$/', $hp_norm)) {
+                return $gagal('No. HP atau Email tidak valid. Masukkan nomor HP (8-15 digit) atau alamat email yang benar.');
+            }
         }
 
         // --- 6. Aktivitas fisik ---------------------------------------------

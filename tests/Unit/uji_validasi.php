@@ -35,20 +35,23 @@ cek('hp_norm = digit saja', '081234567890', $v['data']['hp_norm']);
 cek('aktivitas 1.55 sah', 1.55, $v['data']['aktivitas']);
 cek('tanggal terpakai', $hari_ini, $v['data']['tanggal']);
 
-echo "\n== 2. Variasi format No. HP ==\n";
+echo "\n== 2. Variasi format No. HP / Email ==\n";
 foreach ([
     '+62 812-2494-8388' => '081224948388',
     '0812 2494 8388'    => '081224948388',
     '6281224948388'     => '081224948388',
     '(0812) 2494-8388'  => '081224948388',
     '0812345678'        => '0812345678',
+    'user@example.com'  => 'user@example.com',
+    'User.Name+Tag@Sub.Domain.Org' => 'user.name+tag@sub.domain.org',
 ] as $masuk => $harap) {
     $d = $ok; $d['no_hp'] = $masuk;
     $v = instagi_validasi_input($d);
-    cek("hp '$masuk' -> $harap", $harap, $v['valid'] ? $v['data']['hp_norm'] : ('DITOLAK: ' . $v['error']));
+    cek("kontak '$masuk' -> $harap", $harap, $v['valid'] ? $v['data']['hp_norm'] : ('DITOLAK: ' . $v['error']));
 }
 
 echo "\n== 3. Input yang HARUS ditolak ==\n";
+$pesan_hp_error = 'No. HP atau Email tidak valid. Masukkan nomor HP (8-15 digit) atau alamat email yang benar.';
 $kasus_tolak = [
     'usia 999'                    => ['usia' => '999', 'pesan' => 'Usia harus antara 1 sampai 120 tahun.'],
     'usia -5'                     => ['usia' => '-5', 'pesan' => 'Usia harus antara 1 sampai 120 tahun.'],
@@ -63,10 +66,10 @@ $kasus_tolak = [
     'jenis_kelamin "X"'          => ['jenis_kelamin' => 'X', 'pesan' => 'Jenis Kelamin tidak valid. Pilih Laki-laki atau Perempuan.'],
     'jenis_kelamin "laki-laki"'  => ['jenis_kelamin' => 'laki-laki', 'pesan' => 'Jenis Kelamin tidak valid. Pilih Laki-laki atau Perempuan.'],
     'nama kosong'                => ['nama' => '', 'pesan' => 'Nama Lengkap wajib diisi.'],
-    'hp tanpa awalan 0'          => ['no_hp' => '81234567890', 'pesan' => 'No. HP tidak valid. Masukkan 8-15 digit dan boleh diawali 0 atau +62 (mis. 081234567890).'],
-    'hp terlalu pendek'          => ['no_hp' => '0812345', 'pesan' => 'No. HP tidak valid. Masukkan 8-15 digit dan boleh diawali 0 atau +62 (mis. 081234567890).'],
-    'hp terlalu panjang (18 digit)' => ['no_hp' => '081234567890123456', 'pesan' => 'No. HP tidak valid. Masukkan 8-15 digit dan boleh diawali 0 atau +62 (mis. 081234567890).'],
-    'hp bukan angka'             => ['no_hp' => 'nomor saya', 'pesan' => 'No. HP tidak valid. Masukkan 8-15 digit dan boleh diawali 0 atau +62 (mis. 081234567890).'],
+    'hp tanpa awalan 0'          => ['no_hp' => '81234567890', 'pesan' => $pesan_hp_error],
+    'hp terlalu pendek'          => ['no_hp' => '0812345', 'pesan' => $pesan_hp_error],
+    'hp terlalu panjang (18 digit)' => ['no_hp' => '081234567890123456', 'pesan' => $pesan_hp_error],
+    'hp bukan angka'             => ['no_hp' => 'nomor saya', 'pesan' => $pesan_hp_error],
     'tanggal ngawur 2026-13-45'  => ['tanggal_input' => '2026-13-45', 'pesan' => 'Tanggal tidak valid. Muat ulang halaman lalu coba lagi.'],
     'tanggal 2026-02-31'         => ['tanggal_input' => '2026-02-31', 'pesan' => 'Tanggal tidak valid. Muat ulang halaman lalu coba lagi.'],
     'tanggal masa depan'         => ['tanggal_input' => '2027-01-01', 'pesan' => 'Tanggal tidak valid. Muat ulang halaman lalu coba lagi.'],

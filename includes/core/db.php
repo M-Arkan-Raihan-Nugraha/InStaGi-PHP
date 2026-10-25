@@ -175,7 +175,7 @@ try {
         nama VARCHAR(255) NOT NULL,
         usia INT(3) NOT NULL,
         jenis_kelamin VARCHAR(20) NOT NULL,
-        no_hp VARCHAR(20) NOT NULL,
+        no_hp VARCHAR(100) NOT NULL,
         berat_badan DECIMAL(5,1) NOT NULL,
         tinggi_badan INT(5) NOT NULL,
         aktivitas DECIMAL(4,3) NOT NULL,
@@ -203,7 +203,7 @@ try {
     CREATE TABLE IF NOT EXISTS responden (
         id INT(11) AUTO_INCREMENT PRIMARY KEY,
         nama VARCHAR(255) NOT NULL,
-        no_hp VARCHAR(30) NOT NULL,
+        no_hp VARCHAR(100) NOT NULL,
         password_hash VARCHAR(255) NULL,
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         UNIQUE KEY uniq_nama_hp (nama, no_hp)
@@ -216,6 +216,10 @@ try {
             $koneksi->error
         );
     }
+
+    // Pastikan kolom no_hp cukup panjang untuk email (hingga 100 karakter).
+    @$koneksi->query("ALTER TABLE imt_history MODIFY COLUMN no_hp VARCHAR(100) NOT NULL");
+    @$koneksi->query("ALTER TABLE responden MODIFY COLUMN no_hp VARCHAR(100) NOT NULL");
 
     // 4c) Kolom password_hash pada tabel responden (akun Monitoring yang aman).
     //     Diperiksa lewat INFORMATION_SCHEMA untuk tabel responden — daftar

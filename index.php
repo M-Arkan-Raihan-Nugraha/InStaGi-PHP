@@ -67,21 +67,18 @@ require __DIR__ . '/includes/layout_head.php';
         </ul>
 
         <!-- ===== PILIHAN MENU DI AWAL ===== -->
-        <div class="home-menu">
-            <a class="home-menu-card" href="/imt">
-                <span class="home-menu-ico" aria-hidden="true"><?= instagi_ikon('cek-gizi') ?></span>
-                <h3>Cek Status Gizi</h3>
-                <p>Hitung Indeks Massa Tubuh (IMT), status gizi, dan kebutuhan kalori harian Anda.</p>
+        <div class="home-menu-buttons">
+            <a class="home-btn home-btn-red" href="/imt">
+                <span class="home-btn-ico" aria-hidden="true"><?= instagi_ikon('cek-gizi') ?></span>
+                <span>CEK STATUS GIZI</span>
             </a>
-            <a class="home-menu-card" href="/informasi">
-                <span class="home-menu-ico" aria-hidden="true"><?= instagi_ikon('informasi') ?></span>
-                <h3>Informasi Gizi</h3>
-                <p>Leaflet gizi, contoh menu sesuai kalori, kumpulan resep, panduan diet, dan Daftar Bahan Makanan Penukar (DBMP).</p>
+            <a class="home-btn home-btn-yellow" href="/informasi">
+                <span class="home-btn-ico" aria-hidden="true"><?= instagi_ikon('informasi') ?></span>
+                <span>INFORMASI GIZI</span>
             </a>
-            <a class="home-menu-card" href="/monitoring">
-                <span class="home-menu-ico" aria-hidden="true"><?= instagi_ikon('monitoring') ?></span>
-                <h3>Monitoring Status Gizi</h3>
-                <p>Lihat riwayat dan grafik perkembangan status gizi akun Anda dari waktu ke waktu.</p>
+            <a class="home-btn home-btn-green" href="/monitoring">
+                <span class="home-btn-ico" aria-hidden="true"><?= instagi_ikon('monitoring') ?></span>
+                <span>MONITORING STATUS GIZI</span>
             </a>
         </div>
 

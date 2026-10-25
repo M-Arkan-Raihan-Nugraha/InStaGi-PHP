@@ -167,16 +167,137 @@ if (!function_exists('instagi_responden_find_or_create')) {
     }
 }
 
-if (!function_exists('instagi_responden_login')) {
+if (!function_exists('instagi_responden_cari_kontak')) {
     /**
-     * Login responden. Password WAJIB bila akun sudah memilikinya.
+     * Cari akun responden berdasarkan No. HP atau Email (tanpa nama).
+     *
+     * @return array|null Baris {id, nama, no_hp, password_hash} atau null.
+     */
+    function instagi_responden_cari_kontak($koneksi, $kontak_input, $password = null)
+    {
+        $raw = trim((string) $kontak_input);
+        if ($raw === '') {
+            return null;
+        }
+
+        $is_email = (bool) filter_var($raw, FILTER_VALIDATE_EMAIL);
+        $hp_norm  = $is_email ? strtolower($raw) : instagi_norm_hp($raw);
+        $hp_intl  = (!$is_email && strpos($hp_norm, '0') === 0) ? '62' . substr($hp_norm, 1) : $hp_norm;
+
+        // Ambil semua responden yang no_hp-nya cocok
+        $stmt = $koneksi->prepare(
+            "SELECT id, nama, no_hp, password_hash FROM responden 
+             WHERE no_hp = ? OR no_hp = ? OR no_hp = ?
+                OR REGEXP_REPLACE(no_hp, '[^0-9]', '') IN (?, ?)
+             ORDER BY id DESC"
+        );
+        if ($stmt === false) {
+            return null;
+        }
+        $stmt->bind_param('sssss', $raw, $hp_norm, $hp_intl, $hp_norm, $hp_intl);
+        $stmt->execute();
+        $res = $stmt->get_result();
+        $candidates = $res ? $res->fetch_all(MYSQLI_ASSOC) : [];
+        $stmt->close();
+
+        if (empty($candidates)) {
+            return null;
+        }
+
+        // Bila ada password, cari kandidat yang password-nya cocok
+        if ($password !== null && $password !== '') {
+            foreach ($candidates as $cand) {
+                if (!empty($cand['password_hash']) && password_verify((string) $password, (string) $cand['password_hash'])) {
+                    return $cand;
+                }
+            }
+        }
+
+        return $candidates[0];
+    }
+}
+
+if (!function_exists('instagi_responden_login_by_contact')) {
+    /**
+     * Login responden cukup dengan No. HP atau Email dan Password (tanpa nama).
      *
      * @return array{ok:bool,alasan:string,punya_password:bool}
-     *         alasan: 'ok' | 'tidak_ada' | 'password_salah' | 'password_kosong'
      */
-    function instagi_responden_login($koneksi, $nama, $hp_input, $password = null)
+    function instagi_responden_login_by_contact($koneksi, $kontak_input, $password = null)
     {
-        $nama = trim((string) $nama);
+        $kontak = trim((string) $kontak_input);
+        if ($kontak === '') {
+            return ['ok' => false, 'alasan' => 'tidak_ada', 'punya_password' => false];
+        }
+
+        $row = instagi_responden_cari_kontak($koneksi, $kontak, $password);
+        if (!$row) {
+            return ['ok' => false, 'alasan' => 'tidak_ada', 'punya_password' => false];
+        }
+
+        $punya_password = instagi_responden_punya_password($row);
+
+        if ($punya_password) {
+            if ($password === null || $password === '') {
+                return ['ok' => false, 'alasan' => 'password_kosong', 'punya_password' => true];
+            }
+            if (!password_verify((string) $password, (string) $row['password_hash'])) {
+                return ['ok' => false, 'alasan' => 'password_salah', 'punya_password' => true];
+            }
+        }
+
+        $id = (int) $row['id'];
+
+        if (session_status() === PHP_SESSION_ACTIVE) {
+            @session_regenerate_id(true);
+        }
+
+        $_SESSION['responden'] = [
+            'id'    => $id,
+            'nama'  => $row['nama'],
+            'no_hp' => $row['no_hp'],
+        ];
+
+        // Klaim riwayat lama yang no_hp-nya cocok
+        $is_email = (bool) filter_var($kontak, FILTER_VALIDATE_EMAIL);
+        $hp_norm  = $is_email ? strtolower($kontak) : instagi_norm_hp($kontak);
+        $hp_intl  = (!$is_email && strpos($hp_norm, '0') === 0) ? '62' . substr($hp_norm, 1) : $hp_norm;
+
+        $stmt = $koneksi->prepare(
+            "UPDATE imt_history SET responden_id = ?
+             WHERE responden_id IS NULL
+               AND (
+                     no_hp = ? OR no_hp = ? OR no_hp = ?
+                     OR REGEXP_REPLACE(no_hp, '[^0-9]', '') IN (?, ?)
+                   )"
+        );
+        if ($stmt !== false) {
+            $stmt->bind_param('isssss', $id, $kontak, $hp_norm, $hp_intl, $hp_norm, $hp_intl);
+            $stmt->execute();
+            $stmt->close();
+        }
+
+        return ['ok' => true, 'alasan' => 'ok', 'punya_password' => $punya_password];
+    }
+}
+
+if (!function_exists('instagi_responden_login')) {
+    /**
+     * Login responden. Mendukung pemanggilan baru (kontak, password) maupun
+     * cara lama (nama, no_hp, password).
+     *
+     * @return array{ok:bool,alasan:string,punya_password:bool}
+     */
+    function instagi_responden_login($koneksi, $arg1, $arg2 = null, $arg3 = null)
+    {
+        // Bila dipanggil dengan 2 parameter: instagi_responden_login($koneksi, $kontak, $password)
+        if ($arg3 === null && ($arg2 === null || !preg_match('/^0\d{7,14}$/', instagi_norm_hp($arg2)))) {
+            return instagi_responden_login_by_contact($koneksi, $arg1, $arg2);
+        }
+
+        $nama = trim((string) $arg1);
+        $hp_input = $arg2;
+        $password = $arg3;
         $hp_norm = instagi_norm_hp($hp_input);
         if ($nama === '' || $hp_norm === '') {
             return ['ok' => false, 'alasan' => 'tidak_ada', 'punya_password' => false];
@@ -200,7 +321,6 @@ if (!function_exists('instagi_responden_login')) {
 
         $id = (int) $row['id'];
 
-        // Cegah session fixation: ganti ID sesi setelah berhasil masuk.
         if (session_status() === PHP_SESSION_ACTIVE) {
             @session_regenerate_id(true);
         }
@@ -211,11 +331,6 @@ if (!function_exists('instagi_responden_login')) {
             'no_hp' => $row['no_hp'],
         ];
 
-        // Klaim riwayat lama (responden_id NULL) yang nama & nomor HP-nya sama,
-        // supaya data sebelum fitur akun ini tetap muncul di Monitoring.
-        // Nomor dibandingkan juga dalam bentuk digit-saja (mis. data lama
-        // tersimpan "0812-3456-7890" sementara login memakai "081234567890"),
-        // termasuk bentuk internasional 62...
         $raw_hp  = trim((string) $hp_input);
         $hp_intl = (strpos($hp_norm, '0') === 0) ? '62' . substr($hp_norm, 1) : $hp_norm;
         $stmt = $koneksi->prepare(

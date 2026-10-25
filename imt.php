@@ -180,6 +180,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     'no_hp' => $no_hp, // Simpan no_hp untuk keperluan WhatsApp
                     'success_message' => "Data Anda berhasil dihitung dan disimpan!"
                 ];
+                $_SESSION['sudah_cek_gizi'] = true;
 
                 // Tandai akun responden aktif agar menu Monitoring langsung siap.
                 if (!empty($responden_id)) {
@@ -255,11 +256,12 @@ require __DIR__ . '/includes/layout_head.php';
                 </div>
             </div>
             <div class="form-group">
-                 <label for="no_hp">No. HP</label>
-                <small class="field-hint">8&ndash;15 digit (boleh diawali 0 atau +62)</small>
-                <input type="tel" id="no_hp" name="no_hp" value="<?= htmlspecialchars($no_hp) ?>"
-                       inputmode="tel" autocomplete="tel" pattern="[0-9+\(\)\- ]{8,20}"
-                       title="Masukkan nomor HP Indonesia yang valid, mis. 081234567890 atau +6281234567890" required>
+                <label for="no_hp">No. HP atau Email</label>
+                <small class="field-hint">No. HP (8&ndash;15 digit) atau alamat email aktif</small>
+                <input type="text" id="no_hp" name="no_hp" value="<?= htmlspecialchars($no_hp) ?>"
+                       autocomplete="email tel"
+                       placeholder="Contoh: 081234567890 atau nama@email.com"
+                       title="Masukkan No. HP (mis. 081234567890) atau email yang valid" required>
             </div>
             <div class="form-group">
                 <label for="bb">Berat Badan (kg)</label>

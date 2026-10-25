@@ -37,6 +37,11 @@
     font-size: 1.05em;
 }
 
+.site-nav-brand span {
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
 .site-nav-brand img {
     height: 30px;
     width: auto;
@@ -60,7 +65,9 @@
     text-decoration: none;
     color: var(--text-color, #333);
     font-weight: 600;
-    font-size: 0.95em;
+    font-size: 0.9em;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
     transition: background-color 0.2s, color 0.2s;
 }
 
