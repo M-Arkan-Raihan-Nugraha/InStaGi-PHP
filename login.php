@@ -1,6 +1,6 @@
 <?php
 // Session aman (HttpOnly/SameSite/Secure + strict mode) + helper CSRF.
-require_once 'includes/session.php';
+require_once 'includes/core/session.php';
 
 // --- LOGIC UNTUK LOGIN ---
 
@@ -12,7 +12,7 @@ if (isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true) {
 
 // Definisikan kredensial admin (dibaca dari includes/auth_config.php).
 // Dapat di-override lewat environment variable untuk produksi.
-$auth_config_file = __DIR__ . '/includes/auth_config.php';
+$auth_config_file = is_file(__DIR__ . '/includes/core/auth_config.php') ? __DIR__ . '/includes/core/auth_config.php' : __DIR__ . '/includes/auth_config.php';
 $auth_config = is_file($auth_config_file) ? require $auth_config_file : [];
 define('ADMIN_USERNAME', getenv('INSTAGI_ADMIN_USER') ?: ($auth_config['username'] ?? ''));
 // Nilai default adalah hash dari password 'instagi123'.
@@ -96,7 +96,7 @@ $judul     = 'InStaGi - Login Admin';
 $deskripsi = 'Halaman masuk admin InStaGi untuk mengelola data responden.';
 $og_path   = '/login';
 $css       = ['login.css', 'nav.css'];
-require __DIR__ . '/includes/layout_head.php';
+require __DIR__ . '/includes/views/layout_head.php';
 ?>
     <main class="main-content">
         <div class="login-container">
@@ -118,4 +118,4 @@ require __DIR__ . '/includes/layout_head.php';
             </form>
         </div>
     </main>
-<?php require __DIR__ . '/includes/layout_footer.php'; ?>
+<?php require __DIR__ . '/includes/views/layout_footer.php'; ?>

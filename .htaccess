@@ -150,7 +150,7 @@ Options -Indexes
 # --- 4. Lindungi file kredensial di dalam includes/ ---------------------------
 # (includes/.htaccess sudah memblokir seluruh folder; ini lapisan tambahan.)
 <IfModule mod_rewrite.c>
-    RewriteRule ^includes/(db_credentials|auth_config)\.php$ - [F,L]
+    RewriteRule ^includes/(.*/)?(db_credentials|auth_config)\.php$ - [F,L]
 </IfModule>
 
 # --- 5. PDF (DBMP) ditampilkan di peramban, bukan langsung terunduh -----------

@@ -1,6 +1,6 @@
 <?php
 // Session aman (HttpOnly/SameSite/Secure + strict mode) + helper CSRF.
-require_once 'includes/session.php';
+require_once 'includes/core/session.php';
 
 // Cek apakah user sudah login
 if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true) {
@@ -11,7 +11,7 @@ if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true) {
 $nav_active = 'admin';
 
 // Sisipkan file koneksi database dan modul gizi
-require_once 'includes/db.php';
+require_once 'includes/core/db.php';
 require_once 'includes/services/gizi.php';
 
 // Ambil semua data riwayat dari database, urutkan berdasarkan yang terbaru
@@ -40,7 +40,7 @@ $meta_ekstra = '<meta name="csrf-token" content="' . htmlspecialchars(instagi_cs
 // CSS dari CDN (DataTables) dikirim lewat slot — daftar <head> tetap di satu tempat.
 $css_ekstra = '    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">' . "\n"
             . '    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/responsive/2.2.9/css/responsive.dataTables.min.css">';
-require __DIR__ . '/includes/layout_head.php';
+require __DIR__ . '/includes/views/layout_head.php';
 ?>
     <div class="container">
         <div class="header">
@@ -438,4 +438,4 @@ require __DIR__ . '/includes/layout_head.php';
         });
     });
     </script>
-<?php require __DIR__ . '/includes/layout_footer.php'; ?>
+<?php require __DIR__ . '/includes/views/layout_footer.php'; ?>

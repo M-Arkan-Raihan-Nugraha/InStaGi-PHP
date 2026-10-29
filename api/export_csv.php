@@ -1,5 +1,5 @@
 <?php
-require_once '../includes/session.php';
+require_once '../includes/core/session.php';
 
 // Cek apakah user sudah login sebagai admin (dilakukan sebelum koneksi DB).
 if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true) {
@@ -9,7 +9,7 @@ if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true) {
     exit;
 }
 
-require_once '../includes/db.php';
+require_once '../includes/core/db.php';
 
 // Nama file CSV yang akan di-download
 $filename = "data_responden_imt_" . date('Ymd_His') . ".csv";

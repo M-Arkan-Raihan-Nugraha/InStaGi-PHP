@@ -12,14 +12,14 @@
  * Konten diambil dari modul yang sama dengan result.php, sehingga menambah /
  * mengganti materi cukup dilakukan di includes/leaflet.php, menu.php, dbmp.php.
  */
-require_once 'includes/session.php';
-require_once 'includes/leaflet.php';
-require_once 'includes/menu.php';
-require_once 'includes/resep.php';
-require_once 'includes/panduan.php';
-require_once 'includes/aktivitas.php';
-require_once 'includes/dbmp.php';
-require_once 'includes/bestie.php';
+require_once 'includes/core/session.php';
+require_once 'includes/content/leaflet.php';
+require_once 'includes/content/menu.php';
+require_once 'includes/content/resep.php';
+require_once 'includes/content/panduan.php';
+require_once 'includes/content/aktivitas.php';
+require_once 'includes/content/dbmp.php';
+require_once 'includes/content/bestie.php';
 
 $nav_active = 'informasi';
 
@@ -41,7 +41,7 @@ $judul     = 'InStaGi - Informasi Gizi';
 $deskripsi = 'Etalase mitra Bestie InStaGi dan materi edukasi gizi: leaflet, panduan diet & edukasi gizi, Daftar Bahan Makanan Penukar (DBMP), contoh menu sesuai kebutuhan kalori, kumpulan resep, serta tips bugar.';
 $og_path   = '/informasi';
 $css       = ['index.css', 'nav.css', 'pages.css'];
-require __DIR__ . '/includes/layout_head.php';
+require __DIR__ . '/includes/views/layout_head.php';
 ?>
 
     <div class="container">
@@ -69,7 +69,7 @@ $kartu_intro  = 'Panduan praktis seputar gizi seimbang, sumber zat gizi, hingga 
 $kartu_daftar = $leaflets;
 $kartu_alt    = 'Leaflet';
 $kartu_kosong = 'Belum ada leaflet yang tersedia.';
-require __DIR__ . '/includes/galeri_kartu.php';
+require __DIR__ . '/includes/views/galeri_kartu.php';
 ?>
 
             <!-- ===== 2. PANDUAN & EDUKASI GIZI ===== -->
@@ -80,7 +80,7 @@ $kartu_intro  = 'Panduan diet untuk kondisi tertentu, daftar bahan makanan pilih
 $kartu_daftar = $panduans;
 $kartu_alt    = 'Panduan';
 $kartu_kosong = 'Belum ada panduan yang tersedia.';
-require __DIR__ . '/includes/galeri_kartu.php';
+require __DIR__ . '/includes/views/galeri_kartu.php';
 ?>
 
             <!-- ===== 3. DBMP ===== -->
@@ -120,7 +120,7 @@ $kartu_intro  = 'Contoh menu sehari (3 makan utama + 2 selingan) untuk beberapa 
 $kartu_daftar = $menus;
 $kartu_alt    = 'Contoh menu';
 $kartu_kosong = 'Belum ada contoh menu yang tersedia.';
-require __DIR__ . '/includes/galeri_kartu.php';
+require __DIR__ . '/includes/views/galeri_kartu.php';
 ?>
 
             <!-- ===== 5. KUMPULAN RESEP ===== -->
@@ -131,7 +131,7 @@ $kartu_intro  = 'Lembar resep bergambar: setiap lembar memuat 7 resep lengkap de
 $kartu_daftar = $reseps;
 $kartu_alt    = 'Resep';
 $kartu_kosong = 'Belum ada lembar resep yang tersedia.';
-require __DIR__ . '/includes/galeri_kartu.php';
+require __DIR__ . '/includes/views/galeri_kartu.php';
 ?>
 
             <!-- ===== 6. TIPS BUGAR ===== -->
@@ -142,8 +142,8 @@ $kartu_intro  = 'Panduan dan infografis kebugaran, peregangan harian, serta akti
 $kartu_daftar = $aktivitas;
 $kartu_alt    = 'Tips Bugar';
 $kartu_kosong = 'Belum ada materi tips bugar yang tersedia.';
-require __DIR__ . '/includes/galeri_kartu.php';
+require __DIR__ . '/includes/views/galeri_kartu.php';
 ?>
     </div>
 
-<?php require __DIR__ . '/includes/layout_footer.php'; ?>
+<?php require __DIR__ . '/includes/views/layout_footer.php'; ?>

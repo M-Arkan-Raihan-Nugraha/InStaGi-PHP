@@ -2,7 +2,7 @@
 /**
  * Uji Unit Modul Bestie InStaGi
  */
-require_once __DIR__ . '/../../includes/bestie.php';
+require_once __DIR__ . '/../../includes/content/bestie.php';
 
 $total = 0;
 $lulus = 0;
@@ -56,6 +56,13 @@ cek(isset($kategori_terisi['property']), 'Kategori property terisi flyer');
 cek(isset($kategori_terisi['kuliner']), 'Kategori kuliner terisi flyer');
 cek(isset($kategori_terisi['minimarket']), 'Kategori minimarket terisi flyer');
 cek(isset($kategori_terisi['kesehatan']), 'Kategori kesehatan terisi flyer');
+
+echo "\n== 3. Pengujian Index Slug Bestie (instagi_bestie_list) ==\n";
+$bestie_list = instagi_bestie_list();
+cek(is_array($bestie_list), 'instagi_bestie_list mengembalikan array');
+cek(count($bestie_list) === count($items), 'Jumlah item list sama dengan jumlah item daftar');
+cek(isset($bestie_list['spirit-holiday-bali-lombok']), 'Kunci slug spirit-holiday-bali-lombok ada');
+cek(isset($bestie_list['klinik-sunat-hd']), 'Kunci slug klinik-sunat-hd ada');
 
 echo "\nTotal uji: $total | Lulus: $lulus | Gagal: " . ($total - $lulus) . "\n";
 exit($total === $lulus ? 0 : 1);

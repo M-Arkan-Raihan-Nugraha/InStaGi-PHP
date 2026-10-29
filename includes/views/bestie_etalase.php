@@ -6,7 +6,7 @@
  * Kuliner, Minimarket, Layanan Kesehatan), filter interaktif, modal pratinjau, dan
  * form ajakan kemitraan.
  */
-require_once __DIR__ . '/../bestie.php';
+require_once __DIR__ . '/../content/bestie.php';
 require_once __DIR__ . '/ikon.php';
 if (!function_exists('instagi_wa_url')) {
     require_once __DIR__ . '/../core/config.php';
@@ -48,9 +48,14 @@ $wa_bestie_mitra = instagi_wa_url(
     <!-- ===== GRID KARTU FLYER ===== -->
     <div class="bestie-grid" id="bestie-grid">
         <?php foreach ($bestie_items as $item): ?>
+            <?php
+            $bestie_thumb = function_exists('instagi_galeri_thumb_url')
+                ? instagi_galeri_thumb_url('bestie', $item['id'])
+                : 'assets/bestie/' . $item['gambar'];
+            ?>
             <article class="bestie-card" data-category="<?= htmlspecialchars($item['kategori'], ENT_QUOTES, 'UTF-8') ?>">
                 <div class="bestie-card-thumb" data-full="assets/bestie/<?= htmlspecialchars($item['gambar'], ENT_QUOTES, 'UTF-8') ?>" data-title="<?= htmlspecialchars($item['judul'], ENT_QUOTES, 'UTF-8') ?>">
-                    <img src="assets/bestie/<?= htmlspecialchars($item['gambar'], ENT_QUOTES, 'UTF-8') ?>"
+                    <img src="<?= htmlspecialchars($bestie_thumb, ENT_QUOTES, 'UTF-8') ?>"
                          alt="<?= htmlspecialchars($item['judul'] . ' - ' . $item['subjudul'], ENT_QUOTES, 'UTF-8') ?>"
                          loading="lazy"
                          decoding="async">

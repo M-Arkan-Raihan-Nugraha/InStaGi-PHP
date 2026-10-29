@@ -1,5 +1,5 @@
 <?php
-require_once '../includes/session.php';
+require_once '../includes/core/session.php';
 
 header('Content-Type: application/json');
 
@@ -21,7 +21,7 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 // 3. Wajib menyertakan token CSRF yang sah (403 bila tidak).
 instagi_csrf_require_json();
 
-require_once '../includes/db.php';
+require_once '../includes/core/db.php';
 
 // --- LOGIC ---
 

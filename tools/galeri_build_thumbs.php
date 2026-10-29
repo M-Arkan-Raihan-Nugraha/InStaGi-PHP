@@ -34,6 +34,7 @@ require_once dirname(__DIR__) . '/includes/content/menu.php';
 require_once dirname(__DIR__) . '/includes/content/resep.php';
 require_once dirname(__DIR__) . '/includes/content/panduan.php';
 require_once dirname(__DIR__) . '/includes/content/aktivitas.php';
+require_once dirname(__DIR__) . '/includes/content/bestie.php';
 
 /**
  * Daftar galeri yang diproses.
@@ -50,6 +51,7 @@ $daftar_galeri = [
     'resep'     => ['nama_tampil' => 'Kumpulan Resep',           'fungsi_daftar' => 'instagi_resep_list',     'lebar' => 480, 'mutu' => 76],
     'panduan'   => ['nama_tampil' => 'Panduan & Edukasi Gizi',   'fungsi_daftar' => 'instagi_panduan_list',   'lebar' => 480, 'mutu' => 76],
     'aktivitas' => ['nama_tampil' => 'Tips Bugar',                'fungsi_daftar' => 'instagi_aktivitas_list', 'lebar' => 480, 'mutu' => 76],
+    'bestie'    => ['nama_tampil' => 'Bestie InStaGi (Flyer Mitra)', 'fungsi_daftar' => 'instagi_bestie_list', 'lebar' => 500, 'mutu' => 78],
 ];
 
 if (!extension_loaded('gd')) {

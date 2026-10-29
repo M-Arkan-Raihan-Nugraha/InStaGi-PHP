@@ -1,12 +1,12 @@
 <?php
-require_once '../includes/session.php';
+require_once '../includes/core/session.php';
 // Modul perhitungan gizi (dipakai bersama imt.php agar hasil selalu sama).
 // >>> RUMUS TIDAK DIUBAH: gizi.php dipakai apa adanya.
-require_once '../includes/gizi.php';
+require_once '../includes/services/gizi.php';
 // Modul akun responden: saat admin mengedit, tautan akun tetap konsisten.
-require_once '../includes/responden.php';
+require_once '../includes/services/responden.php';
 // Modul validasi input: aturan SAMA dengan form publik imt.php.
-require_once '../includes/validasi.php';
+require_once '../includes/services/validasi.php';
 
 header('Content-Type: application/json');
 
@@ -27,7 +27,7 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 // 3. Wajib menyertakan token CSRF yang sah (403 bila tidak).
 instagi_csrf_require_json();
 
-require_once '../includes/db.php';
+require_once '../includes/core/db.php';
 
 // ID diperiksa lebih dulu: tanpa ID yang sah tidak ada yang bisa diperbarui.
 $id = (int) ($_POST['id'] ?? 0);

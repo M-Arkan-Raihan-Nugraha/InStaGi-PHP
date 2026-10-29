@@ -14,12 +14,12 @@
  * Garis panduan pada grafik hanya untuk TAMPILAN; ambang klasifikasi yang
  * sebenarnya tetap di includes/gizi.php dan tidak diubah di sini.
  */
-require_once 'includes/session.php';
-require_once 'includes/db.php';
-require_once 'includes/responden.php';
-require_once 'includes/validasi.php';
-require_once 'includes/ikon.php';
-require_once 'includes/format.php';
+require_once 'includes/core/session.php';
+require_once 'includes/core/db.php';
+require_once 'includes/services/responden.php';
+require_once 'includes/services/validasi.php';
+require_once 'includes/views/ikon.php';
+require_once 'includes/services/format.php';
 require_once 'includes/services/gizi.php';
 
 $nav_active = 'monitoring';
@@ -258,7 +258,7 @@ $judul     = 'InStaGi - Monitoring Status Gizi';
 $deskripsi = 'Lihat riwayat dan grafik perkembangan status gizi (IMT) milik akun Anda dari waktu ke waktu melalui InStaGi.';
 $og_path   = '/monitoring';
 $css       = ['imt.css', 'result.css', 'nav.css', 'pages.css'];
-require __DIR__ . '/includes/layout_head.php';
+require __DIR__ . '/includes/views/layout_head.php';
 ?>
 
     <div class="container">
@@ -641,4 +641,4 @@ require __DIR__ . '/includes/layout_head.php';
         })();
     </script>
     <?php endif; ?>
-<?php require __DIR__ . '/includes/layout_footer.php'; ?>
+<?php require __DIR__ . '/includes/views/layout_footer.php'; ?>

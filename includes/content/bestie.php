@@ -202,3 +202,19 @@ if (!function_exists('instagi_bestie_daftar')) {
     }
 }
 
+if (!function_exists('instagi_bestie_list')) {
+    /**
+     * Mengembalikan daftar flyer berindeks slug/id (kompatibel dengan galeri_build_thumbs).
+     *
+     * @return array<string, array<string, mixed>>
+     */
+    function instagi_bestie_list()
+    {
+        $list = [];
+        foreach (instagi_bestie_daftar() as $item) {
+            $list[$item['id']] = $item;
+        }
+        return $list;
+    }
+}
+

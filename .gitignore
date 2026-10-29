@@ -5,8 +5,6 @@
 # --- Kredensial nyata: JANGAN PERNAH masuk repo publik ------------------------
 # File asli tetap ada di folder kerja & tetap di-upload ke hosting.
 # Untuk pengguna baru: salin dari *.example.php lalu isi nilainya.
-includes/db_credentials.php
-includes/auth_config.php
 includes/core/db_credentials.php
 includes/core/auth_config.php
 

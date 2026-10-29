@@ -12,8 +12,8 @@
  *
  * CATATAN: tautan "Login Admin" tidak lagi ditampilkan (lihat includes/nav.php).
  */
-require_once __DIR__ . '/includes/session.php';
-require_once __DIR__ . '/includes/ikon.php';
+require_once __DIR__ . '/includes/core/session.php';
+require_once __DIR__ . '/includes/views/ikon.php';
 
 $nav_active = '';
 
@@ -31,7 +31,7 @@ $judul     = 'InStaGi - Cek dan Pantau Status Gizi Anda';
 $deskripsi = 'InStaGi membantu Anda cek status gizi (IMT), kebutuhan kalori harian, dan memantaunya dari waktu ke waktu. Tersedia juga layanan konsultasi gizi dan katering gizi.';
 $og_path   = '/';
 $css       = ['index.css', 'nav.css', 'pages.css'];
-require __DIR__ . '/includes/layout_head.php';
+require __DIR__ . '/includes/views/layout_head.php';
 ?>
     <div class="container">
         <div class="header">
@@ -86,4 +86,4 @@ require __DIR__ . '/includes/layout_head.php';
             </div>
         </section>
     </div>
-<?php require __DIR__ . '/includes/layout_footer.php'; ?>
+<?php require __DIR__ . '/includes/views/layout_footer.php'; ?>

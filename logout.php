@@ -2,7 +2,7 @@
 // --- LOGIC UNTUK LOGOUT ---
 // Session aman (lihat includes/session.php) — sekaligus memastikan
 // session_start() memakai parameter cookie yang sama seperti saat login.
-require_once 'includes/session.php';
+require_once 'includes/core/session.php';
 
 // Hapus semua variabel session
 $_SESSION = array();

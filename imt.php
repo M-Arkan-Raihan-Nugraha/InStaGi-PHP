@@ -1,20 +1,20 @@
 <?php
 // Session aman + helper CSRF (sekaligus memuat includes/config.php).
-require_once 'includes/session.php';
+require_once 'includes/core/session.php';
 
 // --- LOGIC PHP UNTUK KALKULATOR IMT ---
 // Sisipkan file koneksi untuk menghubungkan ke database.
-require_once 'includes/db.php';
+require_once 'includes/core/db.php';
 
 // Modul perhitungan gizi (satu sumber kebenaran untuk IMT/kalori/saran).
-require_once 'includes/gizi.php';
+require_once 'includes/services/gizi.php';
 
 // Modul akun responden (1 nama + 1 nomor HP = 1 akun) untuk menu Monitoring.
-require_once 'includes/responden.php';
+require_once 'includes/services/responden.php';
 
 // Modul validasi input (satu sumber aturan; dipakai juga oleh API admin
 // api/update_record.php agar aturan form publik dan edit admin sama).
-require_once 'includes/validasi.php';
+require_once 'includes/services/validasi.php';
 
 $nav_active = 'hitung';
 
@@ -214,7 +214,7 @@ $judul     = 'InStaGi - Cek Status Gizi';
 $deskripsi = 'Masukkan nama, usia, jenis kelamin, berat dan tinggi badan untuk menghitung IMT (Indeks Massa Tubuh), status gizi, serta estimasi kebutuhan kalori harian Anda.';
 $og_path   = '/imt';
 $css       = ['imt.css', 'nav.css'];
-require __DIR__ . '/includes/layout_head.php';
+require __DIR__ . '/includes/views/layout_head.php';
 ?>
     <div class="container">
         <div style="text-align: center;">
@@ -379,4 +379,4 @@ require __DIR__ . '/includes/layout_head.php';
         }
     })();
     </script>
-<?php require __DIR__ . '/includes/layout_footer.php'; ?>
+<?php require __DIR__ . '/includes/views/layout_footer.php'; ?>

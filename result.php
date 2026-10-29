@@ -1,9 +1,9 @@
 <?php
 // Session aman (HttpOnly/SameSite/Secure + strict mode) — sekaligus memuat config.php.
-require_once 'includes/session.php';
+require_once 'includes/core/session.php';
 
 // Modul akun responden (untuk tautan ke menu Monitoring)
-require_once 'includes/responden.php';
+require_once 'includes/services/responden.php';
 
 $nav_active = 'hitung';
 
@@ -74,7 +74,7 @@ $judul     = 'InStaGi - Hasil Analisis IMT';
 $deskripsi = 'Hasil analisis IMT dan status gizi Anda, lengkap dengan berat badan ideal, estimasi kebutuhan kalori harian, serta saran gizi praktis dari InStaGi.';
 $og_path   = '/result';
 $css       = ['result.css', 'nav.css', 'pages.css'];
-require __DIR__ . '/includes/layout_head.php';
+require __DIR__ . '/includes/views/layout_head.php';
 ?>
     <div class="container">
         <div style="text-align: center;" id="page-logo">
@@ -250,4 +250,4 @@ require __DIR__ . '/includes/layout_head.php';
         }
     </script>
 
-    <?php require __DIR__ . '/includes/layout_footer.php'; ?>
+    <?php require __DIR__ . '/includes/views/layout_footer.php'; ?>

@@ -1,5 +1,5 @@
 <?php
-require_once '../includes/session.php';
+require_once '../includes/core/session.php';
 
 header('Content-Type: application/json');
 
@@ -10,7 +10,7 @@ $response = ['success' => false, 'message' => '', 'data' => null];
 // menyentuh database sama sekali.
 instagi_require_login_json();
 
-require_once '../includes/db.php';
+require_once '../includes/core/db.php';
 
 // Pastikan ada ID yang dikirim
 if (isset($_GET['id'])) {

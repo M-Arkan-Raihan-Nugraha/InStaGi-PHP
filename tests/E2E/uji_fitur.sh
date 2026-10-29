@@ -39,9 +39,9 @@ echo
 echo "=== B. BACKGROUND LIGHTBLUE (dipusatkan di css/base.css) ==="
 cd "D:/Codingan/Instagi/V3 PHP Native"
 ada "css/base.css memakai #ADD8E6 (lightblue)" "$(grep -c '#ADD8E6' css/base.css; true)" "1"
-ada "layout_head.php memuat /css/base.css untuk semua halaman" "$(grep -c '/css/base.css' includes/layout_head.php; true)" "1"
+ada "layout_head.php memuat /css/base.css untuk semua halaman" "$(grep -c '/css/base.css' includes/views/layout_head.php; true)" "1"
 for f in index imt result informasi monitoring admin login; do
-  ada "$f.php memakai partial layout_head.php" "$(grep -q 'includes/layout_head.php' $f.php && echo YA || echo TIDAK)" "YA"
+  ada "$f.php memakai partial layout_head.php" "$(grep -Eq 'includes/(views/)?layout_head.php' $f.php && echo YA || echo TIDAK)" "YA"
   tiada "$f.php tidak lagi menyalin blok <head> sendiri" "$(grep -c '<!DOCTYPE html>' $f.php; true)" "1"
 done
 ada "tidak ada sisa warna lama #CFE8FF" "$(grep -rl '#CFE8FF' css/ 2>/dev/null | wc -l; true)" "0"
@@ -177,7 +177,7 @@ ada "kartu galeri (leaflet+menu+resep+panduan+dbmp)" "$(echo "$INFO" | grep -o '
 ada "tautan lompat antar bagian" "$(echo "$INFO" | grep -o 'class="info-jump"' | wc -l)" "1"
 ada "kartu resep memakai thumbnail assets/resep/thumbs" "$(echo "$INFO" | grep -c 'assets/resep/thumbs/')" "15"
 ada "kartu panduan memakai thumbnail assets/panduan/thumbs" "$(echo "$INFO" | grep -c 'assets/panduan/thumbs/')" "7"
-ada "berkas modul resep & panduan ada" "$(ls includes/resep.php includes/panduan.php | wc -l)" "2"
+ada "berkas modul resep & panduan ada" "$(ls includes/content/resep.php includes/content/panduan.php | wc -l)" "2"
 # Ikon: SVG menggantikan emoji
 for u in / /imt /informasi /monitoring; do
   H=$(curl -s "$BASE$u")

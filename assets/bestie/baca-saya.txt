@@ -1,3 +1,8 @@
-Letakkan logo mitra/sponsor di folder ini (mis. apotek-sehat.png).
-Semua gambar (.jpg .jpeg .png .webp .gif) otomatis tampil di bagian "Bestie InStaGi" pada halaman utama, diurutkan menurut nama berkas.
-Ukuran yang rapi: tinggi sekitar 68 piksel, latar transparan (PNG) bila memungkinkan.
+Folder Flyer Mitra & Sponsor "Bestie InStaGi"
+-----------------------------------------------------------------------------
+1. Letakkan berkas gambar flyer promosi mitra di folder ini (format: .jpeg, .jpg, .webp, .png).
+2. Rasio gambar disarankan vertikal/portrait (standar flyer/brosur promo).
+3. Daftarkan flyer baru di file: includes/content/bestie.php pada fungsi instagi_bestie_daftar().
+   Isi data meliputi: id, kategori, kategori_label, judul, subjudul, deskripsi, lokasi, harga, wa, wa_text, gambar.
+4. Kategori yang didukung: travel, property, kuliner, minimarket, kesehatan.
+5. Thumbnail otomatis dibuat ke subfolder thumbs/ via skrip CLI: tools/galeri_build_thumbs.php.
