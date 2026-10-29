@@ -8,7 +8,7 @@
  * Isi halaman:
  *   1. Pilihan menu utama: Cek Status Gizi · Informasi Gizi · Monitoring Status Gizi
  *   2. Layanan: Konsultasi Gizi & Katering Gizi (tombol WhatsApp)
- *   3. Bestie InStaGi: wadah sponsor / kerja sama iklan
+ *   (Catatan: Bestie InStaGi telah dipindahkan ke halaman Informasi Gizi)
  *
  * CATATAN: tautan "Login Admin" tidak lagi ditampilkan (lihat includes/nav.php).
  */
@@ -23,25 +23,6 @@ $wa_layanan = instagi_wa_url(
     'Halo InStaGi, saya ingin berkonsultasi mengenai gizi dan memesan katering gizi. Mohon informasinya.',
     INSTAGI_WA_KATERING
 );
-$wa_bestie = instagi_wa_url(
-    'Halo InStaGi, saya ingin bekerja sama / memasang iklan di InStaGi (Bestie InStaGi). Mohon informasinya.',
-    INSTAGI_WA_KERJASAMA
-);
-
-// --- Bestie InStaGi: logo sponsor/partner ------------------------------------
-// Cukup letakkan berkas gambar di assets/bestie/ (mis. apotek-sehat.png).
-// Semua gambar di folder itu tampil otomatis; urutannya mengikuti nama berkas.
-// Bila foldernya kosong, bagian logo disembunyikan (tanpa error).
-$bestie_logo = [];
-$bestie_dir  = __DIR__ . '/assets/bestie';
-if (is_dir($bestie_dir)) {
-    foreach ((array) scandir($bestie_dir) as $berkas) {
-        if (preg_match('/\.(jpe?g|png|webp|gif)$/i', (string) $berkas)) {
-            $bestie_logo[] = $berkas;
-        }
-    }
-    sort($bestie_logo, SORT_NATURAL | SORT_FLAG_CASE);
-}
 
 // Judul, deskripsi, alamat rapi (tanpa .php), dan daftar CSS halaman ini.
 // Semua bagian <head> (meta, Open Graph, Twitter Card, CSS) kini ada di satu
@@ -103,31 +84,6 @@ require __DIR__ . '/includes/layout_head.php';
                     </div>
                 </article>
             </div>
-        </section>
-
-        <!-- ===== BESTIE INSTAGI: SPONSORSHIP, KEMITRAAN, DAN KERJA SAMA ===== -->
-        <section class="bestie-section" id="bestie">
-            <h2>Bestie InStaGi</h2>
-            <p class="bestie-intro">
-                Ruang untuk <strong>sponsorship, kemitraan, dan kerja sama</strong>: produk kesehatan,
-                jasa katering, klinik, apotek, komunitas olahraga, dan usaha lain yang sejalan dengan hidup sehat.
-            </p>
-
-            <?php if (!empty($bestie_logo)): ?>
-                <div class="bestie-grid">
-                    <?php foreach ($bestie_logo as $logo): ?>
-                        <div class="bestie-logo">
-                            <img src="assets/bestie/<?= htmlspecialchars(rawurlencode($logo), ENT_QUOTES, 'UTF-8') ?>"
-                                 alt="Mitra InStaGi: <?= htmlspecialchars(pathinfo($logo, PATHINFO_FILENAME), ENT_QUOTES, 'UTF-8') ?>"
-                                 decoding="async">
-                        </div>
-                    <?php endforeach; ?>
-                </div>
-            <?php endif; ?>
-
-            <p class="bestie-contact">
-                Untuk menjadi Bestie InStaGi hubungi kami via email: <a href="mailto:instagiadmin@gmail.com">instagiadmin@gmail.com</a>
-            </p>
         </section>
     </div>
 <?php require __DIR__ . '/includes/layout_footer.php'; ?>

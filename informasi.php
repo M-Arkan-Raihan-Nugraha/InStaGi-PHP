@@ -19,6 +19,7 @@ require_once 'includes/resep.php';
 require_once 'includes/panduan.php';
 require_once 'includes/aktivitas.php';
 require_once 'includes/dbmp.php';
+require_once 'includes/bestie.php';
 
 $nav_active = 'informasi';
 
@@ -43,13 +44,16 @@ $dbmp_cover = instagi_dbmp_cover();
 <?php
 // Judul, deskripsi, alamat rapi (tanpa .php), dan daftar CSS halaman ini.
 $judul     = 'InStaGi - Informasi Gizi';
-$deskripsi = 'Materi edukasi gizi InStaGi: leaflet, panduan diet & edukasi gizi, Daftar Bahan Makanan Penukar (DBMP), contoh menu sesuai kebutuhan kalori, kumpulan resep, serta tips bugar.';
+$deskripsi = 'Etalase mitra Bestie InStaGi dan materi edukasi gizi: leaflet, panduan diet & edukasi gizi, Daftar Bahan Makanan Penukar (DBMP), contoh menu sesuai kebutuhan kalori, kumpulan resep, serta tips bugar.';
 $og_path   = '/informasi';
 $css       = ['index.css', 'nav.css', 'pages.css'];
 require __DIR__ . '/includes/layout_head.php';
 ?>
 
     <div class="container">
+        <!-- ===== BESTIE INSTAGI: ETALASE MITRA & SPONSOR PALING ATAS ===== -->
+        <?php require __DIR__ . '/includes/views/bestie_etalase.php'; ?>
+
         <?php if (!$akses_diizinkan): ?>
             <!-- Gerbang Akses Dibatasi (Wajib Cek Status Gizi Terlebih Dahulu) -->
             <div class="info-restricted-gate">
@@ -68,6 +72,7 @@ require __DIR__ . '/includes/layout_head.php';
             <p class="info-intro">Materi edukasi gizi InStaGi: leaflet, panduan diet &amp; edukasi gizi, Daftar Bahan Makanan Penukar (DBMP), contoh menu sesuai kebutuhan kalori, kumpulan resep, serta tips bugar. Klik gambar untuk membuka versi besar, atau unduh untuk disimpan.</p>
 
             <nav class="info-jump" aria-label="Lompat ke bagian">
+                <a href="#bestie">Bestie InStaGi</a>
                 <a href="#leaflet">Leaflet</a>
                 <a href="#panduan">Panduan &amp; Edukasi</a>
                 <a href="#dbmp">DBMP</a>
