@@ -180,7 +180,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     'no_hp' => $no_hp, // Simpan no_hp untuk keperluan WhatsApp
                     'success_message' => "Data Anda berhasil dihitung dan disimpan!"
                 ];
-                $_SESSION['sudah_cek_gizi'] = true;
+
 
                 // Tandai akun responden aktif agar menu Monitoring langsung siap.
                 if (!empty($responden_id)) {

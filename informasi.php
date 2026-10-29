@@ -23,12 +23,6 @@ require_once 'includes/bestie.php';
 
 $nav_active = 'informasi';
 
-// Cek hak akses: wajib cek status gizi terlebih dahulu (atau sesi admin)
-$akses_diizinkan = !empty($_SESSION['imt_result'])
-    || !empty($_SESSION['responden'])
-    || !empty($_SESSION['sudah_cek_gizi'])
-    || !empty($_SESSION['loggedin']);
-
 // --- Kumpulkan daftar siap tampil untuk tiap galeri ---
 // (helper bersama: includes/galeri_aset.php — hanya entri yang gambarnya ada)
 $leaflets  = instagi_galeri_daftar_tampil('leaflet', instagi_leaflet_list());
@@ -54,21 +48,7 @@ require __DIR__ . '/includes/layout_head.php';
         <!-- ===== BESTIE INSTAGI: ETALASE MITRA & SPONSOR PALING ATAS ===== -->
         <?php require __DIR__ . '/includes/views/bestie_etalase.php'; ?>
 
-        <?php if (!$akses_diizinkan): ?>
-            <!-- Gerbang Akses Dibatasi (Wajib Cek Status Gizi Terlebih Dahulu) -->
-            <div class="info-restricted-gate">
-                <div class="info-restricted-icon" aria-hidden="true">
-                    <?= instagi_ikon('perhatian') ?>
-                </div>
-                <h1>Akses Informasi Gizi Dibatasi</h1>
-                <p>Anda wajib melakukan <strong>Cek Status Gizi</strong> terlebih dahulu untuk dapat mengakses seluruh materi edukasi, leaflet, panduan, contoh menu, kumpulan resep, dan tips bugar di InStaGi.</p>
-                <a href="/imt" class="btn-primary">
-                    <?= instagi_ikon('cek-gizi') ?>
-                    <span>CEK STATUS GIZI SEKARANG</span>
-                </a>
-            </div>
-        <?php else: ?>
-            <h1 style="text-align:left;color:var(--primary-color);">Informasi Gizi</h1>
+        <h1 style="text-align:left;color:var(--primary-color);">Informasi Gizi</h1>
             <p class="info-intro">Materi edukasi gizi InStaGi: leaflet, panduan diet &amp; edukasi gizi, Daftar Bahan Makanan Penukar (DBMP), contoh menu sesuai kebutuhan kalori, kumpulan resep, serta tips bugar. Klik gambar untuk membuka versi besar, atau unduh untuk disimpan.</p>
 
             <nav class="info-jump" aria-label="Lompat ke bagian">
@@ -164,8 +144,6 @@ $kartu_alt    = 'Tips Bugar';
 $kartu_kosong = 'Belum ada materi tips bugar yang tersedia.';
 require __DIR__ . '/includes/galeri_kartu.php';
 ?>
-
-        <?php endif; ?>
     </div>
 
 <?php require __DIR__ . '/includes/layout_footer.php'; ?>

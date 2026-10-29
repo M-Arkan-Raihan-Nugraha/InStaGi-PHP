@@ -57,3 +57,4 @@ Memindahkan seksi kemitraan dan promosi "Bestie InStaGi" dari halaman beranda (`
 * **Filter Kategori**: Tombol tab/pill aktif tanpa reload halaman menggunakan atribut `data-category`.
 * **Kartu Flyer**: Menampilkan foto flyer proporsional, badge kategori warna-warni, judul mitra, ringkasan/lokasi, tombol "Lihat Flyer" (membuka modal zoom), dan tombol "WhatsApp" untuk menghubungi langsung.
 * **Modal Lightbox**: Menampilkan flyer resolusi penuh dengan tombol tutup dan klik di luar untuk menutup.
+

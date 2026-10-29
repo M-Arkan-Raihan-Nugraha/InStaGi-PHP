@@ -47,7 +47,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         if ($action === 'logout') {
             instagi_responden_logout();
-            unset($_SESSION['sudah_cek_gizi'], $_SESSION['imt_result'], $_SESSION['responden']);
+            unset($_SESSION['imt_result'], $_SESSION['responden']);
             $koneksi->close();
             header('location: /monitoring');
             exit;

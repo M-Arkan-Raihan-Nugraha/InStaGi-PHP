@@ -435,11 +435,10 @@ if (!function_exists('instagi_responden_saat_ini')) {
 }
 
 if (!function_exists('instagi_responden_logout')) {
-    /** Keluarkan responden dan bersihkan sesi cek status gizi (tidak menyentuh sesi admin). */
+    /** Keluarkan responden dan bersihkan sesi hasil perhitungan (tidak menyentuh sesi admin). */
     function instagi_responden_logout()
     {
         unset($_SESSION['responden']);
-        unset($_SESSION['sudah_cek_gizi']);
         unset($_SESSION['imt_result']);
     }
 }

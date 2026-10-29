@@ -59,3 +59,4 @@ cek(isset($kategori_terisi['kesehatan']), 'Kategori kesehatan terisi flyer');
 
 echo "\nTotal uji: $total | Lulus: $lulus | Gagal: " . ($total - $lulus) . "\n";
 exit($total === $lulus ? 0 : 1);
+
