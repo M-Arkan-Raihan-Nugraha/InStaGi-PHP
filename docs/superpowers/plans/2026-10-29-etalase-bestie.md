@@ -34,9 +34,9 @@
   - `WhatsApp Image 2026-10-26 at 09.54.36.jpeg` -> `assets/bestie/pd-puspita-minimarket.jpeg`
   - `WhatsApp Image 2026-10-26 at 10.03.42.jpeg` -> `assets/bestie/klinik-sunat-hd.jpeg`
 
-- [ ] **Step 1: Pindahkan dan beri nama terstruktur untuk ke-11 file gambar flyer**
-- [ ] **Step 2: Verifikasi seluruh berkas berada di `assets/bestie/` dan dapat dibaca**
-- [ ] **Step 3: Commit perubahan aset**
+- [x] **Step 1: Pindahkan dan beri nama terstruktur untuk ke-11 file gambar flyer**
+- [x] **Step 2: Verifikasi seluruh berkas berada di `assets/bestie/` dan dapat dibaca**
+- [x] **Step 3: Commit perubahan aset**
 
 ---
 
@@ -52,11 +52,11 @@
   - `instagi_bestie_kategori(): array<string, string>`
   - `instagi_bestie_daftar(): array<int, array{id: string, kategori: string, kategori_label: string, judul: string, subjudul: string, deskripsi: string, lokasi: string, harga: string, wa: string, wa_text: string, gambar: string}>`
 
-- [ ] **Step 1: Tulis unit test `tests/Unit/uji_bestie.php` yang memverifikasi kategori dan integritas berkas gambar flyer**
-- [ ] **Step 2: Jalankan test dan pastikan gagal sebelum implementasi**
-- [ ] **Step 3: Implementasikan `includes/content/bestie.php` dan `includes/bestie.php`**
-- [ ] **Step 4: Jalankan unit test dan pastikan lolos (PASS)**
-- [ ] **Step 5: Commit modul data Bestie**
+- [x] **Step 1: Tulis unit test `tests/Unit/uji_bestie.php` yang memverifikasi kategori dan integritas berkas gambar flyer**
+- [x] **Step 2: Jalankan test dan pastikan gagal sebelum implementasi**
+- [x] **Step 3: Implementasikan `includes/content/bestie.php` dan `includes/bestie.php`**
+- [x] **Step 4: Jalankan unit test dan pastikan lolos (PASS)**
+- [x] **Step 5: Commit modul data Bestie**
 
 ---
 
@@ -70,10 +70,10 @@
 - Consumes: `instagi_bestie_kategori()`, `instagi_bestie_daftar()`, `instagi_wa_url()`
 - Produces: HTML section `#bestie` dengan filter buttons, grid kartu flyer, dialog modal zoom, dan form kontak/sponsor.
 
-- [ ] **Step 1: Rancang markup semantic untuk filter kategori, kartu flyer, tombol WhatsApp, dan lightbox modal**
-- [ ] **Step 2: Sertakan script vanilla JS terenkapsulasi untuk filter kategori aktif (`data-category`) dan interaksi modal**
-- [ ] **Step 3: Uji render partial view secara terisolasi dengan CLI php**
-- [ ] **Step 4: Commit komponen view etalase**
+- [x] **Step 1: Rancang markup semantic untuk filter kategori, kartu flyer, tombol WhatsApp, dan lightbox modal**
+- [x] **Step 2: Sertakan script vanilla JS terenkapsulasi untuk filter kategori aktif (`data-category`) dan interaksi modal**
+- [x] **Step 3: Uji render partial view secara terisolasi dengan CLI php**
+- [x] **Step 4: Commit komponen view etalase**
 
 ---
 
@@ -83,11 +83,11 @@
 - Modify: `informasi.php`
 - Modify: `index.php`
 
-- [ ] **Step 1: Muat modul `bestie.php` di `informasi.php` dan panggil `includes/views/bestie_etalase.php` sebelum blok pembatasan akses**
-- [ ] **Step 2: Tambahkan jump anchor `#bestie` pada menu navigasi lompat cepat `informasi.php` jika diperlukan**
-- [ ] **Step 3: Bersihkan seksi Bestie lama dan pemindaian logo dari `index.php`**
-- [ ] **Step 4: Uji sintaks kedua file dengan `php -l`**
-- [ ] **Step 5: Commit perubahan integrasi halaman**
+- [x] **Step 1: Muat modul `bestie.php` di `informasi.php` dan panggil `includes/views/bestie_etalase.php` sebelum blok pembatasan akses**
+- [x] **Step 2: Tambahkan jump anchor `#bestie` pada menu navigasi lompat cepat `informasi.php` jika diperlukan**
+- [x] **Step 3: Bersihkan seksi Bestie lama dan pemindaian logo dari `index.php`**
+- [x] **Step 4: Uji sintaks kedua file dengan `php -l`**
+- [x] **Step 5: Commit perubahan integrasi halaman**
 
 ---
 
@@ -96,10 +96,10 @@
 **Files:**
 - Modify: `css/pages.css`
 
-- [ ] **Step 1: Tambahkan gaya CSS untuk etalase Bestie: tabs/pills filter, grid flyer responsif, kartu flyer bertema InStaGi, badge kategori, tombol aksi WA & zoom**
-- [ ] **Step 2: Tambahkan gaya modal preview gambar flyer dengan transisi halus dan responsif di layar sentuh**
-- [ ] **Step 3: Uji tampilan di berbagai ukuran viewport (desktop, tablet, mobile)**
-- [ ] **Step 4: Commit perubahan styling**
+- [x] **Step 1: Tambahkan gaya CSS untuk etalase Bestie: tabs/pills filter, grid flyer responsif, kartu flyer bertema InStaGi, badge kategori, tombol aksi WA & zoom**
+- [x] **Step 2: Tambahkan gaya modal preview gambar flyer dengan transisi halus dan responsif di layar sentuh**
+- [x] **Step 3: Uji tampilan di berbagai ukuran viewport (desktop, tablet, mobile)**
+- [x] **Step 4: Commit perubahan styling**
 
 ---
 
@@ -109,7 +109,7 @@
 - Run test suite: `tests/Unit/uji_gizi.php`, `tests/Unit/uji_validasi.php`, `tests/Unit/uji_bestie.php`
 - Run linting / syntax check: `tools/` and all php files.
 
-- [ ] **Step 1: Jalankan semua unit test**
-- [ ] **Step 2: Jalankan web server lokal php built-in untuk memverifikasi halaman `http://localhost:8080/informasi.php` dan `http://localhost:8080/index.php`**
-- [ ] **Step 3: Periksa interaktivitas: filter kategori berfungsi menyaring kartu, modal zoom terbuka dan tertutup dengan benar, link WA valid**
-- [ ] **Step 4: Pastikan status git bersih dan commit final**
+- [x] **Step 1: Jalankan semua unit test**
+- [x] **Step 2: Jalankan web server lokal php built-in untuk memverifikasi halaman `http://localhost:8080/informasi.php` dan `http://localhost:8080/index.php`**
+- [x] **Step 3: Periksa interaktivitas: filter kategori berfungsi menyaring kartu, modal zoom terbuka dan tertutup dengan benar, link WA valid**
+- [x] **Step 4: Pastikan status git bersih dan commit final**
