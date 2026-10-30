@@ -32,7 +32,7 @@
 
 // Modul akun responden dipakai untuk menormalkan No. HP (satu sumber aturan).
 if (!function_exists('instagi_norm_hp')) {
-    require_once __DIR__ . '/responden.php';
+    require_once __DIR__ . '/respondent.php';
 }
 
 if (!function_exists('instagi_aktivitas_diizinkan')) {
