@@ -319,7 +319,9 @@
 }
 
 .info-jump a {
-    display: inline-block;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
     padding: 7px 14px;
     border-radius: 999px;
     background-color: #ffffff;
@@ -329,12 +331,32 @@
     font-weight: 600;
     text-decoration: none;
     transition: all 0.2s;
+    white-space: nowrap;
+}
+
+.info-jump-count {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 0, 0, 0.08);
+    color: inherit;
+    font-size: 0.85em;
+    padding: 1px 7px;
+    border-radius: 999px;
+    font-weight: 700;
+    transition: background 0.2s, color 0.2s;
 }
 
 .info-jump a:hover,
 .info-jump a:focus-visible {
-    background-color: #f7f9fa;
+    background-color: #fdf2f4;
     border-color: var(--primary-color);
+    color: var(--primary-color);
+}
+
+.info-jump a:hover .info-jump-count,
+.info-jump a:focus-visible .info-jump-count {
+    background: rgba(231, 76, 60, 0.15);
     color: var(--primary-color);
 }
 

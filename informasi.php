@@ -24,12 +24,13 @@ require_once 'includes/content/bestie.php';
 $nav_active = 'informasi';
 
 // --- Kumpulkan daftar siap tampil untuk tiap galeri ---
-// (helper bersama: includes/galeri_aset.php — hanya entri yang gambarnya ada)
-$leaflets   = instagi_galeri_daftar_tampil('leaflet', instagi_leaflet_list());
-$menus      = instagi_galeri_daftar_tampil('menu', instagi_menu_list(), 'instagi_menu_slug');
-$reseps     = instagi_resep_daftar();
-$panduans   = instagi_panduan_daftar();
-$tips_bugar = instagi_tips_bugar_daftar();
+// (helper bersama: includes/content/gallery_asset.php — hanya entri yang gambarnya ada)
+$leaflets     = instagi_galeri_daftar_tampil('leaflet', instagi_leaflet_list());
+$menus        = instagi_galeri_daftar_tampil('menu', instagi_menu_list(), 'instagi_menu_slug');
+$reseps       = instagi_resep_daftar();
+$panduans     = instagi_panduan_daftar();
+$tips_bugar   = instagi_tips_bugar_daftar();
+$bestie_items = instagi_bestie_daftar();
 
 // --- DBMP (satu berkas PDF) ---
 $dbmp_pdf   = instagi_dbmp_pdf();
@@ -52,13 +53,13 @@ require __DIR__ . '/includes/views/layout_head.php';
             <p class="info-intro">Materi edukasi gizi InStaGi: leaflet, panduan diet &amp; edukasi gizi, Daftar Bahan Makanan Penukar (DBMP), contoh menu sesuai kebutuhan kalori, kumpulan resep, serta tips bugar. Klik gambar untuk membuka versi besar, atau unduh untuk disimpan.</p>
 
             <nav class="info-jump" aria-label="Lompat ke bagian">
-                <a href="#bestie">Bestie InStaGi</a>
-                <a href="#leaflet">Leaflet</a>
-                <a href="#panduan">Panduan &amp; Edukasi</a>
-                <a href="#dbmp">DBMP</a>
-                <a href="#menu">Contoh Menu</a>
-                <a href="#resep">Kumpulan Resep</a>
-                <a href="#tips-bugar">Tips Bugar</a>
+                <a href="#bestie"><span>Bestie InStaGi</span><span class="info-jump-count"><?= count($bestie_items) ?></span></a>
+                <a href="#leaflet"><span>Leaflet</span><span class="info-jump-count"><?= count($leaflets) ?></span></a>
+                <a href="#panduan"><span>Panduan &amp; Edukasi</span><span class="info-jump-count"><?= count($panduans) ?></span></a>
+                <a href="#dbmp"><span>DBMP</span><span class="info-jump-count"><?= $dbmp_pdf !== null ? 1 : 0 ?></span></a>
+                <a href="#menu"><span>Contoh Menu</span><span class="info-jump-count"><?= count($menus) ?></span></a>
+                <a href="#resep"><span>Kumpulan Resep</span><span class="info-jump-count"><?= count($reseps) ?></span></a>
+                <a href="#tips-bugar"><span>Tips Bugar</span><span class="info-jump-count"><?= count($tips_bugar) ?></span></a>
             </nav>
 
             <!-- ===== 1. LEAFLET INFORMASI GIZI ===== -->
