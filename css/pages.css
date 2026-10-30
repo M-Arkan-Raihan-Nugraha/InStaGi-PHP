@@ -310,31 +310,38 @@
     margin-bottom: 18px;
 }
 
-/* Tautan lompat ke bagian halaman Informasi Gizi (halaman kini panjang). */
-.info-jump {
+/* Filter Materi Informasi Gizi */
+.info-filter-wrapper {
+    margin: 16px 0 20px;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: 4px;
+}
+
+.info-filters {
     display: flex;
     flex-wrap: wrap;
     gap: 8px;
-    margin: 16px 0 4px;
 }
 
-.info-jump a {
+.info-filter-btn {
+    appearance: none;
+    background: #ffffff;
+    border: 1.5px solid #d1d5db;
+    color: #4b5563;
+    padding: 8px 16px;
+    border-radius: 999px;
+    font-size: 0.88em;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    white-space: nowrap;
     display: inline-flex;
     align-items: center;
     gap: 6px;
-    padding: 7px 14px;
-    border-radius: 999px;
-    background-color: #ffffff;
-    border: 1px solid var(--border-color);
-    color: var(--text-color);
-    font-size: 0.9em;
-    font-weight: 600;
-    text-decoration: none;
-    transition: all 0.2s;
-    white-space: nowrap;
 }
 
-.info-jump-count {
+.info-filter-count {
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -347,17 +354,29 @@
     transition: background 0.2s, color 0.2s;
 }
 
-.info-jump a:hover,
-.info-jump a:focus-visible {
-    background-color: #fdf2f4;
+.info-filter-btn:hover,
+.info-filter-btn:focus-visible {
     border-color: var(--primary-color);
+    color: var(--primary-color);
+    background: #fdf2f4;
+}
+
+.info-filter-btn:hover .info-filter-count,
+.info-filter-btn:focus-visible .info-filter-count {
+    background: rgba(231, 76, 60, 0.15);
     color: var(--primary-color);
 }
 
-.info-jump a:hover .info-jump-count,
-.info-jump a:focus-visible .info-jump-count {
-    background: rgba(231, 76, 60, 0.15);
-    color: var(--primary-color);
+.info-filter-btn.is-active {
+    background: var(--primary-color);
+    color: #ffffff;
+    border-color: var(--primary-color);
+    box-shadow: 0 2px 8px rgba(231, 76, 60, 0.25);
+}
+
+.info-filter-btn.is-active .info-filter-count {
+    background: rgba(255, 255, 255, 0.28);
+    color: #ffffff;
 }
 
 .info-grid {

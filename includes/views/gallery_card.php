@@ -26,7 +26,7 @@ $kartu_daftar = isset($kartu_daftar) && is_array($kartu_daftar) ? $kartu_daftar 
 $kartu_alt    = isset($kartu_alt) ? $kartu_alt : '';
 $kartu_kosong = isset($kartu_kosong) ? $kartu_kosong : 'Belum ada materi yang tersedia.';
 ?>
-        <section class="info-section" id="<?= htmlspecialchars($kartu_id, ENT_QUOTES, 'UTF-8') ?>">
+        <section class="info-section" id="<?= htmlspecialchars($kartu_id, ENT_QUOTES, 'UTF-8') ?>" data-section="<?= htmlspecialchars($kartu_id, ENT_QUOTES, 'UTF-8') ?>">
             <h2><?= htmlspecialchars($kartu_judul, ENT_QUOTES, 'UTF-8') ?></h2>
             <?php if ($kartu_intro !== ''): ?>
             <p class="info-intro"><?= htmlspecialchars($kartu_intro, ENT_QUOTES, 'UTF-8') ?></p>

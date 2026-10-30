@@ -52,15 +52,32 @@ require __DIR__ . '/includes/views/layout_head.php';
         <h1 style="text-align:left;color:var(--primary-color);">Informasi Gizi</h1>
             <p class="info-intro">Materi edukasi gizi InStaGi: leaflet, panduan diet &amp; edukasi gizi, Daftar Bahan Makanan Penukar (DBMP), contoh menu sesuai kebutuhan kalori, kumpulan resep, serta tips bugar. Klik gambar untuk membuka versi besar, atau unduh untuk disimpan.</p>
 
-            <nav class="info-jump" aria-label="Lompat ke bagian">
-                <a href="#bestie"><span>Bestie InStaGi</span><span class="info-jump-count"><?= count($bestie_items) ?></span></a>
-                <a href="#leaflet"><span>Leaflet</span><span class="info-jump-count"><?= count($leaflets) ?></span></a>
-                <a href="#panduan"><span>Panduan &amp; Edukasi</span><span class="info-jump-count"><?= count($panduans) ?></span></a>
-                <a href="#dbmp"><span>DBMP</span><span class="info-jump-count"><?= $dbmp_pdf !== null ? 1 : 0 ?></span></a>
-                <a href="#menu"><span>Contoh Menu</span><span class="info-jump-count"><?= count($menus) ?></span></a>
-                <a href="#resep"><span>Kumpulan Resep</span><span class="info-jump-count"><?= count($reseps) ?></span></a>
-                <a href="#tips-bugar"><span>Tips Bugar</span><span class="info-jump-count"><?= count($tips_bugar) ?></span></a>
-            </nav>
+            <div class="info-filter-wrapper">
+                <div class="info-filters" role="tablist" aria-label="Filter Materi Informasi Gizi">
+                    <button type="button" class="info-filter-btn is-active" data-filter="all" role="tab" aria-selected="true">
+                        <span>Semua</span>
+                        <span class="info-filter-count"><?= count($leaflets) + count($panduans) + ($dbmp_pdf !== null ? 1 : 0) + count($menus) + count($reseps) + count($tips_bugar) ?></span>
+                    </button>
+                    <button type="button" class="info-filter-btn" data-filter="leaflet" role="tab" aria-selected="false">
+                        <span>Leaflet</span><span class="info-filter-count"><?= count($leaflets) ?></span>
+                    </button>
+                    <button type="button" class="info-filter-btn" data-filter="panduan" role="tab" aria-selected="false">
+                        <span>Panduan &amp; Edukasi</span><span class="info-filter-count"><?= count($panduans) ?></span>
+                    </button>
+                    <button type="button" class="info-filter-btn" data-filter="dbmp" role="tab" aria-selected="false">
+                        <span>DBMP</span><span class="info-filter-count"><?= $dbmp_pdf !== null ? 1 : 0 ?></span>
+                    </button>
+                    <button type="button" class="info-filter-btn" data-filter="menu" role="tab" aria-selected="false">
+                        <span>Contoh Menu</span><span class="info-filter-count"><?= count($menus) ?></span>
+                    </button>
+                    <button type="button" class="info-filter-btn" data-filter="resep" role="tab" aria-selected="false">
+                        <span>Kumpulan Resep</span><span class="info-filter-count"><?= count($reseps) ?></span>
+                    </button>
+                    <button type="button" class="info-filter-btn" data-filter="tips-bugar" role="tab" aria-selected="false">
+                        <span>Tips Bugar</span><span class="info-filter-count"><?= count($tips_bugar) ?></span>
+                    </button>
+                </div>
+            </div>
 
             <!-- ===== 1. LEAFLET INFORMASI GIZI ===== -->
 <?php
@@ -85,7 +102,7 @@ require __DIR__ . '/includes/views/gallery_card.php';
 ?>
 
             <!-- ===== 3. DBMP ===== -->
-            <section class="info-section" id="dbmp">
+            <section class="info-section" id="dbmp" data-section="dbmp">
                 <h2>Daftar Bahan Makanan Penukar (DBMP)</h2>
                 <p class="info-intro">Panduan menukar bahan makanan dengan nilai gizi setara, disusun per golongan pangan.</p>
 
@@ -147,5 +164,31 @@ $kartu_kosong = 'Belum ada materi tips bugar yang tersedia.';
 require __DIR__ . '/includes/views/gallery_card.php';
 ?>
     </div>
+
+<script>
+(function () {
+    'use strict';
+    var filterBtns = document.querySelectorAll('.info-filter-btn');
+    var sections   = document.querySelectorAll('.info-section[data-section]');
+
+    filterBtns.forEach(function (btn) {
+        btn.addEventListener('click', function () {
+            var filter = this.getAttribute('data-filter');
+
+            filterBtns.forEach(function (b) {
+                b.classList.remove('is-active');
+                b.setAttribute('aria-selected', 'false');
+            });
+            this.classList.add('is-active');
+            this.setAttribute('aria-selected', 'true');
+
+            sections.forEach(function (sec) {
+                var s = sec.getAttribute('data-section');
+                sec.style.display = (filter === 'all' || s === filter) ? '' : 'none';
+            });
+        });
+    });
+})();
+</script>
 
 <?php require __DIR__ . '/includes/views/layout_footer.php'; ?>
