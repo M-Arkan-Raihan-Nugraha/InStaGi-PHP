@@ -31,6 +31,9 @@ if (!function_exists('instagi_galeri_dir')) {
     {
         $root   = defined('APP_ROOT') ? APP_ROOT : dirname(dirname(__DIR__));
         $bersih = preg_replace('/[^a-z0-9_\-]/', '', strtolower((string) $galeri));
+        if ($bersih === 'aktivitas') {
+            $bersih = 'tips-bugar';
+        }
         if ($bersih === '') {
             $bersih = 'leaflet';
         }
@@ -97,7 +100,10 @@ if (!function_exists('instagi_galeri_web_url')) {
             return null;
         }
         $bersih = preg_replace('/[^a-z0-9_\-]/', '', strtolower((string) $galeri));
-        return 'assets/' . $bersih . '/' . $berkas;
+        if ($bersih === 'aktivitas') {
+            $bersih = 'tips-bugar';
+        }
+        return '/assets/' . $bersih . '/' . $berkas;
     }
 }
 
@@ -108,7 +114,10 @@ if (!function_exists('instagi_galeri_thumb_url')) {
         $thumb = instagi_galeri_thumb_find($galeri, $slug);
         if ($thumb !== null) {
             $bersih = preg_replace('/[^a-z0-9_\-]/', '', strtolower((string) $galeri));
-            return 'assets/' . $bersih . '/thumbs/' . $thumb;
+            if ($bersih === 'aktivitas') {
+                $bersih = 'tips-bugar';
+            }
+            return '/assets/' . $bersih . '/thumbs/' . $thumb;
         }
         return instagi_galeri_web_url($galeri, $slug);
     }

@@ -486,7 +486,7 @@ require __DIR__ . '/includes/views/layout_head.php';
 
     <?php if ($responden && $stat['jumlah'] > 0): ?>
     <!-- Pustaka Chart.js lokal (mencegah Tracking Prevention browser memblokir CDN) -->
-    <script src="assets/js/chart.umd.min.js"></script>
+    <script src="/assets/js/chart.umd.min.js"></script>
     <script>
         (function () {
             var data = <?= json_encode($grafik, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_HEX_TAG | JSON_HEX_AMP) ?>;

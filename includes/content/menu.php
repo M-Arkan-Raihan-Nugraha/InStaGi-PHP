@@ -168,7 +168,7 @@ if (!function_exists('instagi_menu_web_url')) {
     function instagi_menu_web_url($kkal)
     {
         $file = instagi_menu_find($kkal);
-        return $file === null ? null : 'assets/menu/' . $file;
+        return $file === null ? null : '/assets/menu/' . $file;
     }
 }
 
@@ -182,7 +182,7 @@ if (!function_exists('instagi_menu_thumb_url')) {
     {
         $thumb = instagi_menu_thumb_find($kkal);
         if ($thumb !== null) {
-            return 'assets/menu/thumbs/' . $thumb;
+            return '/assets/menu/thumbs/' . $thumb;
         }
         return instagi_menu_web_url($kkal);
     }

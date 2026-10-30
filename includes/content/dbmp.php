@@ -42,7 +42,7 @@ if (!function_exists('instagi_dbmp_pdf')) {
         $dir = instagi_dbmp_dir();
         foreach (['dbmp-lengkap.pdf', 'dbmp.pdf', 'DBMP.pdf'] as $name) {
             if (is_file($dir . '/' . $name)) {
-                return 'assets/dbmp/' . $name;
+                return '/assets/dbmp/' . $name;
             }
         }
         return null;
@@ -60,7 +60,7 @@ if (!function_exists('instagi_dbmp_cover')) {
         $dir = instagi_dbmp_dir();
         foreach (['dbmp-cover.webp', 'dbmp-cover.jpg', 'dbmp-cover.jpeg', 'dbmp-cover.png'] as $name) {
             if (is_file($dir . '/' . $name)) {
-                return 'assets/dbmp/' . $name;
+                return '/assets/dbmp/' . $name;
             }
         }
         return null;

@@ -151,7 +151,7 @@ if (!function_exists('instagi_leaflet_web_url')) {
     function instagi_leaflet_web_url($slug)
     {
         $file = instagi_leaflet_find($slug);
-        return $file === null ? null : 'assets/leaflet/' . $file;
+        return $file === null ? null : '/assets/leaflet/' . $file;
     }
 }
 
@@ -165,7 +165,7 @@ if (!function_exists('instagi_leaflet_thumb_url')) {
     {
         $thumb = instagi_leaflet_thumb_find($slug);
         if ($thumb !== null) {
-            return 'assets/leaflet/thumbs/' . $thumb;
+            return '/assets/leaflet/thumbs/' . $thumb;
         }
         return instagi_leaflet_web_url($slug);
     }

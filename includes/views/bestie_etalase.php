@@ -90,10 +90,10 @@ foreach ($bestie_items as $item) {
                             <?php
                             $bestie_thumb = function_exists('instagi_galeri_thumb_url')
                                 ? instagi_galeri_thumb_url('bestie', $item['id'])
-                                : 'assets/bestie/' . $item['gambar'];
+                                : '/assets/bestie/' . $item['gambar'];
                             ?>
                             <article class="bestie-card">
-                                <div class="bestie-card-thumb" data-full="assets/bestie/<?= htmlspecialchars($item['gambar'], ENT_QUOTES, 'UTF-8') ?>" data-title="<?= htmlspecialchars($item['judul'], ENT_QUOTES, 'UTF-8') ?>">
+                                <div class="bestie-card-thumb" data-full="/assets/bestie/<?= htmlspecialchars($item['gambar'], ENT_QUOTES, 'UTF-8') ?>" data-title="<?= htmlspecialchars($item['judul'], ENT_QUOTES, 'UTF-8') ?>">
                                     <img src="<?= htmlspecialchars($bestie_thumb, ENT_QUOTES, 'UTF-8') ?>"
                                          alt="<?= htmlspecialchars($item['judul'] . ' - ' . $item['subjudul'], ENT_QUOTES, 'UTF-8') ?>"
                                          loading="lazy"
@@ -103,7 +103,7 @@ foreach ($bestie_items as $item) {
                                     </span>
                                     <button type="button"
                                             class="bestie-thumb-zoom-btn"
-                                            data-full="assets/bestie/<?= htmlspecialchars($item['gambar'], ENT_QUOTES, 'UTF-8') ?>"
+                                            data-full="/assets/bestie/<?= htmlspecialchars($item['gambar'], ENT_QUOTES, 'UTF-8') ?>"
                                             data-title="<?= htmlspecialchars($item['judul'], ENT_QUOTES, 'UTF-8') ?>"
                                             aria-label="Lihat ukuran penuh <?= htmlspecialchars($item['judul'], ENT_QUOTES, 'UTF-8') ?>">
                                         <?= instagi_ikon('zoom') ?>
@@ -131,7 +131,7 @@ foreach ($bestie_items as $item) {
                                     <div class="bestie-card-actions">
                                         <button type="button"
                                                 class="bestie-btn-view"
-                                                data-full="assets/bestie/<?= htmlspecialchars($item['gambar'], ENT_QUOTES, 'UTF-8') ?>"
+                                                data-full="/assets/bestie/<?= htmlspecialchars($item['gambar'], ENT_QUOTES, 'UTF-8') ?>"
                                                 data-title="<?= htmlspecialchars($item['judul'], ENT_QUOTES, 'UTF-8') ?>">
                                             <span class="bestie-btn-ico" aria-hidden="true"><?= instagi_ikon('zoom') ?></span>
                                             <span>Lihat Flyer</span>

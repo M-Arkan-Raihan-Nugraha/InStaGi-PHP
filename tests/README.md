@@ -6,9 +6,12 @@ tidak hilang.
 
 | Berkas | Kegunaan |
 |--------|----------|
-| `uji_validasi.php` | Uji unit `includes/validasi.php` tanpa database (69 kasus: input sah, ditolak, pesan, format No. HP, aktivitas, tanggal, fuzz) |
-| `uji_e2e.sh` | Uji end-to-end: input form → hasil → login admin → API (get/update/delete/export) → Monitoring, **termasuk memaksa `prepare()` gagal** untuk membuktikan penjaga JSON 500. **Membuat ulang (DROP + CREATE) database uji**, jadi jalankan ini lebih dulu sebelum `uji_fitur.sh`. |
-| `uji_fitur.sh` | Uji fitur permukaan: menu baru, tanpa Login Admin, background lightblue, akun berpassword (buat/pasang/ganti), grafik Monitoring, layanan WhatsApp, Bestie InStaGi, **alamat rapi tanpa `.php`** (bagian H). Bersifat stateful — jalankan setelah `uji_e2e.sh`. |
+| `Unit/uji_validasi.php` | Uji unit `includes/services/validasi.php` tanpa database (71 kasus: input sah, ditolak, pesan, format No. HP, aktivitas, tanggal, fuzz) |
+| `Unit/uji_gizi.php` | Uji unit perhitungan rumus IMT, kalori, dan ambang batas gizi (14 kasus) |
+| `Unit/uji_bestie.php` | Uji unit data etalase mitra Bestie InStaGi dan integritas berkas WebP (73 kasus) |
+| `Unit/uji_galeri.php` | Uji unit seluruh materi galeri informasi gizi (Leaflet, Menu, Resep, Panduan, Tips Bugar, DBMP) dan keterhubungan aset WebP (180 kasus) |
+| `E2E/uji_e2e.sh` | Uji end-to-end: input form → hasil → login admin → API (get/update/delete/export) → Monitoring, **termasuk memaksa `prepare()` gagal** untuk membuktikan penjaga JSON 500. **Membuat ulang (DROP + CREATE) database uji**, jadi jalankan ini lebih dulu sebelum `uji_fitur.sh`. |
+| `E2E/uji_fitur.sh` | Uji fitur permukaan: menu baru, tanpa Login Admin, background lightblue, akun berpassword (buat/pasang/ganti), grafik Monitoring, layanan WhatsApp, Bestie InStaGi, **alamat rapi tanpa `.php`** (bagian H). Bersifat stateful — jalankan setelah `uji_e2e.sh`. |
 | `dev-router.php` | Peniru bagian 0d `.htaccess` untuk server bawaan PHP (`php -S`), supaya alamat rapi juga bisa diuji lokal. Produksi tidak memakainya. |
 
 ## Cara menjalankan (Windows + XAMPP)

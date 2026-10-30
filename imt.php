@@ -218,7 +218,7 @@ require __DIR__ . '/includes/views/layout_head.php';
 ?>
     <div class="container">
         <div style="text-align: center;">
-            <img src="assets/logo.webp" alt="InStaGi Logo" width="512" height="466" style="max-width: 150px; height: auto; margin-bottom: 10px;">
+            <img src="/assets/logo.webp" alt="InStaGi Logo" width="512" height="466" style="max-width: 150px; height: auto; margin-bottom: 10px;">
         </div>
         <h1>Cek Status Gizi Anda</h1>
 

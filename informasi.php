@@ -17,7 +17,7 @@ require_once 'includes/content/leaflet.php';
 require_once 'includes/content/menu.php';
 require_once 'includes/content/resep.php';
 require_once 'includes/content/panduan.php';
-require_once 'includes/content/aktivitas.php';
+require_once 'includes/content/tips_bugar.php';
 require_once 'includes/content/dbmp.php';
 require_once 'includes/content/bestie.php';
 
@@ -25,11 +25,11 @@ $nav_active = 'informasi';
 
 // --- Kumpulkan daftar siap tampil untuk tiap galeri ---
 // (helper bersama: includes/galeri_aset.php — hanya entri yang gambarnya ada)
-$leaflets  = instagi_galeri_daftar_tampil('leaflet', instagi_leaflet_list());
-$menus     = instagi_galeri_daftar_tampil('menu', instagi_menu_list(), 'instagi_menu_slug');
-$reseps    = instagi_resep_daftar();
-$panduans  = instagi_panduan_daftar();
-$aktivitas = instagi_aktivitas_daftar();
+$leaflets   = instagi_galeri_daftar_tampil('leaflet', instagi_leaflet_list());
+$menus      = instagi_galeri_daftar_tampil('menu', instagi_menu_list(), 'instagi_menu_slug');
+$reseps     = instagi_resep_daftar();
+$panduans   = instagi_panduan_daftar();
+$tips_bugar = instagi_tips_bugar_daftar();
 
 // --- DBMP (satu berkas PDF) ---
 $dbmp_pdf   = instagi_dbmp_pdf();
@@ -58,7 +58,7 @@ require __DIR__ . '/includes/views/layout_head.php';
                 <a href="#dbmp">DBMP</a>
                 <a href="#menu">Contoh Menu</a>
                 <a href="#resep">Kumpulan Resep</a>
-                <a href="#aktivitas">Tips Bugar</a>
+                <a href="#tips-bugar">Tips Bugar</a>
             </nav>
 
             <!-- ===== 1. LEAFLET INFORMASI GIZI ===== -->
@@ -135,11 +135,12 @@ require __DIR__ . '/includes/views/galeri_kartu.php';
 ?>
 
             <!-- ===== 6. TIPS BUGAR ===== -->
+            <span id="aktivitas" style="display:none;" aria-hidden="true"></span>
 <?php
-$kartu_id     = 'aktivitas';
+$kartu_id     = 'tips-bugar';
 $kartu_judul  = 'Tips Bugar';
 $kartu_intro  = 'Panduan dan infografis kebugaran, peregangan harian, serta aktivitas fisik untuk mendukung gaya hidup sehat dan bugar.';
-$kartu_daftar = $aktivitas;
+$kartu_daftar = $tips_bugar;
 $kartu_alt    = 'Tips Bugar';
 $kartu_kosong = 'Belum ada materi tips bugar yang tersedia.';
 require __DIR__ . '/includes/views/galeri_kartu.php';
