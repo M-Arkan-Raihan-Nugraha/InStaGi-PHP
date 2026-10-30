@@ -12,7 +12,7 @@ $nav_active = 'admin';
 
 // Sisipkan file koneksi database dan modul gizi
 require_once 'includes/core/db.php';
-require_once 'includes/services/gizi.php';
+require_once 'includes/services/nutrition.php';
 
 // Ambil semua data riwayat dari database, urutkan berdasarkan yang terbaru
 $riwayat_result = $koneksi->query("SELECT * FROM imt_history ORDER BY tanggal DESC, id DESC");

@@ -13,7 +13,7 @@
  * CATATAN: tautan "Login Admin" tidak lagi ditampilkan (lihat includes/nav.php).
  */
 require_once __DIR__ . '/includes/core/session.php';
-require_once __DIR__ . '/includes/views/ikon.php';
+require_once __DIR__ . '/includes/views/icon.php';
 
 $nav_active = '';
 

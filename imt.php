@@ -7,14 +7,14 @@ require_once 'includes/core/session.php';
 require_once 'includes/core/db.php';
 
 // Modul perhitungan gizi (satu sumber kebenaran untuk IMT/kalori/saran).
-require_once 'includes/services/gizi.php';
+require_once 'includes/services/nutrition.php';
 
 // Modul akun responden (1 nama + 1 nomor HP = 1 akun) untuk menu Monitoring.
-require_once 'includes/services/responden.php';
+require_once 'includes/services/respondent.php';
 
 // Modul validasi input (satu sumber aturan; dipakai juga oleh API admin
 // api/update_record.php agar aturan form publik dan edit admin sama).
-require_once 'includes/services/validasi.php';
+require_once 'includes/services/validation.php';
 
 $nav_active = 'hitung';
 

@@ -5,4 +5,4 @@ Folder Flyer Mitra & Sponsor "Bestie InStaGi"
 3. Daftarkan flyer baru di file: includes/content/bestie.php pada fungsi instagi_bestie_daftar().
    Isi data meliputi: id, kategori, kategori_label, judul, subjudul, deskripsi, lokasi, harga, wa, wa_text, gambar.
 4. Kategori yang didukung: travel, property, kuliner, minimarket, kesehatan.
-5. Thumbnail otomatis dibuat ke subfolder thumbs/ via skrip CLI: tools/galeri_build_thumbs.php.
+5. Thumbnail otomatis dibuat ke subfolder thumbs/ via skrip CLI: tools/build_gallery_thumbs.php.

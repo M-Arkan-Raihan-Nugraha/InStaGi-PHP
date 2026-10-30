@@ -18,7 +18,7 @@
  * partial ini aman dijalankan berkali-kali.
  */
 
-require_once __DIR__ . '/ikon.php';
+require_once __DIR__ . '/icon.php';
 
 if (!function_exists('instagi_nav_items')) {
     function instagi_nav_items()

@@ -16,11 +16,11 @@
  */
 require_once 'includes/core/session.php';
 require_once 'includes/core/db.php';
-require_once 'includes/services/responden.php';
-require_once 'includes/services/validasi.php';
-require_once 'includes/views/ikon.php';
+require_once 'includes/services/respondent.php';
+require_once 'includes/services/validation.php';
+require_once 'includes/views/icon.php';
 require_once 'includes/services/format.php';
-require_once 'includes/services/gizi.php';
+require_once 'includes/services/nutrition.php';
 
 $nav_active = 'monitoring';
 

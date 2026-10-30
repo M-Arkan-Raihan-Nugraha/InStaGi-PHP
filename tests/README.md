@@ -6,13 +6,13 @@ tidak hilang.
 
 | Berkas | Kegunaan |
 |--------|----------|
-| `Unit/uji_validasi.php` | Uji unit `includes/services/validasi.php` tanpa database (71 kasus: input sah, ditolak, pesan, format No. HP, aktivitas, tanggal, fuzz) |
-| `Unit/uji_gizi.php` | Uji unit perhitungan rumus IMT, kalori, dan ambang batas gizi (14 kasus) |
-| `Unit/uji_bestie.php` | Uji unit data etalase mitra Bestie InStaGi dan integritas berkas WebP (73 kasus) |
-| `Unit/uji_galeri.php` | Uji unit seluruh materi galeri informasi gizi (Leaflet, Menu, Resep, Panduan, Tips Bugar, DBMP) dan keterhubungan aset WebP (180 kasus) |
-| `E2E/uji_e2e.sh` | Uji end-to-end: input form → hasil → login admin → API (get/update/delete/export) → Monitoring, **termasuk memaksa `prepare()` gagal** untuk membuktikan penjaga JSON 500. **Membuat ulang (DROP + CREATE) database uji**, jadi jalankan ini lebih dulu sebelum `uji_fitur.sh`. |
-| `E2E/uji_fitur.sh` | Uji fitur permukaan: menu baru, tanpa Login Admin, background lightblue, akun berpassword (buat/pasang/ganti), grafik Monitoring, layanan WhatsApp, Bestie InStaGi, **alamat rapi tanpa `.php`** (bagian H). Bersifat stateful — jalankan setelah `uji_e2e.sh`. |
-| `dev-router.php` | Peniru bagian 0d `.htaccess` untuk server bawaan PHP (`php -S`), supaya alamat rapi juga bisa diuji lokal. Produksi tidak memakainya. |
+| `Unit/test_validation.php` | Uji unit `includes/services/validation.php` tanpa database (71 kasus: input sah, ditolak, pesan, format No. HP, aktivitas, tanggal, fuzz) |
+| `Unit/test_nutrition.php` | Uji unit perhitungan rumus IMT, kalori, dan ambang batas gizi (14 kasus) |
+| `Unit/test_bestie.php` | Uji unit data etalase mitra Bestie InStaGi dan integritas berkas WebP (73 kasus) |
+| `Unit/test_gallery.php` | Uji unit seluruh materi galeri informasi gizi (Leaflet, Menu, Resep, Panduan, Tips Bugar, DBMP) dan keterhubungan aset WebP (180 kasus) |
+| `E2E/test_e2e.sh` | Uji end-to-end: input form → hasil → login admin → API (get/update/delete/export) → Monitoring, **termasuk memaksa `prepare()` gagal** untuk membuktikan penjaga JSON 500. **Membuat ulang (DROP + CREATE) database uji**, jadi jalankan ini lebih dulu sebelum `test_features.sh`. |
+| `E2E/test_features.sh` | Uji fitur permukaan: menu baru, tanpa Login Admin, background lightblue, akun berpassword (buat/pasang/ganti), grafik Monitoring, layanan WhatsApp, Bestie InStaGi, **alamat rapi tanpa `.php`** (bagian H). Bersifat stateful — jalankan setelah `test_e2e.sh`. |
+| `dev_router.php` | Peniru bagian 0d `.htaccess` untuk server bawaan PHP (`php -S`), supaya alamat rapi juga bisa diuji lokal. Produksi tidak memakainya. |
 
 ## Cara menjalankan (Windows + XAMPP)
 
@@ -22,19 +22,22 @@ tidak hilang.
   --defaults-file="D:/SMAKZIE/PRODUKTIF/XAMPP/instagi-db/my.ini" --console
 
 # 2) Nyalakan server PHP dengan database UJI + admin uji (jangan DB produksi!)
-#    PENTING: pakai dev-router.php supaya alamat rapi (/imt, /monitoring, …) ikut
+#    PENTING: pakai dev_router.php supaya alamat rapi (/imt, /monitoring, …) ikut
 #    berlaku — server bawaan PHP tidak membaca .htaccess.
 cd "D:/Codingan/Instagi/V3 PHP Native"
 INSTAGI_DB_HOST=127.0.0.1 INSTAGI_DB_USER=root INSTAGI_DB_PASS= \
 INSTAGI_DB_NAME=instagi_v3_uji INSTAGI_DB_PORT=3306 \
 INSTAGI_ADMIN_USER=admin_uji \
 INSTAGI_ADMIN_HASH='<hash bcrypt dari password uji>' \
-/d/SMAKZIE/PRODUKTIF/XAMPP/php/php -S 127.0.0.1:8099 docs/uji/dev-router.php
+/d/SMAKZIE/PRODUKTIF/XAMPP/php/php -S 127.0.0.1:8099 tests/dev_router.php
 
 # 3) Jalankan uji (dari Git Bash), urutannya penting:
-php docs/uji/uji_validasi.php
-bash docs/uji/uji_e2e.sh      # membuat ulang database uji sendiri
-bash docs/uji/uji_fitur.sh    # stateful: jalankan SETELAH uji_e2e.sh
+php tests/Unit/test_validation.php
+php tests/Unit/test_nutrition.php
+php tests/Unit/test_bestie.php
+php tests/Unit/test_gallery.php
+bash tests/E2E/test_e2e.sh      # membuat ulang database uji sendiri
+bash tests/E2E/test_features.sh # stateful: jalankan SETELAH test_e2e.sh
 ```
 
 ### Menguji `.htaccess` dengan Apache sungguhan (opsional, lebih kuat)

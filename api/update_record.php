@@ -2,11 +2,11 @@
 require_once '../includes/core/session.php';
 // Modul perhitungan gizi (dipakai bersama imt.php agar hasil selalu sama).
 // >>> RUMUS TIDAK DIUBAH: gizi.php dipakai apa adanya.
-require_once '../includes/services/gizi.php';
+require_once '../includes/services/nutrition.php';
 // Modul akun responden: saat admin mengedit, tautan akun tetap konsisten.
-require_once '../includes/services/responden.php';
+require_once '../includes/services/respondent.php';
 // Modul validasi input: aturan SAMA dengan form publik imt.php.
-require_once '../includes/services/validasi.php';
+require_once '../includes/services/validation.php';
 
 header('Content-Type: application/json');
 

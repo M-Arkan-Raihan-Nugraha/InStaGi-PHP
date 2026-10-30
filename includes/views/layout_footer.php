@@ -12,7 +12,7 @@
  * hanya posisinya relatif terhadap footer yang tidak terlihat.)
  */
 ?>
-<?php require_once __DIR__ . '/ikon.php'; ?>
+<?php require_once __DIR__ . '/icon.php'; ?>
     <footer class="main-footer">
         <p>Copyright © 2026 InStaGi | Created With <span class="ikon-hati"><?= instagi_ikon('hati') ?></span> · <a href="/login" class="footer-admin-link">Admin</a></p>
     </footer>
