@@ -110,8 +110,23 @@ require __DIR__ . '/includes/views/gallery_card.php';
                     <div class="info-grid">
                         <article class="info-card">
                             <?php if ($dbmp_cover !== null): ?>
-                                <img src="<?= htmlspecialchars($dbmp_cover, ENT_QUOTES, 'UTF-8') ?>"
-                                     alt="Sampul DBMP" decoding="async">
+                                <div class="info-card-thumb"
+                                     data-full="<?= htmlspecialchars($dbmp_cover, ENT_QUOTES, 'UTF-8') ?>"
+                                     data-title="Daftar Bahan Makanan Penukar (DBMP)"
+                                     data-download="DBMP-InStaGi-Sampul.webp"
+                                     data-download-text="Unduh Sampul DBMP">
+                                    <img src="<?= htmlspecialchars($dbmp_cover, ENT_QUOTES, 'UTF-8') ?>"
+                                         alt="Sampul DBMP" loading="lazy" decoding="async">
+                                    <button type="button"
+                                            class="info-thumb-zoom-btn"
+                                            data-full="<?= htmlspecialchars($dbmp_cover, ENT_QUOTES, 'UTF-8') ?>"
+                                            data-title="Daftar Bahan Makanan Penukar (DBMP)"
+                                            data-download="DBMP-InStaGi-Sampul.webp"
+                                            data-download-text="Unduh Sampul DBMP"
+                                            aria-label="Lihat sampul DBMP">
+                                        <?= instagi_ikon('zoom') ?>
+                                    </button>
+                                </div>
                             <?php endif; ?>
                             <div class="info-card-body">
                                 <span class="info-tag">Panduan Diet</span>

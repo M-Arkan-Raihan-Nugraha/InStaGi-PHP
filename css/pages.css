@@ -385,6 +385,7 @@
     gap: 18px;
 }
 
+/* Kartu Galeri Informasi Gizi */
 .info-card {
     background: #fff;
     border: 1px solid var(--border-color);
@@ -393,14 +394,61 @@
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.04);
     display: flex;
     flex-direction: column;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
 }
 
-.info-card img {
+.info-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.09);
+}
+
+.info-card-thumb {
+    position: relative;
     width: 100%;
-    height: 180px;
+    height: 190px;
+    background: #f3f4f6;
+    cursor: pointer;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.info-card-thumb img {
+    width: 100%;
+    height: 100%;
     object-fit: cover;
+    background: #f1f5f9;
     display: block;
-    background: #f2f2f2;
+    transition: transform 0.3s ease;
+}
+
+.info-card:hover .info-card-thumb img {
+    transform: scale(1.04);
+}
+
+.info-thumb-zoom-btn {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    background: rgba(15, 23, 42, 0.7);
+    color: #ffffff;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1em;
+    cursor: pointer;
+    transition: background 0.2s ease, transform 0.2s ease;
+    z-index: 2;
+}
+
+.info-thumb-zoom-btn:hover {
+    background: rgba(15, 23, 42, 0.95);
+    transform: scale(1.08);
 }
 
 .info-card-body {
@@ -438,26 +486,60 @@
     margin-top: auto;
     display: flex;
     gap: 8px;
-    flex-wrap: wrap;
     padding-top: 6px;
 }
 
+.info-card-actions button,
 .info-card-actions a {
     flex: 1;
-    text-align: center;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
     padding: 8px 10px;
     border-radius: 8px;
     text-decoration: none;
     font-weight: 600;
     font-size: 0.85em;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-sizing: border-box;
+    font-family: inherit;
+}
+
+.info-card-actions .info-btn-view,
+.info-card-actions a:not(.alt) {
     background: var(--primary-color);
-    color: #fff;
+    color: #ffffff;
+    border: 1.5px solid var(--primary-color);
+}
+
+.info-card-actions .info-btn-view:hover,
+.info-card-actions a:not(.alt):hover {
+    background: #c0392b;
+    border-color: #c0392b;
 }
 
 .info-card-actions a.alt {
-    background: #fff;
+    background: #ffffff;
     color: var(--primary-color);
-    border: 1px solid var(--primary-color);
+    border: 1.5px solid var(--primary-color);
+}
+
+.info-card-actions a.alt:hover {
+    background: #fdf2f4;
+}
+
+.info-btn-ico {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+}
+
+.info-btn-ico svg {
+    width: 14px;
+    height: 14px;
 }
 
 .info-empty {
@@ -1150,8 +1232,9 @@
     background: #fff7ed;
 }
 
-/* Modal Lightbox */
-.bestie-modal {
+/* Modal Lightbox (Terpadu: Bestie & Informasi Gizi) */
+.bestie-modal,
+.info-modal {
     position: fixed;
     inset: 0;
     z-index: 99999;
@@ -1163,23 +1246,26 @@
     transition: opacity 0.25s ease, visibility 0.25s ease;
     padding: 16px;
     box-sizing: border-box;
+    touch-action: pan-y;
 }
 
-.bestie-modal.is-open {
+.bestie-modal.is-open,
+.info-modal.is-open {
     opacity: 1;
     visibility: visible;
 }
 
 body.bestie-modal-active {
     overflow: hidden;
+    touch-action: none;
 }
 
 .bestie-modal-backdrop {
     position: absolute;
     inset: 0;
     background: rgba(15, 23, 42, 0.78);
-    backdrop-filter: blur(4px);
-    -webkit-backdrop-filter: blur(4px);
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
 }
 
 .bestie-modal-box {
@@ -1187,13 +1273,21 @@ body.bestie-modal-active {
     z-index: 10;
     background: #ffffff;
     border-radius: 16px;
-    max-width: 600px;
+    max-width: 820px;
     max-height: 92vh;
     width: 100%;
     display: flex;
     flex-direction: column;
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.35);
+    box-shadow: 0 24px 48px rgba(0, 0, 0, 0.38);
     overflow: hidden;
+    overscroll-behavior: contain;
+    transform: scale(0.96);
+    transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.bestie-modal.is-open .bestie-modal-box,
+.info-modal.is-open .bestie-modal-box {
+    transform: scale(1);
 }
 
 .bestie-modal-close {
@@ -1212,11 +1306,12 @@ body.bestie-modal-active {
     font-size: 1.1em;
     cursor: pointer;
     z-index: 20;
-    transition: background 0.2s ease;
+    transition: background 0.2s ease, transform 0.2s ease;
 }
 
 .bestie-modal-close:hover {
-    background: rgba(15, 23, 42, 0.9);
+    background: rgba(15, 23, 42, 0.95);
+    transform: scale(1.08);
 }
 
 .bestie-modal-header {
@@ -1228,26 +1323,35 @@ body.bestie-modal-active {
 .bestie-modal-title {
     margin: 0;
     font-size: 1.05em;
+    font-weight: 700;
     color: #1e293b;
     padding-right: 36px;
+    line-height: 1.4;
 }
 
 .bestie-modal-body {
-    padding: 10px;
+    padding: 12px;
     overflow-y: auto;
+    overscroll-behavior: contain;
+    -webkit-overflow-scrolling: touch;
     display: flex;
     align-items: center;
     justify-content: center;
     background: #0f172a;
-    max-height: 68vh;
+    max-height: calc(88vh - 120px);
+    flex: 1;
+    min-height: 0;
 }
 
 .bestie-modal-body img {
     max-width: 100%;
-    max-height: 65vh;
+    max-height: calc(88vh - 144px);
+    width: auto;
+    height: auto;
     object-fit: contain;
     border-radius: 6px;
     display: block;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
 }
 
 .bestie-modal-footer {
@@ -1262,6 +1366,7 @@ body.bestie-modal-active {
 .bestie-modal-btn {
     display: inline-flex;
     align-items: center;
+    justify-content: center;
     padding: 8px 16px;
     border-radius: 8px;
     font-size: 0.85em;
@@ -1270,6 +1375,7 @@ body.bestie-modal-active {
     background: var(--primary-color);
     color: #ffffff;
     transition: background 0.2s ease;
+    box-sizing: border-box;
 }
 
 .bestie-modal-btn:hover {
@@ -1284,6 +1390,7 @@ body.bestie-modal-active {
 
 .bestie-modal-btn.alt:hover {
     background: #f3f4f6;
+    border-color: #9ca3af;
 }
 
 /* --- Monitoring: ringkasan, grafik, keamanan akun --------------------------- */
@@ -1542,9 +1649,7 @@ body.bestie-modal-active {
     .password-form-actions .btn-primary {
         width: 100%;
     }
-}
 
-@media (max-width: 600px) {
     .mon-chart-wrap {
         height: 260px;
     }
@@ -1583,6 +1688,76 @@ body.bestie-modal-active {
         width: 100%;
         justify-content: center;
         box-sizing: border-box;
+    }
+
+    /* Modal Lightbox Responsif di Layar Ponsel */
+    .bestie-modal,
+    .info-modal {
+        padding: 8px;
+    }
+
+    .bestie-modal-box {
+        max-width: 100%;
+        max-height: 96vh;
+        border-radius: 14px;
+    }
+
+    .bestie-modal-header {
+        padding: 10px 14px;
+    }
+
+    .bestie-modal-title {
+        font-size: 0.95em;
+        padding-right: 32px;
+        line-height: 1.35;
+    }
+
+    .bestie-modal-close {
+        top: 8px;
+        right: 8px;
+        width: 32px;
+        height: 32px;
+        font-size: 1em;
+    }
+
+    .bestie-modal-body {
+        padding: 8px;
+        max-height: calc(88vh - 105px);
+    }
+
+    .bestie-modal-body img {
+        max-height: calc(88vh - 121px);
+    }
+
+    .bestie-modal-footer {
+        padding: 10px 14px;
+        gap: 8px;
+    }
+
+    .bestie-modal-btn {
+        flex: 1;
+        justify-content: center;
+        padding: 8px 10px;
+        font-size: 0.82em;
+        text-align: center;
+    }
+
+    .info-card-thumb {
+        height: 170px;
+    }
+}
+
+@media (max-width: 380px) {
+    .info-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .info-card-actions {
+        flex-direction: column;
+    }
+
+    .bestie-modal-footer {
+        flex-direction: column;
     }
 }
 

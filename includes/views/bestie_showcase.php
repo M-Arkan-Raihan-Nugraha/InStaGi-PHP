@@ -93,7 +93,11 @@ foreach ($bestie_items as $item) {
                                 : '/assets/bestie/' . $item['gambar'];
                             ?>
                             <article class="bestie-card">
-                                <div class="bestie-card-thumb" data-full="/assets/bestie/<?= htmlspecialchars($item['gambar'], ENT_QUOTES, 'UTF-8') ?>" data-title="<?= htmlspecialchars($item['judul'], ENT_QUOTES, 'UTF-8') ?>">
+                                <div class="bestie-card-thumb"
+                                     data-full="/assets/bestie/<?= htmlspecialchars($item['gambar'], ENT_QUOTES, 'UTF-8') ?>"
+                                     data-title="<?= htmlspecialchars($item['judul'], ENT_QUOTES, 'UTF-8') ?>"
+                                     data-download="<?= htmlspecialchars($item['gambar'], ENT_QUOTES, 'UTF-8') ?>"
+                                     data-download-text="Unduh Flyer">
                                     <img src="<?= htmlspecialchars($bestie_thumb, ENT_QUOTES, 'UTF-8') ?>"
                                          alt="<?= htmlspecialchars($item['judul'] . ' - ' . $item['subjudul'], ENT_QUOTES, 'UTF-8') ?>"
                                          loading="lazy"
@@ -105,6 +109,8 @@ foreach ($bestie_items as $item) {
                                             class="bestie-thumb-zoom-btn"
                                             data-full="/assets/bestie/<?= htmlspecialchars($item['gambar'], ENT_QUOTES, 'UTF-8') ?>"
                                             data-title="<?= htmlspecialchars($item['judul'], ENT_QUOTES, 'UTF-8') ?>"
+                                            data-download="<?= htmlspecialchars($item['gambar'], ENT_QUOTES, 'UTF-8') ?>"
+                                            data-download-text="Unduh Flyer"
                                             aria-label="Lihat ukuran penuh <?= htmlspecialchars($item['judul'], ENT_QUOTES, 'UTF-8') ?>">
                                         <?= instagi_ikon('zoom') ?>
                                     </button>
@@ -132,7 +138,9 @@ foreach ($bestie_items as $item) {
                                         <button type="button"
                                                 class="bestie-btn-view"
                                                 data-full="/assets/bestie/<?= htmlspecialchars($item['gambar'], ENT_QUOTES, 'UTF-8') ?>"
-                                                data-title="<?= htmlspecialchars($item['judul'], ENT_QUOTES, 'UTF-8') ?>">
+                                                data-title="<?= htmlspecialchars($item['judul'], ENT_QUOTES, 'UTF-8') ?>"
+                                                data-download="<?= htmlspecialchars($item['gambar'], ENT_QUOTES, 'UTF-8') ?>"
+                                                data-download-text="Unduh Flyer">
                                             <span class="bestie-btn-ico" aria-hidden="true"><?= instagi_ikon('zoom') ?></span>
                                             <span>Lihat Flyer</span>
                                         </button>
@@ -187,25 +195,25 @@ foreach ($bestie_items as $item) {
         </div>
     </div>
 
-    <!-- ===== MODAL LIGHTBOX PRATINJAU FLYER ===== -->
-    <div id="bestie-modal" class="bestie-modal" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="bestie-modal-title">
+    <!-- ===== MODAL LIGHTBOX PRATINJAU MATERI & FLYER ===== -->
+    <div id="bestie-modal" class="bestie-modal info-modal" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="bestie-modal-title">
         <div class="bestie-modal-backdrop" id="bestie-modal-backdrop"></div>
         <div class="bestie-modal-box">
-            <button type="button" class="bestie-modal-close" id="bestie-modal-close" aria-label="Tutup pratinjau flyer">
+            <button type="button" class="bestie-modal-close" id="bestie-modal-close" aria-label="Tutup pratinjau">
                 <?= instagi_ikon('tutup') ?>
             </button>
             <div class="bestie-modal-header">
-                <h4 id="bestie-modal-title" class="bestie-modal-title">Pratinjau Flyer</h4>
+                <h4 id="bestie-modal-title" class="bestie-modal-title">Pratinjau Materi</h4>
             </div>
             <div class="bestie-modal-body">
-                <img id="bestie-modal-img" src="" alt="Pratinjau Flyer Mitra" decoding="async">
+                <img id="bestie-modal-img" src="" alt="Pratinjau Materi InStaGi" decoding="async">
             </div>
             <div class="bestie-modal-footer">
                 <a id="bestie-modal-tab" href="" target="_blank" rel="noopener" class="bestie-modal-btn">
                     <span>Buka Ukuran Asli</span>
                 </a>
                 <a id="bestie-modal-dl" href="" download class="bestie-modal-btn alt">
-                    <span>Unduh Flyer</span>
+                    <span id="bestie-modal-dl-text">Unduh Berkas</span>
                 </a>
             </div>
         </div>
@@ -289,22 +297,34 @@ foreach ($bestie_items as $item) {
         tracks.forEach(updateArrowState);
     });
 
-    // 2. Modal Lightbox
+    // 3. Modal Lightbox Terpadu (Bestie InStaGi & Informasi Gizi)
     var modal = document.getElementById('bestie-modal');
     var modalImg = document.getElementById('bestie-modal-img');
     var modalTitle = document.getElementById('bestie-modal-title');
     var modalTab = document.getElementById('bestie-modal-tab');
     var modalDl = document.getElementById('bestie-modal-dl');
+    var modalDlText = document.getElementById('bestie-modal-dl-text');
     var closeBtn = document.getElementById('bestie-modal-close');
     var backdrop = document.getElementById('bestie-modal-backdrop');
 
-    function openModal(fullSrc, title) {
-        if (!modal || !modalImg) return;
+    function openModal(fullSrc, title, downloadName, downloadText) {
+        if (!modal || !modalImg || !fullSrc) return;
         modalImg.src = fullSrc;
-        modalImg.alt = title || 'Flyer Bestie InStaGi';
-        if (modalTitle) modalTitle.textContent = title || 'Pratinjau Flyer';
+        modalImg.alt = title || 'Materi InStaGi';
+        if (modalTitle) modalTitle.textContent = title || 'Pratinjau Materi';
         if (modalTab) modalTab.href = fullSrc;
-        if (modalDl) modalDl.href = fullSrc;
+        if (modalDl) {
+            modalDl.href = fullSrc;
+            var dlName = downloadName || (fullSrc ? fullSrc.split('/').pop().split('?')[0] : '');
+            if (dlName) {
+                modalDl.setAttribute('download', dlName);
+            } else {
+                modalDl.removeAttribute('download');
+            }
+        }
+        if (modalDlText) {
+            modalDlText.textContent = downloadText || 'Unduh Berkas';
+        }
         modal.classList.add('is-open');
         modal.setAttribute('aria-hidden', 'false');
         document.body.classList.add('bestie-modal-active');
@@ -317,22 +337,23 @@ foreach ($bestie_items as $item) {
         document.body.classList.remove('bestie-modal-active');
     }
 
-    document.querySelectorAll('.bestie-btn-view, .bestie-thumb-zoom-btn').forEach(function(el) {
-        el.addEventListener('click', function(e) {
-            e.stopPropagation();
-            var src = this.getAttribute('data-full');
-            var title = this.getAttribute('data-title');
-            openModal(src, title);
-        });
-    });
+    // Tangani semua pemicu lightbox pada Bestie maupun Galeri Informasi Gizi (Event Delegation)
+    document.addEventListener('click', function(e) {
+        var trigger = e.target.closest('.bestie-btn-view, .bestie-thumb-zoom-btn, .bestie-card-thumb, .info-btn-view, .info-thumb-zoom-btn, .info-card-thumb');
+        if (!trigger) return;
 
-    document.querySelectorAll('.bestie-card-thumb').forEach(function(thumb) {
-        thumb.addEventListener('click', function(e) {
-            if (e.target.closest('.bestie-thumb-zoom-btn')) return;
-            var src = this.getAttribute('data-full');
-            var title = this.getAttribute('data-title');
-            openModal(src, title);
-        });
+        // Cegah klik ganda jika tombol zoom di dalam thumbnail ditekan
+        if (trigger.classList.contains('bestie-card-thumb') || trigger.classList.contains('info-card-thumb')) {
+            if (e.target.closest('.bestie-thumb-zoom-btn, .info-thumb-zoom-btn')) return;
+        }
+
+        e.preventDefault();
+        e.stopPropagation();
+        var src = trigger.getAttribute('data-full');
+        var title = trigger.getAttribute('data-title');
+        var downloadName = trigger.getAttribute('data-download');
+        var downloadText = trigger.getAttribute('data-download-text');
+        openModal(src, title, downloadName, downloadText);
     });
 
     if (closeBtn) closeBtn.addEventListener('click', closeModal);
@@ -343,6 +364,12 @@ foreach ($bestie_items as $item) {
             closeModal();
         }
     });
+
+    // Expose fungsi agar bisa dipanggil secara programatis bila diperlukan
+    window.instagiLightbox = {
+        open: openModal,
+        close: closeModal
+    };
 })();
 </script>
 

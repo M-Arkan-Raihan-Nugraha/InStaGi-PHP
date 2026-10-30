@@ -2,19 +2,18 @@
 /**
  * Partial SATU BAGIAN galeri di halaman Informasi Gizi
  * -----------------------------------------------------------------------------
- * Sebelumnya markup kartu (gambar + tag + judul + ringkasan + tombol Lihat/Unduh)
- * disalin untuk tiap galeri. Sekarang cukup satu tempat ini; halaman Informasi
- * Gizi memanggilnya empat kali (leaflet, contoh menu, resep, panduan).
+ * Menampilkan kartu materi edukasi gizi dengan thumbnail interaktif, tombol zoom,
+ * dan integrasi modal lightbox yang seragam dengan Bestie InStaGi.
  *
  * CARA PAKAI — isi variabel berikut sebelum `require`:
  *
- *   $kartu_id     = 'resep';                       // id bagian (untuk tautan #resep)
+ *   $kartu_id     = 'resep';                       // id bagian (untuk tautan / filter #resep)
  *   $kartu_judul  = 'Kumpulan Resep';
  *   $kartu_intro  = 'Lembar resep bergambar dari InStaGi ...';
  *   $kartu_daftar = $reseps;                       // hasil instagi_galeri_daftar_tampil()
  *   $kartu_alt    = 'Resep';                       // awalan teks alternatif gambar
  *   $kartu_kosong = 'Belum ada resep yang tersedia.';
- *   require __DIR__ . '/includes/galeri_kartu.php';
+ *   require __DIR__ . '/includes/views/gallery_card.php';
  *
  * Semua teks dicetak lewat htmlspecialchars(), jadi data dari modul tetap aman.
  */
@@ -36,17 +35,39 @@ $kartu_kosong = isset($kartu_kosong) ? $kartu_kosong : 'Belum ada materi yang te
                 <div class="info-grid">
                     <?php foreach ($kartu_daftar as $kt): ?>
                     <article class="info-card">
-                        <a href="<?= htmlspecialchars($kt['full'], ENT_QUOTES, 'UTF-8') ?>" target="_blank" rel="noopener">
+                        <div class="info-card-thumb"
+                             data-full="<?= htmlspecialchars($kt['full'], ENT_QUOTES, 'UTF-8') ?>"
+                             data-title="<?= htmlspecialchars($kt['judul'], ENT_QUOTES, 'UTF-8') ?>"
+                             data-download="<?= htmlspecialchars($kt['unduh'], ENT_QUOTES, 'UTF-8') ?>"
+                             data-download-text="Unduh <?= htmlspecialchars($kartu_alt, ENT_QUOTES, 'UTF-8') ?>">
                             <img src="<?= htmlspecialchars($kt['thumb'], ENT_QUOTES, 'UTF-8') ?>"
                                  alt="<?= htmlspecialchars(trim($kartu_alt . ' ' . $kt['judul']), ENT_QUOTES, 'UTF-8') ?>"
+                                 loading="lazy"
                                  decoding="async">
-                        </a>
+                            <button type="button"
+                                    class="info-thumb-zoom-btn"
+                                    data-full="<?= htmlspecialchars($kt['full'], ENT_QUOTES, 'UTF-8') ?>"
+                                    data-title="<?= htmlspecialchars($kt['judul'], ENT_QUOTES, 'UTF-8') ?>"
+                                    data-download="<?= htmlspecialchars($kt['unduh'], ENT_QUOTES, 'UTF-8') ?>"
+                                    data-download-text="Unduh <?= htmlspecialchars($kartu_alt, ENT_QUOTES, 'UTF-8') ?>"
+                                    aria-label="Lihat ukuran penuh <?= htmlspecialchars($kt['judul'], ENT_QUOTES, 'UTF-8') ?>">
+                                <?= instagi_ikon('zoom') ?>
+                            </button>
+                        </div>
                         <div class="info-card-body">
                             <span class="info-tag"><?= htmlspecialchars($kt['tag'], ENT_QUOTES, 'UTF-8') ?></span>
                             <h3><?= htmlspecialchars($kt['judul'], ENT_QUOTES, 'UTF-8') ?></h3>
                             <p class="info-desc"><?= htmlspecialchars($kt['ringkas'], ENT_QUOTES, 'UTF-8') ?></p>
                             <div class="info-card-actions">
-                                <a href="<?= htmlspecialchars($kt['full'], ENT_QUOTES, 'UTF-8') ?>" target="_blank" rel="noopener">Lihat</a>
+                                <button type="button"
+                                        class="info-btn-view"
+                                        data-full="<?= htmlspecialchars($kt['full'], ENT_QUOTES, 'UTF-8') ?>"
+                                        data-title="<?= htmlspecialchars($kt['judul'], ENT_QUOTES, 'UTF-8') ?>"
+                                        data-download="<?= htmlspecialchars($kt['unduh'], ENT_QUOTES, 'UTF-8') ?>"
+                                        data-download-text="Unduh <?= htmlspecialchars($kartu_alt, ENT_QUOTES, 'UTF-8') ?>">
+                                    <span class="info-btn-ico" aria-hidden="true"><?= instagi_ikon('zoom') ?></span>
+                                    <span>Lihat</span>
+                                </button>
                                 <a class="alt" href="<?= htmlspecialchars($kt['full'], ENT_QUOTES, 'UTF-8') ?>"
                                    download="<?= htmlspecialchars($kt['unduh'], ENT_QUOTES, 'UTF-8') ?>">Unduh</a>
                             </div>
