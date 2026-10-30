@@ -119,6 +119,12 @@ if (!function_exists('instagi_ikon_bentuk')) {
             // Hati penuh (footer).
             'hati' =>
                 '<path d="M12 20.2S4.6 15.8 4.6 10.6A4 4 0 0 1 12 8.3a4 4 0 0 1 7.4 2.3c0 5.2-7.4 9.6-7.4 9.6z" fill="currentColor" stroke="none"/>',
+
+            // Panah navigasi carousel (kiri & kanan)
+            'panah-kiri' =>
+                '<path d="M15 18l-6-6 6-6"/>',
+            'panah-kanan' =>
+                '<path d="M9 18l6-6-6-6"/>',
         ];
 
         return isset($bentuk[$nama]) ? $bentuk[$nama] : '';

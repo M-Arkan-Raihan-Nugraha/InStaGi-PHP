@@ -46,44 +46,44 @@
 /* Warna tombol beranda: Burgundy, Yellow Baby, Sage Green (soft, elegan, dan kontras) */
 .home-btn-red,
 .home-btn-burgundy {
-    background-color: #f8ecee;
-    color: #6b1d2f;
-    border: 1.5px solid #dfb6be;
+    background-color: #f1d8dd;
+    color: #541222;
+    border: 1.5px solid #cd8a97;
 }
 
 .home-btn-red:hover,
 .home-btn-burgundy:hover {
-    background-color: #f1d8dd;
-    border-color: #cd8a97;
-    color: #541222;
+    background-color: #f8ecee;
+    border-color: #dfb6be;
+    color: #6b1d2f;
 }
 
 .home-btn-yellow,
 .home-btn-baby-yellow {
-    background-color: #fefce8;
-    color: #854d0e;
-    border: 1.5px solid #fef08a;
+    background-color: #fef9c3;
+    color: #713f12;
+    border: 1.5px solid #fde047;
 }
 
 .home-btn-yellow:hover,
 .home-btn-baby-yellow:hover {
-    background-color: #fef9c3;
-    border-color: #fde047;
-    color: #713f12;
+    background-color: #fefce8;
+    border-color: #fef08a;
+    color: #854d0e;
 }
 
 .home-btn-green,
 .home-btn-sage-green {
-    background-color: #e8f0eb;
-    color: #2d5a3c;
-    border: 1.5px solid #adc4b5;
+    background-color: #dfece2;
+    color: #20452d;
+    border: 1.5px solid #97b7a1;
 }
 
 .home-btn-green:hover,
 .home-btn-sage-green:hover {
-    background-color: #dfece2;
-    border-color: #97b7a1;
-    color: #20452d;
+    background-color: #e8f0eb;
+    border-color: #adc4b5;
+    color: #2d5a3c;
 }
 
 /* --- Kotak akun responden --------------------------------------------------- */
@@ -631,6 +631,21 @@
     cursor: pointer;
     transition: all 0.2s ease;
     white-space: nowrap;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.bestie-filter-count {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 0, 0, 0.08);
+    color: inherit;
+    font-size: 0.85em;
+    padding: 1px 7px;
+    border-radius: 999px;
+    font-weight: 700;
 }
 
 .bestie-filter-btn:hover {
@@ -646,15 +661,134 @@
     box-shadow: 0 2px 8px rgba(231, 76, 60, 0.25);
 }
 
-/* Grid Kartu Flyer */
-.bestie-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
-    gap: 20px;
+.bestie-filter-btn.is-active .bestie-filter-count {
+    background: rgba(255, 255, 255, 0.28);
+    color: #ffffff;
+}
+
+/* Carousel Horizontal Scroll per Kategori */
+.bestie-carousel-container {
     margin-bottom: 24px;
 }
 
+.bestie-cat-group {
+    margin-bottom: 32px;
+}
+
+.bestie-cat-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 12px;
+    gap: 12px;
+}
+
+.bestie-cat-title-wrap {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.bestie-cat-indicator {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    display: inline-block;
+    flex-shrink: 0;
+}
+
+.bestie-cat-title {
+    margin: 0;
+    font-size: 1.22em;
+    color: #1f2937;
+    font-weight: 700;
+}
+
+.bestie-cat-count {
+    font-size: 0.78em;
+    font-weight: 600;
+    color: #6b7280;
+    background: #f3f4f6;
+    padding: 2px 10px;
+    border-radius: 999px;
+}
+
+.bestie-nav-arrows {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.bestie-arrow-btn {
+    appearance: none;
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    border: 1.5px solid #d1d5db;
+    background: #ffffff;
+    color: #374151;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    padding: 0;
+    font-size: 1.05em;
+}
+
+.bestie-arrow-btn:hover {
+    border-color: var(--primary-color);
+    color: var(--primary-color);
+    background: #fdf2f4;
+}
+
+.bestie-arrow-btn:disabled {
+    opacity: 0.3;
+    cursor: default;
+    pointer-events: none;
+}
+
+.bestie-track-wrapper {
+    position: relative;
+    width: 100%;
+}
+
+.bestie-carousel-track {
+    display: flex;
+    gap: 18px;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+    padding: 6px 4px 16px 4px;
+    scrollbar-width: thin;
+    scrollbar-color: #cbd5e1 #f1f5f9;
+}
+
+.bestie-carousel-track::-webkit-scrollbar {
+    height: 6px;
+}
+
+.bestie-carousel-track::-webkit-scrollbar-track {
+    background: #f1f5f9;
+    border-radius: 999px;
+}
+
+.bestie-carousel-track::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 999px;
+}
+
+.bestie-carousel-track::-webkit-scrollbar-thumb:hover {
+    background: #94a3b8;
+}
+
+/* Kartu Flyer di Dalam Carousel */
 .bestie-card {
+    flex: 0 0 280px;
+    width: 280px;
+    scroll-snap-align: start;
     background: #ffffff;
     border: 1px solid var(--border-color);
     border-radius: 14px;
@@ -663,6 +797,7 @@
     display: flex;
     flex-direction: column;
     transition: transform 0.2s ease, box-shadow 0.2s ease;
+    box-sizing: border-box;
 }
 
 .bestie-card:hover {
@@ -1378,13 +1513,17 @@ body.bestie-modal-active {
         padding: 16px;
     }
 
-    .bestie-grid {
-        grid-template-columns: 1fr;
-        gap: 16px;
+    .bestie-carousel-track .bestie-card {
+        flex: 0 0 82vw;
+        max-width: 300px;
+    }
+
+    .bestie-nav-arrows {
+        display: none;
     }
 
     .bestie-card-thumb {
-        height: 280px;
+        height: 250px;
     }
 
     .bestie-cta-card {
