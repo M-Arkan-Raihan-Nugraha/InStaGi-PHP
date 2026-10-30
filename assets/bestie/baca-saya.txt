@@ -1,6 +1,6 @@
 Folder Flyer Mitra & Sponsor "Bestie InStaGi"
 -----------------------------------------------------------------------------
-1. Letakkan berkas gambar flyer promosi mitra di folder ini (format: .jpeg, .jpg, .webp, .png).
+1. Letakkan berkas gambar flyer promosi mitra di folder ini (standar resmi: .webp; didukung juga .jpg, .jpeg, .png).
 2. Rasio gambar disarankan vertikal/portrait (standar flyer/brosur promo).
 3. Daftarkan flyer baru di file: includes/content/bestie.php pada fungsi instagi_bestie_daftar().
    Isi data meliputi: id, kategori, kategori_label, judul, subjudul, deskripsi, lokasi, harga, wa, wa_text, gambar.

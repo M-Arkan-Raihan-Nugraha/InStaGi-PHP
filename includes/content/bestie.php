@@ -66,7 +66,7 @@ if (!function_exists('instagi_bestie_daftar')) {
                 'harga'          => 'Mulai Rp 3,65 Juta / pax',
                 'wa'             => '6281214364730',
                 'wa_text'        => 'Halo Spirit Holiday Indonesia, saya tertarik dengan Open Trip Overland Bali - Lombok yang ada di Bestie InStaGi. Mohon info detail pendaftaran.',
-                'gambar'         => 'spirit-holiday-bali-lombok.jpeg',
+                'gambar'         => 'spirit-holiday-bali-lombok.webp',
             ],
             [
                 'id'             => 'dago-wisata-bobotoh-singapore',
@@ -79,7 +79,7 @@ if (!function_exists('instagi_bestie_daftar')) {
                 'harga'          => 'Promo mulai Rp 6,99 Juta',
                 'wa'             => '62811222056',
                 'wa_text'        => 'Halo Dago Wisata, saya ingin mendaftar promo Bobotoh Away Days Goes to Singapore via Bestie InStaGi. Mohon info ketersediaan seat.',
-                'gambar'         => 'dago-wisata-bobotoh-singapore.jpeg',
+                'gambar'         => 'dago-wisata-bobotoh-singapore.webp',
             ],
             [
                 'id'             => 'rumah-tanah-ciranjang-cianjur',
@@ -92,7 +92,7 @@ if (!function_exists('instagi_bestie_daftar')) {
                 'harga'          => 'Rp 950 Juta (Nego)',
                 'wa'             => '6281224948388',
                 'wa_text'        => 'Halo, saya tertarik dengan informasi Dijual Rumah & Tanah Ciranjang Cianjur di Bestie InStaGi. Mohon info jadwal survei lokasi.',
-                'gambar'         => 'rumah-tanah-ciranjang-cianjur.jpeg',
+                'gambar'         => 'rumah-tanah-ciranjang-cianjur.webp',
             ],
             [
                 'id'             => 'tanah-sawah-cigaok-sukabumi',
@@ -105,7 +105,7 @@ if (!function_exists('instagi_bestie_daftar')) {
                 'harga'          => 'Harga Spesial (Nego)',
                 'wa'             => '6281224948388',
                 'wa_text'        => 'Halo, saya tertarik dengan informasi Dijual Tanah Sawah & Daratan 3 Ha Sukabumi di Bestie InStaGi. Mohon rincian legalitas dan harga penawarannya.',
-                'gambar'         => 'tanah-sawah-cigaok-sukabumi.jpeg',
+                'gambar'         => 'tanah-sawah-cigaok-sukabumi.webp',
             ],
             [
                 'id'             => 'tanah-kolam-sawah-cugenang-cianjur',
@@ -118,7 +118,7 @@ if (!function_exists('instagi_bestie_daftar')) {
                 'harga'          => 'Rp 1,1 Juta / m² (Nego)',
                 'wa'             => '6281224948388',
                 'wa_text'        => 'Halo, saya melihat info Dijual Tanah Kolam & Sawah di Cugenang Cianjur melalui Bestie InStaGi. Boleh minta detail lokasinya?',
-                'gambar'         => 'tanah-kolam-sawah-cugenang-cianjur.jpeg',
+                'gambar'         => 'tanah-kolam-sawah-cugenang-cianjur.webp',
             ],
             [
                 'id'             => 'rumah-tanah-jagapura-brebes',
@@ -131,7 +131,7 @@ if (!function_exists('instagi_bestie_daftar')) {
                 'harga'          => 'Harga Nego',
                 'wa'             => '6281224948388',
                 'wa_text'        => 'Halo, saya tertarik dengan iklan Rumah & Tanah 1.249 m² di Kersana Brebes yang terpasang di Bestie InStaGi. Mohon informasinya.',
-                'gambar'         => 'rumah-tanah-jagapura-brebes.jpeg',
+                'gambar'         => 'rumah-tanah-jagapura-brebes.webp',
             ],
             [
                 'id'             => 'dapur-rifka-kuliner',
@@ -144,7 +144,7 @@ if (!function_exists('instagi_bestie_daftar')) {
                 'harga'          => 'Mulai Rp 10.000',
                 'wa'             => '6282318974678',
                 'wa_text'        => 'Halo Dapur Rifka, saya ingin pesan makanan/minuman rumahan dari etalase Bestie InStaGi. Mohon daftar menu hari ini.',
-                'gambar'         => 'dapur-rifka-kuliner.jpeg',
+                'gambar'         => 'dapur-rifka-kuliner.webp',
             ],
             [
                 'id'             => 'marwa-fresh-markisa',
@@ -157,7 +157,7 @@ if (!function_exists('instagi_bestie_daftar')) {
                 'harga'          => 'Segar & Alami',
                 'wa'             => '6281224948388',
                 'wa_text'        => 'Halo Marwa Fresh, saya tertarik memesan Homegrown Passion Fruit Drink yang terpasang di Bestie InStaGi. Mohon info harga & ongkir.',
-                'gambar'         => 'marwa-fresh-markisa.jpeg',
+                'gambar'         => 'marwa-fresh-markisa.webp',
             ],
             [
                 'id'             => 'dapur-ummi-frozen-risoles',
@@ -170,7 +170,7 @@ if (!function_exists('instagi_bestie_daftar')) {
                 'harga'          => 'Mulai Rp 10.000',
                 'wa'             => '6289602751277',
                 'wa_text'        => 'Halo Dapur Ummi, saya tertarik memesan Frozen Risoles yang saya lihat di Bestie InStaGi. Varian apa saja yang ready stock?',
-                'gambar'         => 'dapur-ummi-frozen-risoles.jpeg',
+                'gambar'         => 'dapur-ummi-frozen-risoles.webp',
             ],
             [
                 'id'             => 'pd-puspita-minimarket',
@@ -183,7 +183,7 @@ if (!function_exists('instagi_bestie_daftar')) {
                 'harga'          => 'Harga Grosir & Eceran Murah',
                 'wa'             => '6287718604058',
                 'wa_text'        => 'Halo PD Puspita, saya menemukan toko Anda melalui etalase Bestie InStaGi. Ingin menanyakan info pemesanan sembako/barang kebutuhan harian.',
-                'gambar'         => 'pd-puspita-minimarket.jpeg',
+                'gambar'         => 'pd-puspita-minimarket.webp',
             ],
             [
                 'id'             => 'klinik-sunat-hd',
@@ -196,7 +196,7 @@ if (!function_exists('instagi_bestie_daftar')) {
                 'harga'          => 'Paket Lengkap & Nyaman',
                 'wa'             => '6281320469003',
                 'wa_text'        => 'Halo Klinik Sunat HD, saya ingin berkonsultasi mengenai layanan sunat modern 5.G Plus yang tertera di Bestie InStaGi. Mohon info biaya dan reservasinya.',
-                'gambar'         => 'klinik-sunat-hd.jpeg',
+                'gambar'         => 'klinik-sunat-hd.webp',
             ],
         ];
     }

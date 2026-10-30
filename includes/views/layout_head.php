@@ -30,7 +30,7 @@ $meta_ekstra = isset($meta_ekstra) ? $meta_ekstra : '';
 // Alamat kanonik dibuat dari domain yang sedang aktif (og:url & <link canonical>).
 $instagi_dasar = instagi_base_url();
 $instagi_kanonik = $instagi_dasar . ($og_path === '' ? '/' : $og_path);
-$instagi_gambar  = $instagi_dasar . '/assets/og-image.jpg';
+$instagi_gambar  = $instagi_dasar . '/assets/og-image.webp';
 ?>
 <!DOCTYPE html>
 <html lang="id">
