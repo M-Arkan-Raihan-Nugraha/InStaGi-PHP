@@ -25,3 +25,4 @@ require __DIR__ . '/includes/views/layout_head.php';
     </div>
 
 <?php require __DIR__ . '/includes/views/layout_footer.php'; ?>
+
