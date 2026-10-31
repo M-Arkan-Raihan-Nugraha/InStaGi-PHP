@@ -259,6 +259,8 @@ try {
         'kalori'       => "ALTER TABLE imt_history ADD COLUMN kalori INT(11) NOT NULL DEFAULT 0 AFTER aktivitas",
         // Tautan ke akun responden (fitur Monitoring per-akun).
         'responden_id' => "ALTER TABLE imt_history ADD COLUMN responden_id INT(11) NULL AFTER id",
+        // Timestamp waktu input data responden
+        'created_at'   => "ALTER TABLE imt_history ADD COLUMN created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP",
     ];
     foreach ($column_migrations as $column => $sql) {
         if (!isset($existing_columns[$column])) {

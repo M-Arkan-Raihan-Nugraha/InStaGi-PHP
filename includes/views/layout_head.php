@@ -36,15 +36,24 @@ $instagi_gambar  = $instagi_dasar . '/assets/og-image.webp';
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
     <title><?= htmlspecialchars($judul, ENT_QUOTES, 'UTF-8') ?></title>
     <link rel="shortcut icon" href="/assets/favicon.ico" type="image/x-icon">
     <link rel="canonical" href="<?= htmlspecialchars($instagi_kanonik, ENT_QUOTES, 'UTF-8') ?>">
 
-    <!-- CSS bersama SELALU dimuat lebih dulu, lalu CSS khusus halaman. -->
-    <link rel="stylesheet" href="/css/base.css">
+    <!-- CSS bersama SELALU dimuat lebih dulu, lalu CSS khusus halaman (cache-busting dinamis per-berkas). -->
+    <?php
+        $css_root = defined('APP_ROOT') ? APP_ROOT : dirname(__DIR__, 2);
+        $base_css_file = $css_root . '/css/base.css';
+        $v_base = file_exists($base_css_file) ? filemtime($base_css_file) : '20261031';
+    ?>
+    <link rel="stylesheet" href="/css/base.css?v=<?= $v_base ?>">
     <?php foreach ($css as $berkas_css): ?>
-    <link rel="stylesheet" href="/css/<?= htmlspecialchars($berkas_css, ENT_QUOTES, 'UTF-8') ?>">
+    <?php
+        $page_css_file = $css_root . '/css/' . $berkas_css;
+        $v_page = file_exists($page_css_file) ? filemtime($page_css_file) : $v_base;
+    ?>
+    <link rel="stylesheet" href="/css/<?= htmlspecialchars($berkas_css, ENT_QUOTES, 'UTF-8') ?>?v=<?= $v_page ?>">
     <?php endforeach; ?>
     <?= $css_ekstra ?>
     <?= $meta_ekstra ?>

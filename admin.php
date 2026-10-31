@@ -55,7 +55,7 @@ require __DIR__ . '/includes/views/layout_head.php';
         </div>
 
         <div class="table-container">
-            <table id="historyTable" class="display responsive nowrap" style="width:100%">
+            <table id="historyTable" class="display nowrap" style="width:100%">
                 <thead>
                     <tr>
                         <th data-orderable="false"><input type="checkbox" id="select-all"></th>
@@ -88,13 +88,16 @@ require __DIR__ . '/includes/views/layout_head.php';
                             if (strpos($wa_clean, '0') === 0) {
                                 $wa_clean = '62' . substr($wa_clean, 1);
                             }
+                            $waktu_jam = !empty($row['created_at'])
+                                ? date("H:i", strtotime($row['created_at']))
+                                : (!empty($row['tanggal']) ? date("H:i", strtotime($row['tanggal'])) : '-');
                         ?>
                         <tr data-id="<?= $row['id'] ?>">
                             <td><input type="checkbox" class="row-checkbox" value="<?= $row['id'] ?>"></td>
                             <td><span class="id-badge">#<?= (int)$row['id'] ?></span></td>
                             <td>
                                 <strong><?= htmlspecialchars(date("d-m-Y", strtotime($row['tanggal']))) ?></strong><br>
-                                <small class="text-muted"><?= htmlspecialchars(date("H:i", strtotime($row['created_at']))) ?> WIB</small>
+                                <small class="text-muted"><?= htmlspecialchars($waktu_jam) ?> WIB</small>
                             </td>
                             <td><strong><?= htmlspecialchars($row['nama']) ?></strong></td>
                             <td><?= htmlspecialchars($row['usia']) ?> thn</td>
@@ -151,10 +154,6 @@ require __DIR__ . '/includes/views/layout_head.php';
                             </td>
                         </tr>
                         <?php endwhile; ?>
-                    <?php else: ?>
-                        <tr>
-                            <td colspan="17" style="text-align: center;">Belum ada data responden.</td>
-                        </tr>
                     <?php endif; ?>
                 </tbody>
             </table>
@@ -294,22 +293,25 @@ require __DIR__ . '/includes/views/layout_head.php';
         }
 
         var table = $('#historyTable').DataTable({
-            responsive: true,
-            "columnDefs": [
-                { "orderable": false, "targets": [0, 16] } // Disable sorting on checkbox & aksi columns
+            responsive: false,
+            scrollX: true,
+            order: [[1, 'desc']],
+            columnDefs: [
+                { orderable: false, targets: [0, 16] } // Disable sorting on checkbox & aksi columns
             ],
             language: {
-                "search": "Cari:",
-                "lengthMenu": "Tampilkan _MENU_ data per halaman",
-                "zeroRecords": "Tidak ada data yang cocok",
-                "info": "Menampilkan halaman _PAGE_ dari _PAGES_",
-                "infoEmpty": "Tidak ada data tersedia",
-                "infoFiltered": "(disaring dari _MAX_ total data)",
-                "paginate": {
-                    "first":      "Pertama",
-                    "last":       "Terakhir",
-                    "next":       "Berikutnya",
-                    "previous":   "Sebelumnya"
+                search: "Cari:",
+                lengthMenu: "Tampilkan _MENU_ data",
+                zeroRecords: "Tidak ada data yang cocok",
+                emptyTable: "Belum ada data responden.",
+                info: "Menampilkan _START_ - _END_ dari _TOTAL_ data",
+                infoEmpty: "Tidak ada data tersedia",
+                infoFiltered: "(disaring dari _MAX_ total data)",
+                paginate: {
+                    first:      "Pertama",
+                    last:       "Terakhir",
+                    next:       "Berikutnya",
+                    previous:   "Sebelumnya"
                 }
             }
         });

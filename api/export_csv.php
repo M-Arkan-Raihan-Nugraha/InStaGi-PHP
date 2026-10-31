@@ -92,7 +92,7 @@ if ($result->num_rows > 0) {
             'IMT'                    => $row['imt'],
             'Status Gizi'            => $row['status_gizi'],
             'Saran Praktis'          => $row['saran'],
-            'Waktu Input'            => date("d-m-Y H:i:s", strtotime($row['created_at']))
+            'Waktu Input'            => !empty($row['created_at']) ? date("d-m-Y H:i:s", strtotime($row['created_at'])) : date("d-m-Y", strtotime($row['tanggal']))
         ];
 
         // Netralkan nilai yang berpotensi jadi rumus (CSV injection).

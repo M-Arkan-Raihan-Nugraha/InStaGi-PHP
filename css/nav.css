@@ -88,16 +88,35 @@
 
 @media (max-width: 600px) {
     .site-nav-inner {
-        padding: 10px 14px;
-        gap: 10px;
+        padding: 8px 12px;
+        gap: 8px;
+    }
+    .site-nav-brand {
+        font-size: 0.95em;
+    }
+    .site-nav-brand img {
+        height: 26px;
     }
     .site-nav-links {
         margin-left: 0;
         width: 100%;
-        gap: 4px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 5px;
     }
     .site-nav-link {
-        padding: 7px 10px;
-        font-size: 0.85em;
+        padding: 6px 9px;
+        font-size: 0.78em;
+        letter-spacing: 0.2px;
+        flex: 1 1 auto;
+        justify-content: center;
+        text-align: center;
+    }
+}
+
+@media (max-width: 380px) {
+    .site-nav-link {
+        padding: 5px 7px;
+        font-size: 0.72em;
     }
 }

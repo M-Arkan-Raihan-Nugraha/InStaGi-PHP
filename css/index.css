@@ -119,8 +119,10 @@ ul li::before {
 
 @media (max-width: 768px) {
     .container {
-        margin: 15px 12px;
-        padding: 25px 20px;
+        margin: 12px auto;
+        width: calc(100% - 16px);
+        padding: 20px 14px;
+        box-sizing: border-box;
     }
     .logo img {
         max-width: 120px;

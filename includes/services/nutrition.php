@@ -147,15 +147,57 @@ if (!function_exists('instagi_hitung_semua')) {
             $kategori['kalori_adj']
         );
 
+        $rentang = instagi_hitung_rentang_bb_sehat($tb_cm);
+
         return [
             'imt'           => $imt,
             'status_gizi'   => $kategori['status_gizi'],
             'status_class'  => $kategori['status_class'],
             'saran'         => $kategori['saran'],
             'kalori_harian' => $kalori_harian,
-            'bb_ideal'      => round(($tb_cm - 100) * 0.9, 1),
-            'bb_sehat_min'  => round(18.5 * ($tb_meter * $tb_meter), 1),
-            'bb_sehat_max'  => round(24.9 * ($tb_meter * $tb_meter), 1),
+            'bb_ideal'      => instagi_hitung_bbi($tb_cm, $jenis_kelamin),
+            'bb_sehat_min'  => $rentang['min'],
+            'bb_sehat_max'  => $rentang['max'],
+        ];
+    }
+}
+
+if (!function_exists('instagi_hitung_bbi')) {
+    /**
+     * Hitung Berat Badan Ideal (BBI) dengan rumus Broca modifikasi Kemenkes:
+     * BBI = (TB - 100) - 10% x (TB - 100) = (TB - 100) * 0.9
+     *
+     * @param float|int $tb_cm Tinggi badan dalam cm
+     * @param string $jenis_kelamin Jenis kelamin ('Laki-laki' / 'Perempuan')
+     * @return float
+     */
+    function instagi_hitung_bbi($tb_cm, $jenis_kelamin = 'Laki-laki')
+    {
+        $tb_cm = (float) $tb_cm;
+        if ($tb_cm <= 100) {
+            return 0.0;
+        }
+        return round(($tb_cm - 100) * 0.9, 1);
+    }
+}
+
+if (!function_exists('instagi_hitung_rentang_bb_sehat')) {
+    /**
+     * Hitung rentang berat badan sehat berdasarkan batas IMT normal (18.5 - 24.9).
+     *
+     * @param float|int $tb_cm Tinggi badan dalam cm
+     * @return array{min: float, max: float}
+     */
+    function instagi_hitung_rentang_bb_sehat($tb_cm)
+    {
+        $tb_cm = (float) $tb_cm;
+        $tb_meter = $tb_cm / 100;
+        if ($tb_meter <= 0) {
+            return ['min' => 0.0, 'max' => 0.0];
+        }
+        return [
+            'min' => round(18.5 * ($tb_meter * $tb_meter), 1),
+            'max' => round(24.9 * ($tb_meter * $tb_meter), 1),
         ];
     }
 }
