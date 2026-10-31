@@ -29,6 +29,7 @@ if (!function_exists('instagi_nav_items')) {
         return [
             'hitung'     => ['label' => 'Cek Status Gizi',        'href' => '/imt',        'icon' => 'cek-gizi'],
             'informasi'  => ['label' => 'Informasi Gizi',         'href' => '/informasi',  'icon' => 'informasi'],
+            'bestie'     => ['label' => 'Bestie InStaGi',         'href' => '/bestie',     'icon' => 'hati'],
             'monitoring' => ['label' => 'Monitoring Status Gizi', 'href' => '/monitoring', 'icon' => 'monitoring'],
         ];
     }

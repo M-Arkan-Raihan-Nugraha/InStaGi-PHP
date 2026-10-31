@@ -57,6 +57,10 @@ require __DIR__ . '/includes/views/layout_head.php';
                 <span class="home-btn-ico" aria-hidden="true"><?= instagi_ikon('informasi') ?></span>
                 <span>INFORMASI GIZI</span>
             </a>
+            <a class="home-btn home-btn-coral" href="/bestie">
+                <span class="home-btn-ico" aria-hidden="true"><?= instagi_ikon('hati') ?></span>
+                <span>BESTIE INSTAGI</span>
+            </a>
             <a class="home-btn home-btn-sage-green" href="/monitoring">
                 <span class="home-btn-ico" aria-hidden="true"><?= instagi_ikon('monitoring') ?></span>
                 <span>MONITORING STATUS GIZI</span>

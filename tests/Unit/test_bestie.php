@@ -31,7 +31,7 @@ cek(isset($kategori['kesehatan']), 'Tersedia kategori kesehatan');
 echo "\n== 2. Pengujian Daftar Flyer Bestie (instagi_bestie_daftar) ==\n";
 $items = instagi_bestie_daftar();
 cek(is_array($items), 'instagi_bestie_daftar mengembalikan array');
-cek(count($items) === 11, 'Jumlah flyer tepat 11 item');
+cek(count($items) === 12, 'Jumlah flyer tepat 12 item');
 
 $kategori_terisi = [];
 $assets_dir = dirname(dirname(__DIR__)) . '/assets/bestie';
@@ -63,6 +63,7 @@ cek(is_array($bestie_list), 'instagi_bestie_list mengembalikan array');
 cek(count($bestie_list) === count($items), 'Jumlah item list sama dengan jumlah item daftar');
 cek(isset($bestie_list['spirit-holiday-bali-lombok']), 'Kunci slug spirit-holiday-bali-lombok ada');
 cek(isset($bestie_list['klinik-sunat-hd']), 'Kunci slug klinik-sunat-hd ada');
+cek(isset($bestie_list['gastio-bite-siomay-ayam']), 'Kunci slug gastio-bite-siomay-ayam ada');
 
 echo "\nTotal uji: $total | Lulus: $lulus | Gagal: " . ($total - $lulus) . "\n";
 exit($total === $lulus ? 0 : 1);

@@ -10,9 +10,10 @@ if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true) {
 
 $nav_active = 'admin';
 
-// Sisipkan file koneksi database dan modul gizi
+// Sisipkan file koneksi database, modul gizi, dan ikon
 require_once 'includes/core/db.php';
 require_once 'includes/services/nutrition.php';
+require_once 'includes/views/icon.php';
 
 // Ambil semua data riwayat dari database, urutkan berdasarkan yang terbaru
 $riwayat_result = $koneksi->query("SELECT * FROM imt_history ORDER BY tanggal DESC, id DESC");
@@ -26,9 +27,7 @@ if ($riwayat_result === false) {
         public function fetch_assoc() { return null; }
     };
 }
-
 ?>
-
 <?php
 // Judul, deskripsi, alamat rapi (tanpa .php), dan daftar CSS halaman ini.
 $judul     = 'InStaGi - Data Responden';
@@ -60,48 +59,76 @@ require __DIR__ . '/includes/views/layout_head.php';
                 <thead>
                     <tr>
                         <th data-orderable="false"><input type="checkbox" id="select-all"></th>
-                        <th>Tanggal</th>
-                        <th>Nama</th>
+                        <th>ID</th>
+                        <th>Tanggal Input</th>
+                        <th>Nama Responden</th>
                         <th>Usia</th>
-                        <th>Jenis Kelamin</th>
-                        <th>No. HP / Email</th>
+                        <th>Gender</th>
+                        <th>Kontak (No. HP)</th>
                         <th>BB (kg)</th>
                         <th>TB (cm)</th>
+                        <th>BB Ideal</th>
+                        <th>Rentang Sehat</th>
                         <th>Aktivitas</th>
                         <th>Kalori (kkal)</th>
                         <th>IMT</th>
                         <th>Status Gizi</th>
                         <th>Saran</th>
-                        <th>Aksi</th>
+                        <th data-orderable="false">Aksi</th>
                     </tr>
                 </thead>
                 <tbody>
                     <?php if ($riwayat_result->num_rows > 0): ?>
                         <?php while($row = $riwayat_result->fetch_assoc()): ?>
+                        <?php
+                            $bbi = instagi_hitung_bbi((int)$row['tinggi_badan'], (string)$row['jenis_kelamin']);
+                            $rentang_sehat = instagi_hitung_rentang_bb_sehat((int)$row['tinggi_badan']);
+                            $raw_hp = (string)$row['no_hp'];
+                            $wa_clean = preg_replace('/[^0-9]/', '', $raw_hp);
+                            if (strpos($wa_clean, '0') === 0) {
+                                $wa_clean = '62' . substr($wa_clean, 1);
+                            }
+                        ?>
                         <tr data-id="<?= $row['id'] ?>">
                             <td><input type="checkbox" class="row-checkbox" value="<?= $row['id'] ?>"></td>
-                            <td><?= htmlspecialchars(date("d-m-Y", strtotime($row['tanggal']))) ?></td>
-                            <td><?= htmlspecialchars($row['nama']) ?></td>
+                            <td><span class="id-badge">#<?= (int)$row['id'] ?></span></td>
+                            <td>
+                                <strong><?= htmlspecialchars(date("d-m-Y", strtotime($row['tanggal']))) ?></strong><br>
+                                <small class="text-muted"><?= htmlspecialchars(date("H:i", strtotime($row['created_at']))) ?> WIB</small>
+                            </td>
+                            <td><strong><?= htmlspecialchars($row['nama']) ?></strong></td>
                             <td><?= htmlspecialchars($row['usia']) ?> thn</td>
                             <td><?= htmlspecialchars($row['jenis_kelamin']) ?></td>
-                            <td><?= htmlspecialchars($row['no_hp']) ?></td>
+                            <td>
+                                <?php if (!empty($wa_clean)): ?>
+                                    <a href="https://wa.me/<?= htmlspecialchars($wa_clean, ENT_QUOTES, 'UTF-8') ?>" target="_blank" rel="noopener" class="wa-table-link" title="Chat WhatsApp <?= htmlspecialchars($row['nama'], ENT_QUOTES, 'UTF-8') ?>">
+                                        <span class="wa-icon-svg" aria-hidden="true"><?= instagi_ikon('whatsapp') ?></span>
+                                        <span><?= htmlspecialchars($raw_hp) ?></span>
+                                    </a>
+                                <?php else: ?>
+                                    <span class="text-muted">-</span>
+                                <?php endif; ?>
+                            </td>
                             <td><?= htmlspecialchars($row['berat_badan']) ?></td>
                             <td><?= htmlspecialchars($row['tinggi_badan']) ?></td>
+                            <td><strong><?= $bbi ?></strong> kg</td>
+                            <td><?= $rentang_sehat['min'] ?> - <?= $rentang_sehat['max'] ?> kg</td>
                             <td>
                                 <?php
-                                    $aktivitas_val = $row['aktivitas'];
+                                    $aktivitas_val = (string)$row['aktivitas'];
                                     $aktivitas_level = '';
-                                    if ($aktivitas_val == 1.2) $aktivitas_level = 'Sangat Ringan';
-                                    elseif ($aktivitas_val == 1.375) $aktivitas_level = 'Ringan';
-                                    elseif ($aktivitas_val == 1.55) $aktivitas_level = 'Sedang';
-                                    elseif ($aktivitas_val == 1.725) $aktivitas_level = 'Berat';
-                                    elseif ($aktivitas_val == 1.9) $aktivitas_level = 'Sangat Berat';
+                                    if ($aktivitas_val == '1.2' || $aktivitas_val == '1.200') $aktivitas_level = 'Sangat Ringan';
+                                    elseif ($aktivitas_val == '1.375') $aktivitas_level = 'Ringan';
+                                    elseif ($aktivitas_val == '1.55' || $aktivitas_val == '1.550') $aktivitas_level = 'Sedang';
+                                    elseif ($aktivitas_val == '1.725') $aktivitas_level = 'Berat';
+                                    elseif ($aktivitas_val == '1.9' || $aktivitas_val == '1.900') $aktivitas_level = 'Sangat Berat';
                                     else $aktivitas_level = htmlspecialchars($aktivitas_val);
-                                    echo $aktivitas_level;
                                 ?>
+                                <span class="aktivitas-chip"><?= $aktivitas_level ?></span>
+                                <small class="text-muted">(<?= htmlspecialchars($aktivitas_val) ?>)</small>
                             </td>
-                            <td><?= htmlspecialchars($row['kalori']) ?></td>
-                            <td><?= htmlspecialchars($row['imt']) ?></td>
+                            <td><strong><?= number_format((int)$row['kalori'], 0, ',', '.') ?></strong></td>
+                            <td><strong><?= htmlspecialchars($row['imt']) ?></strong></td>
                             <td>
                                 <?php 
                                     $status_gizi_db = $row['status_gizi'];
@@ -111,16 +138,22 @@ require __DIR__ . '/includes/views/layout_head.php';
                                     <?= htmlspecialchars($status_gizi_db) ?>
                                 </span>
                             </td>
-                            <td><?= htmlspecialchars($row['saran']) ?></td>
                             <td>
-                                <button class="action-btn edit-btn" data-id="<?= $row['id'] ?>">Edit</button>
-                                <button class="action-btn delete-btn" data-id="<?= $row['id'] ?>">Hapus</button>
+                                <div class="saran-cell" title="<?= htmlspecialchars($row['saran']) ?>">
+                                    <?= htmlspecialchars($row['saran']) ?>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="action-btn-group">
+                                    <button class="action-btn edit-btn" data-id="<?= $row['id'] ?>">Edit</button>
+                                    <button class="action-btn delete-btn" data-id="<?= $row['id'] ?>">Hapus</button>
+                                </div>
                             </td>
                         </tr>
                         <?php endwhile; ?>
                     <?php else: ?>
                         <tr>
-                            <td colspan="14" style="text-align: center;">Belum ada data responden.</td>
+                            <td colspan="17" style="text-align: center;">Belum ada data responden.</td>
                         </tr>
                     <?php endif; ?>
                 </tbody>
@@ -165,7 +198,7 @@ require __DIR__ . '/includes/views/layout_head.php';
                             </select>
                         </div>
                         <div class="form-group">
-                            <label for="edit_no_hp">No. HP</label>
+                            <label for="edit_no_hp">No. HP / WhatsApp</label>
                             <input type="tel" id="edit_no_hp" name="no_hp" required>
                         </div>
                         <div class="form-group">
@@ -187,15 +220,27 @@ require __DIR__ . '/includes/views/layout_head.php';
                             </select>
                         </div>
                         <div class="form-group">
-                            <label for="edit_imt">IMT</label>
+                            <label for="edit_imt">IMT (Indeks Massa Tubuh)</label>
                             <input type="text" id="edit_imt" name="imt" readonly>
                         </div>
-                        <div class="form-group full-width">
+                        <div class="form-group">
                             <label for="edit_status_gizi">Status Gizi</label>
                             <input type="text" id="edit_status_gizi" name="status_gizi" readonly>
                         </div>
+                        <div class="form-group">
+                            <label for="edit_bb_ideal">Berat Badan Ideal (BBI)</label>
+                            <input type="text" id="edit_bb_ideal" readonly>
+                        </div>
+                        <div class="form-group">
+                            <label for="edit_rentang_sehat">Rentang BB Sehat</label>
+                            <input type="text" id="edit_rentang_sehat" readonly>
+                        </div>
                         <div class="form-group full-width">
-                            <label for="edit_saran">Saran</label>
+                            <label for="edit_kalori">Kebutuhan Kalori Harian</label>
+                            <input type="text" id="edit_kalori" readonly>
+                        </div>
+                        <div class="form-group full-width">
+                            <label for="edit_saran">Saran Gizi Praktis</label>
                             <textarea id="edit_saran" name="saran" rows="3" style="width: 100%; padding: 10px; border: 1px solid var(--border-color); border-radius: 8px; box-sizing: border-box;" readonly></textarea>
                         </div>
                     </div>
@@ -251,7 +296,7 @@ require __DIR__ . '/includes/views/layout_head.php';
         var table = $('#historyTable').DataTable({
             responsive: true,
             "columnDefs": [
-                { "orderable": false, "targets": 0 } // Disable sorting on the checkbox column
+                { "orderable": false, "targets": [0, 16] } // Disable sorting on checkbox & aksi columns
             ],
             language: {
                 "search": "Cari:",
@@ -279,7 +324,6 @@ require __DIR__ . '/includes/views/layout_head.php';
 
         // Handle "Select All" checkbox click
         $('#select-all').on('click', function() {
-            // Check/uncheck all checkboxes in the table
             var rows = table.rows({ 'search': 'applied' }).nodes();
             $('input[type="checkbox"]', rows).prop('checked', this.checked);
             toggleDeleteButton();
@@ -287,7 +331,6 @@ require __DIR__ . '/includes/views/layout_head.php';
 
         // Handle individual row checkbox change
         $('#historyTable tbody').on('change', 'input[type="checkbox"]', function() {
-            // If this checkbox is unchecked, uncheck "Select All"
             if (!this.checked) {
                 var el = $('#select-all').get(0);
                 if (el && el.checked && ('indeterminate' in el)) {
@@ -299,7 +342,6 @@ require __DIR__ . '/includes/views/layout_head.php';
         
         // Handle table draw event to update select-all state
         table.on('draw', function() {
-            // Uncheck "Select All" checkbox when table is redrawn (e.g., pagination)
             $('#select-all').prop('checked', false);
             toggleDeleteButton();
         });
@@ -307,7 +349,6 @@ require __DIR__ . '/includes/views/layout_head.php';
         // Handle "Delete Selected" button click
         $('#delete-selected-btn').on('click', function() {
             var ids = [];
-            // Get IDs from all checked checkboxes across all pages
             table.$('.row-checkbox:checked').each(function() {
                 ids.push($(this).val());
             });
@@ -321,10 +362,9 @@ require __DIR__ . '/includes/views/layout_head.php';
                 $.ajax({
                     url: 'api/delete_record.php',
                     type: 'POST',
-                    data: { ids: ids }, // Send as an array of IDs
+                    data: { ids: ids },
                     success: function(response) {
                         handleJsonResponse(response, function(res) {
-                            // Reload page to reflect changes
                             location.reload();
                         });
                     },
@@ -349,7 +389,6 @@ require __DIR__ . '/includes/views/layout_head.php';
                     data: { id: id },
                     success: function(response) {
                         handleJsonResponse(response, function(res) {
-                            // On success, remove the row from DataTables and redraw without resetting pagination
                             table.row(rowToDelete).remove().draw(false);
                         });
                     },
@@ -364,22 +403,18 @@ require __DIR__ . '/includes/views/layout_head.php';
         // --- EDIT MODAL LOGIC ---
         var modal = $('#editModal');
         var span = $('.close-button');
-        var saveBtn = $('.save-btn');
         var cancelBtn = $('.cancel-btn');
 
-        // When the user clicks on <span> (x), close the modal
         span.on('click', function() {
             modal.hide();
         });
 
-        // When the user clicks anywhere outside of the modal, close it
         $(window).on('click', function(event) {
             if (event.target == modal[0]) {
                 modal.hide();
             }
         });
 
-        // Handle Cancel button click
         cancelBtn.on('click', function() {
             modal.hide();
         });
@@ -391,24 +426,29 @@ require __DIR__ . '/includes/views/layout_head.php';
                 url: 'api/get_record.php',
                 type: 'GET',
                 data: { id: id },
-                                    success: function(response) {
-                                                                handleJsonResponse(response, function(res) {
-                                                                    // Populate the form fields
-                                                                    $('#edit_id').val(res.data.id);
-                                                                    $('#edit_tanggal').val(res.data.tanggal);
-                                                                    $('#edit_nama').val(res.data.nama);
-                                                                    $('#edit_usia').val(res.data.usia);
-                                                                    $('#edit_jenis_kelamin').val(res.data.jenis_kelamin);
-                                                                    $('#edit_no_hp').val(res.data.no_hp);
-                                                                    $('#edit_bb').val(res.data.berat_badan);
-                                                                    $('#edit_tb').val(res.data.tinggi_badan);
-                                                                    $('#edit_aktivitas').val(res.data.aktivitas);
-                                                                    $('#edit_imt').val(res.data.imt);
-                                                                    $('#edit_status_gizi').val(res.data.status_gizi);
-                                                                    $('#edit_saran').val(res.data.saran);
-                                                                    
-                                                                    modal.show(); // Display the modal
-                                                                }, { showAlertOnSuccess: false }); // Do not show success alert for get_record                                    },                error: function(xhr, status, error) {
+                success: function(response) {
+                    handleJsonResponse(response, function(res) {
+                        // Populate form fields
+                        $('#edit_id').val(res.data.id);
+                        $('#edit_tanggal').val(res.data.tanggal);
+                        $('#edit_nama').val(res.data.nama);
+                        $('#edit_usia').val(res.data.usia);
+                        $('#edit_jenis_kelamin').val(res.data.jenis_kelamin);
+                        $('#edit_no_hp').val(res.data.no_hp);
+                        $('#edit_bb').val(res.data.berat_badan);
+                        $('#edit_tb').val(res.data.tinggi_badan);
+                        $('#edit_aktivitas').val(res.data.aktivitas);
+                        $('#edit_imt').val(res.data.imt);
+                        $('#edit_status_gizi').val(res.data.status_gizi);
+                        $('#edit_bb_ideal').val(res.data.bb_ideal || '');
+                        $('#edit_rentang_sehat').val(res.data.rentang_sehat || '');
+                        $('#edit_kalori').val(res.data.kalori_label || (res.data.kalori + ' kkal'));
+                        $('#edit_saran').val(res.data.saran);
+                        
+                        modal.show();
+                    }, { showAlertOnSuccess: false });
+                },
+                error: function(xhr, status, error) {
                     alert('Terjadi kesalahan saat mengambil data: ' + error);
                     console.error('AJAX Error:', status, error, xhr);
                 }
@@ -417,20 +457,21 @@ require __DIR__ . '/includes/views/layout_head.php';
 
         // Handle Save Changes button in modal
         $('#editForm').on('submit', function(e) {
-            e.preventDefault(); // Prevent default form submission
+            e.preventDefault();
 
-            var formData = $(this).serialize(); // Get form data
+            var formData = $(this).serialize();
 
             $.ajax({
                 url: 'api/update_record.php',
                 type: 'POST',
                 data: formData,
-                                    success: function(response) {
-                                        handleJsonResponse(response, function(res) {
-                                            modal.hide(); // Hide the modal
-                                            location.reload(); // Reload the page to see changes
-                                        });
-                                    },                error: function(xhr, status, error) {
+                success: function(response) {
+                    handleJsonResponse(response, function(res) {
+                        modal.hide();
+                        location.reload();
+                    });
+                },
+                error: function(xhr, status, error) {
                     alert('Terjadi kesalahan saat menyimpan perubahan: ' + error);
                     console.error('AJAX Error:', status, error, xhr);
                 }

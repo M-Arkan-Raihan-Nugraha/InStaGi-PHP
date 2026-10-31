@@ -19,7 +19,6 @@ require_once 'includes/content/recipes.php';
 require_once 'includes/content/guidelines.php';
 require_once 'includes/content/fitness_tips.php';
 require_once 'includes/content/food_exchange.php';
-require_once 'includes/content/bestie.php';
 
 $nav_active = 'informasi';
 
@@ -30,7 +29,6 @@ $menus        = instagi_galeri_daftar_tampil('menu', instagi_menu_list(), 'insta
 $reseps       = instagi_resep_daftar();
 $panduans     = instagi_panduan_daftar();
 $tips_bugar   = instagi_tips_bugar_daftar();
-$bestie_items = instagi_bestie_daftar();
 
 // --- DBMP (satu berkas PDF) ---
 $dbmp_pdf   = instagi_dbmp_pdf();
@@ -39,16 +37,13 @@ $dbmp_cover = instagi_dbmp_cover();
 <?php
 // Judul, deskripsi, alamat rapi (tanpa .php), dan daftar CSS halaman ini.
 $judul     = 'InStaGi - Informasi Gizi';
-$deskripsi = 'Etalase mitra Bestie InStaGi dan materi edukasi gizi: leaflet, panduan diet & edukasi gizi, Daftar Bahan Makanan Penukar (DBMP), contoh menu sesuai kebutuhan kalori, kumpulan resep, serta tips bugar.';
+$deskripsi = 'Materi edukasi gizi InStaGi: leaflet informasi gizi, panduan diet & edukasi gizi, Daftar Bahan Makanan Penukar (DBMP), contoh menu sesuai kebutuhan kalori, kumpulan resep, serta tips bugar.';
 $og_path   = '/informasi';
 $css       = ['index.css', 'nav.css', 'pages.css'];
 require __DIR__ . '/includes/views/layout_head.php';
 ?>
 
     <div class="container">
-        <!-- ===== BESTIE INSTAGI: ETALASE MITRA & SPONSOR PALING ATAS ===== -->
-        <?php require __DIR__ . '/includes/views/bestie_showcase.php'; ?>
-
         <h1 style="text-align:left;color:var(--primary-color);">Informasi Gizi</h1>
             <p class="info-intro">Materi edukasi gizi InStaGi: leaflet, panduan diet &amp; edukasi gizi, Daftar Bahan Makanan Penukar (DBMP), contoh menu sesuai kebutuhan kalori, kumpulan resep, serta tips bugar. Klik gambar untuk membuka versi besar, atau unduh untuk disimpan.</p>
 
@@ -179,6 +174,9 @@ $kartu_kosong = 'Belum ada materi tips bugar yang tersedia.';
 require __DIR__ . '/includes/views/gallery_card.php';
 ?>
     </div>
+
+<!-- ===== MODAL LIGHTBOX PRATINJAU MATERI EDUKASI GIZI ===== -->
+<?php require __DIR__ . '/includes/views/lightbox_modal.php'; ?>
 
 <script>
 (function () {

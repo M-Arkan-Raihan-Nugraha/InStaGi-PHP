@@ -11,6 +11,7 @@ $response = ['success' => false, 'message' => '', 'data' => null];
 instagi_require_login_json();
 
 require_once '../includes/core/db.php';
+require_once '../includes/services/nutrition.php';
 
 // Pastikan ada ID yang dikirim
 if (isset($_GET['id'])) {
@@ -23,11 +24,6 @@ if (isset($_GET['id'])) {
         exit;
     }
 
-    // Siapkan statement SELECT.
-    // Penjaga: prepare() bisa gagal (mis. tabel belum siap). Karena mode
-    // exception mysqli dimatikan (includes/db.php), kegagalan menghasilkan
-    // nilai `false` — memanggil bind_param() pada false memicu fatal yang
-    // membuat respons bukan JSON lagi. Pola sama dengan imt.php.
     $stmt = $koneksi->prepare("SELECT * FROM imt_history WHERE id = ?");
     if ($stmt === false) {
         error_log('[InStaGi] get_record prepare gagal: ' . $koneksi->error);
@@ -43,8 +39,15 @@ if (isset($_GET['id'])) {
     $result = $stmt->get_result();
 
     if ($result && $result->num_rows > 0) {
+        $row = $result->fetch_assoc();
+        $row['bb_ideal'] = instagi_hitung_bbi((int)$row['tinggi_badan'], (string)$row['jenis_kelamin']) . ' kg';
+        $rentang = instagi_hitung_rentang_bb_sehat((int)$row['tinggi_badan']);
+        $row['bb_sehat_min'] = $rentang['min'];
+        $row['bb_sehat_max'] = $rentang['max'];
+        $row['rentang_sehat'] = $rentang['min'] . ' - ' . $rentang['max'] . ' kg';
+        $row['kalori_label'] = number_format((int)$row['kalori'], 0, ',', '.') . ' kkal';
         $response['success'] = true;
-        $response['data'] = $result->fetch_assoc();
+        $response['data'] = $row;
     } else {
         $response['message'] = 'Data tidak ditemukan.';
     }

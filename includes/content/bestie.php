@@ -3,7 +3,8 @@
  * Modul Data Bestie InStaGi (Mitra, Sponsor, & Etalase Flyer)
  * -----------------------------------------------------------------------------
  * Menyimpan data flyer promosi mitra InStaGi dalam berbagai kategori:
- * Travel & Hotel, Land & Property, Kuliner, Minimarket, dan Layanan Kesehatan.
+ * Layanan Kesehatan, Kuliner, Minimarket, Land & Property, dan Travel & Hotel.
+ * Urutan kategori dan flyer disusun berdasarkan relevansi gizi dan kesehatan InStaGi.
  */
 
 if (!function_exists('instagi_bestie_dir')) {
@@ -17,7 +18,7 @@ if (!function_exists('instagi_bestie_dir')) {
 
 if (!function_exists('instagi_bestie_kategori')) {
     /**
-     * Daftar kategori etalase Bestie InStaGi.
+     * Daftar kategori etalase Bestie InStaGi (diurutkan sesuai relevansi InStaGi).
      *
      * @return array<string, string>
      */
@@ -25,11 +26,11 @@ if (!function_exists('instagi_bestie_kategori')) {
     {
         return [
             'all'        => 'Semua',
-            'travel'     => 'Travel & Hotel',
-            'property'   => 'Land & Property',
+            'kesehatan'  => 'Layanan Kesehatan',
             'kuliner'    => 'Kuliner',
             'minimarket' => 'Minimarket',
-            'kesehatan'  => 'Layanan Kesehatan',
+            'property'   => 'Land & Property',
+            'travel'     => 'Travel & Hotel',
         ];
     }
 }
@@ -37,6 +38,7 @@ if (!function_exists('instagi_bestie_kategori')) {
 if (!function_exists('instagi_bestie_daftar')) {
     /**
      * Mengembalikan seluruh daftar flyer Bestie yang aktif.
+     * Urutan diawali mitra yang paling relevan dengan kesehatan & kebutuhan gizi keluarga.
      *
      * @return array<int, array{
      *   id: string,
@@ -55,6 +57,145 @@ if (!function_exists('instagi_bestie_daftar')) {
     function instagi_bestie_daftar()
     {
         return [
+            // ===== 1. LAYANAN KESEHATAN =====
+            [
+                'id'             => 'klinik-sunat-hd',
+                'kategori'       => 'kesehatan',
+                'kategori_label' => 'Layanan Kesehatan',
+                'judul'          => 'Klinik Sunat HD Care Center',
+                'subjudul'       => 'Sunat Modern & Profesional 5.G Plus',
+                'deskripsi'      => 'Solusi sunat nyaman untuk si kecil dengan metode mutakhir 5.G Plus: Tanpa suntik, tanpa jahit, tanpa perban, tanpa kontrol berbelit, dan minim trauma. Dapatkan bonus gratis mainan Mobil Remote Control.',
+                'lokasi'         => 'Cipagalo, Kec. Bojongsoang, Kab. Bandung',
+                'harga'          => 'Paket Lengkap & Nyaman',
+                'wa'             => '6281320469003',
+                'wa_text'        => 'Halo Klinik Sunat HD, saya ingin berkonsultasi mengenai layanan sunat modern 5.G Plus yang tertera di Bestie InStaGi. Mohon info biaya dan reservasinya.',
+                'gambar'         => 'klinik-sunat-hd.webp',
+            ],
+
+            // ===== 2. KULINER & PANGAN SEHAT =====
+            [
+                'id'             => 'marwa-fresh-markisa',
+                'kategori'       => 'kuliner',
+                'kategori_label' => 'Kuliner',
+                'judul'          => 'Marwa Fresh - Jus Markisa Asli',
+                'subjudul'       => 'Homegrown Passion Fruit Drink',
+                'deskripsi'      => 'Minuman sari buah markisa asli hasil panen kebun rumahan. Segar alami, kaya vitamin C, tanpa bahan pengawet, cocok dinikmati dingin saat santai bersama keluarga.',
+                'lokasi'         => 'Bandung & Sekitarnya',
+                'harga'          => 'Segar & Alami',
+                'wa'             => '6281224948388',
+                'wa_text'        => 'Halo Marwa Fresh, saya tertarik memesan Homegrown Passion Fruit Drink yang terpasang di Bestie InStaGi. Mohon info harga & ongkir.',
+                'gambar'         => 'marwa-fresh-markisa.webp',
+            ],
+            [
+                'id'             => 'gastio-bite-siomay-ayam',
+                'kategori'       => 'kuliner',
+                'kategori_label' => 'Kuliner',
+                'judul'          => 'Gastio Bite - Siomay Ayam Frozen',
+                'subjudul'       => 'Daging Ayam Segar & Tanpa Pengawet',
+                'deskripsi'      => 'Siomay ayam beku higienis dan lezat, diolah dari daging ayam segar pilihan tanpa bahan pengawet. Praktis disajikan kapan saja: bisa dikukus empuk, dibuat campuran sup hangat, ataupun digoreng renyah gurih.',
+                'lokasi'         => 'Ciumbuleuit, Bandung',
+                'harga'          => 'Frozen Pack Praktis',
+                'wa'             => '6281287977960',
+                'wa_text'        => 'Halo Gastio Bite, saya ingin memesan Siomay Ayam Frozen yang terpasang di Bestie InStaGi. Mohon info harga paket dan pengirimannya.',
+                'gambar'         => 'gastio-bite-siomay-ayam.webp',
+            ],
+            [
+                'id'             => 'dapur-rifka-kuliner',
+                'kategori'       => 'kuliner',
+                'kategori_label' => 'Kuliner',
+                'judul'          => 'Dapur Rifka - Makanan & Minuman',
+                'subjudul'       => 'Masakan Rumahan Rasa Istimewa',
+                'deskripsi'      => 'Sedia aneka minuman segar botol 250ml (Kopi, Alpukat Kocok, Lemon Sereh, Gogoma Ubi Ungu) dan masakan rumahan favorit: Gabin Tape, Tape Ketan Hitam, Seblak Kering, Rendang Jengkol, Suir Tongkol, Sambel Goreng Kentang.',
+                'lokasi'         => 'Ciumbuleuit, Bandung (Takeaway Only)',
+                'harga'          => 'Mulai Rp 10.000',
+                'wa'             => '6282318974678',
+                'wa_text'        => 'Halo Dapur Rifka, saya ingin pesan makanan/minuman rumahan dari etalase Bestie InStaGi. Mohon daftar menu hari ini.',
+                'gambar'         => 'dapur-rifka-kuliner.webp',
+            ],
+            [
+                'id'             => 'dapur-ummi-frozen-risoles',
+                'kategori'       => 'kuliner',
+                'kategori_label' => 'Kuliner',
+                'judul'          => 'Dapur Ummi - Frozen Risoles',
+                'subjudul'       => 'Kriuk di Luar, Lembut di Dalam',
+                'deskripsi'      => 'Risoles beku praktis siap goreng kapan saja (isi 5 & 10 pcs). Pilihan Varian Savory (Sayur, Rogout Ayam, Mayo, Mushroom, Beef Bolognese, Ayam Pedas) dan Sweet (Choco Cheese, Matcha, Jasuke, Ubi).',
+                'lokasi'         => 'Jl. Cibadak, Bandung',
+                'harga'          => 'Mulai Rp 10.000',
+                'wa'             => '6289602751277',
+                'wa_text'        => 'Halo Dapur Ummi, saya tertarik memesan Frozen Risoles yang saya lihat di Bestie InStaGi. Varian apa saja yang ready stock?',
+                'gambar'         => 'dapur-ummi-frozen-risoles.webp',
+            ],
+
+            // ===== 3. MINIMARKET & SEMBAKO =====
+            [
+                'id'             => 'pd-puspita-minimarket',
+                'kategori'       => 'minimarket',
+                'kategori_label' => 'Minimarket',
+                'judul'          => 'PD Puspita - Kebutuhan Sehari-hari',
+                'subjudul'       => 'Toko Sembako & Minimarket Lengkap',
+                'deskripsi'      => 'Menyediakan aneka ragam kebutuhan pokok harian, sembako berkualitas, makanan ringan, aneka minuman kemasan, serta perlengkapan dapur dan rumah tangga secara grosir maupun eceran.',
+                'lokasi'         => 'Baros - Arjasari, Kab. Bandung',
+                'harga'          => 'Harga Grosir & Eceran Murah',
+                'wa'             => '6287718604058',
+                'wa_text'        => 'Halo PD Puspita, saya menemukan toko Anda melalui etalase Bestie InStaGi. Ingin menanyakan info pemesanan sembako/barang kebutuhan harian.',
+                'gambar'         => 'pd-puspita-minimarket.webp',
+            ],
+
+            // ===== 4. LAND & PROPERTY =====
+            [
+                'id'             => 'rumah-tanah-ciranjang-cianjur',
+                'kategori'       => 'property',
+                'kategori_label' => 'Land & Property',
+                'judul'          => 'Dijual Rumah & Tanah Ciranjang',
+                'subjudul'       => 'Lokasi Strategis Samping Puskesmas',
+                'deskripsi'      => 'Lahan luas & bangunan kokoh siap huni (LT 329 m², LB 250 m²). Dilengkapi 4 Kamar Tidur, 3 Kamar Mandi, Garasi + Carport, SHM. Sangat cocok untuk hunian keluarga besar atau tempat usaha.',
+                'lokasi'         => 'Jl. Rumahsakit, Ciranjang, Cianjur, Jawa Barat',
+                'harga'          => 'Rp 950 Juta (Nego)',
+                'wa'             => '6281224948388',
+                'wa_text'        => 'Halo, saya tertarik dengan informasi Dijual Rumah & Tanah Ciranjang Cianjur di Bestie InStaGi. Mohon info jadwal survei lokasi.',
+                'gambar'         => 'rumah-tanah-ciranjang-cianjur.webp',
+            ],
+            [
+                'id'             => 'tanah-kolam-sawah-cugenang-cianjur',
+                'kategori'       => 'property',
+                'kategori_label' => 'Land & Property',
+                'judul'          => 'Tanah Daratan, Kolam & Sawah',
+                'subjudul'       => 'Luas 1.600 m² Bersertifikat SHM',
+                'deskripsi'      => 'Properti serbaguna terdiri dari daratan, kolam ikan air mengalir, dan sawah produktif. Memiliki sumber mata air mandiri, udara sejuk pegunungan, serta akses jalan yang baik.',
+                'lokasi'         => 'Desa Talaga, Kec. Cugenang, Kab. Cianjur',
+                'harga'          => 'Rp 1,1 Juta / m² (Nego)',
+                'wa'             => '6281224948388',
+                'wa_text'        => 'Halo, saya melihat info Dijual Tanah Kolam & Sawah di Cugenang Cianjur melalui Bestie InStaGi. Boleh minta detail lokasinya?',
+                'gambar'         => 'tanah-kolam-sawah-cugenang-cianjur.webp',
+            ],
+            [
+                'id'             => 'tanah-sawah-cigaok-sukabumi',
+                'kategori'       => 'property',
+                'kategori_label' => 'Land & Property',
+                'judul'          => 'Dijual Tanah Sawah & Daratan 3 Ha',
+                'subjudul'       => 'Tanah Subur & Sumber Mata Air Mandiri',
+                'deskripsi'      => 'Lahan seluas 3 Hektar gabungan sawah produktif dan daratan berbukit asri. Memiliki sumber mata air sendiri, tanah sangat subur, cocok untuk agrowisata, perkebunan, maupun investasi jangka panjang.',
+                'lokasi'         => 'Kp. Cigaok Desa Girijaya, Warung Kiara, Sukabumi',
+                'harga'          => 'Harga Spesial (Nego)',
+                'wa'             => '6281224948388',
+                'wa_text'        => 'Halo, saya tertarik dengan informasi Dijual Tanah Sawah & Daratan 3 Ha Sukabumi di Bestie InStaGi. Mohon rincian legalitas dan harga penawarannya.',
+                'gambar'         => 'tanah-sawah-cigaok-sukabumi.webp',
+            ],
+            [
+                'id'             => 'rumah-tanah-jagapura-brebes',
+                'kategori'       => 'property',
+                'kategori_label' => 'Land & Property',
+                'judul'          => 'Rumah & Tanah Luas 1.249 m²',
+                'subjudul'       => 'SHM Siap Huni Dekat Kawasan Industri',
+                'deskripsi'      => 'Rumah siap huni dengan halaman sangat luas (1.249 m²). Status Sertifikat Hak Milik (SHM), lingkungan teduh asri, lokasi strategis dekat area industri perdagangan dan jasa Kersana.',
+                'lokasi'         => 'Desa Jagapura, Kec. Kersana, Kab. Brebes, Jateng',
+                'harga'          => 'Harga Nego',
+                'wa'             => '6281224948388',
+                'wa_text'        => 'Halo, saya tertarik dengan iklan Rumah & Tanah 1.249 m² di Kersana Brebes yang terpasang di Bestie InStaGi. Mohon informasinya.',
+                'gambar'         => 'rumah-tanah-jagapura-brebes.webp',
+            ],
+
+            // ===== 5. TRAVEL & HOTEL =====
             [
                 'id'             => 'spirit-holiday-bali-lombok',
                 'kategori'       => 'travel',
@@ -81,123 +222,6 @@ if (!function_exists('instagi_bestie_daftar')) {
                 'wa_text'        => 'Halo Dago Wisata, saya ingin mendaftar promo Bobotoh Away Days Goes to Singapore via Bestie InStaGi. Mohon info ketersediaan seat.',
                 'gambar'         => 'dago-wisata-bobotoh-singapore.webp',
             ],
-            [
-                'id'             => 'rumah-tanah-ciranjang-cianjur',
-                'kategori'       => 'property',
-                'kategori_label' => 'Land & Property',
-                'judul'          => 'Dijual Rumah & Tanah Ciranjang',
-                'subjudul'       => 'Lokasi Strategis Samping Puskesmas',
-                'deskripsi'      => 'Lahan luas & bangunan kokoh siap huni (LT 329 m², LB 250 m²). Dilengkapi 4 Kamar Tidur, 3 Kamar Mandi, Garasi + Carport, SHM. Sangat cocok untuk hunian keluarga besar atau tempat usaha.',
-                'lokasi'         => 'Jl. Rumahsakit, Ciranjang, Cianjur, Jawa Barat',
-                'harga'          => 'Rp 950 Juta (Nego)',
-                'wa'             => '6281224948388',
-                'wa_text'        => 'Halo, saya tertarik dengan informasi Dijual Rumah & Tanah Ciranjang Cianjur di Bestie InStaGi. Mohon info jadwal survei lokasi.',
-                'gambar'         => 'rumah-tanah-ciranjang-cianjur.webp',
-            ],
-            [
-                'id'             => 'tanah-sawah-cigaok-sukabumi',
-                'kategori'       => 'property',
-                'kategori_label' => 'Land & Property',
-                'judul'          => 'Dijual Tanah Sawah & Daratan 3 Ha',
-                'subjudul'       => 'Tanah Subur & Sumber Mata Air Mandiri',
-                'deskripsi'      => 'Lahan seluas 3 Hektar gabungan sawah produktif dan daratan berbukit asri. Memiliki sumber mata air sendiri, tanah sangat subur, cocok untuk agrowisata, perkebunan, maupun investasi jangka panjang.',
-                'lokasi'         => 'Kp. Cigaok Desa Girijaya, Warung Kiara, Sukabumi',
-                'harga'          => 'Harga Spesial (Nego)',
-                'wa'             => '6281224948388',
-                'wa_text'        => 'Halo, saya tertarik dengan informasi Dijual Tanah Sawah & Daratan 3 Ha Sukabumi di Bestie InStaGi. Mohon rincian legalitas dan harga penawarannya.',
-                'gambar'         => 'tanah-sawah-cigaok-sukabumi.webp',
-            ],
-            [
-                'id'             => 'tanah-kolam-sawah-cugenang-cianjur',
-                'kategori'       => 'property',
-                'kategori_label' => 'Land & Property',
-                'judul'          => 'Tanah Daratan, Kolam & Sawah',
-                'subjudul'       => 'Luas 1.600 m² Bersertifikat SHM',
-                'deskripsi'      => 'Properti serbaguna terdiri dari daratan, kolam ikan air mengalir, dan sawah produktif. Memiliki sumber mata air mandiri, udara sejuk pegunungan, serta akses jalan yang baik.',
-                'lokasi'         => 'Desa Talaga, Kec. Cugenang, Kab. Cianjur',
-                'harga'          => 'Rp 1,1 Juta / m² (Nego)',
-                'wa'             => '6281224948388',
-                'wa_text'        => 'Halo, saya melihat info Dijual Tanah Kolam & Sawah di Cugenang Cianjur melalui Bestie InStaGi. Boleh minta detail lokasinya?',
-                'gambar'         => 'tanah-kolam-sawah-cugenang-cianjur.webp',
-            ],
-            [
-                'id'             => 'rumah-tanah-jagapura-brebes',
-                'kategori'       => 'property',
-                'kategori_label' => 'Land & Property',
-                'judul'          => 'Rumah & Tanah Luas 1.249 m²',
-                'subjudul'       => 'SHM Siap Huni Dekat Kawasan Industri',
-                'deskripsi'      => 'Rumah siap huni dengan halaman sangat luas (1.249 m²). Status Sertifikat Hak Milik (SHM), lingkungan teduh asri, lokasi strategis dekat area industri perdagangan dan jasa Kersana.',
-                'lokasi'         => 'Desa Jagapura, Kec. Kersana, Kab. Brebes, Jateng',
-                'harga'          => 'Harga Nego',
-                'wa'             => '6281224948388',
-                'wa_text'        => 'Halo, saya tertarik dengan iklan Rumah & Tanah 1.249 m² di Kersana Brebes yang terpasang di Bestie InStaGi. Mohon informasinya.',
-                'gambar'         => 'rumah-tanah-jagapura-brebes.webp',
-            ],
-            [
-                'id'             => 'dapur-rifka-kuliner',
-                'kategori'       => 'kuliner',
-                'kategori_label' => 'Kuliner',
-                'judul'          => 'Dapur Rifka - Makanan & Minuman',
-                'subjudul'       => 'Masakan Rumahan Rasa Istimewa',
-                'deskripsi'      => 'Sedia aneka minuman segar botol 250ml (Kopi, Alpukat Kocok, Lemon Sereh, Gogoma Ubi Ungu) dan masakan rumahan favorit: Gabin Tape, Tape Ketan Hitam, Seblak Kering, Rendang Jengkol, Suir Tongkol, Sambel Goreng Kentang.',
-                'lokasi'         => 'Ciumbuleuit, Bandung (Takeaway Only)',
-                'harga'          => 'Mulai Rp 10.000',
-                'wa'             => '6282318974678',
-                'wa_text'        => 'Halo Dapur Rifka, saya ingin pesan makanan/minuman rumahan dari etalase Bestie InStaGi. Mohon daftar menu hari ini.',
-                'gambar'         => 'dapur-rifka-kuliner.webp',
-            ],
-            [
-                'id'             => 'marwa-fresh-markisa',
-                'kategori'       => 'kuliner',
-                'kategori_label' => 'Kuliner',
-                'judul'          => 'Marwa Fresh - Jus Markisa Asli',
-                'subjudul'       => 'Homegrown Passion Fruit Drink',
-                'deskripsi'      => 'Minuman sari buah markisa asli hasil panen kebun rumahan. Segar alami, kaya vitamin C, tanpa bahan pengawet, cocok dinikmati dingin saat santai bersama keluarga.',
-                'lokasi'         => 'Bandung & Sekitarnya',
-                'harga'          => 'Segar & Alami',
-                'wa'             => '6281224948388',
-                'wa_text'        => 'Halo Marwa Fresh, saya tertarik memesan Homegrown Passion Fruit Drink yang terpasang di Bestie InStaGi. Mohon info harga & ongkir.',
-                'gambar'         => 'marwa-fresh-markisa.webp',
-            ],
-            [
-                'id'             => 'dapur-ummi-frozen-risoles',
-                'kategori'       => 'kuliner',
-                'kategori_label' => 'Kuliner',
-                'judul'          => 'Dapur Ummi - Frozen Risoles',
-                'subjudul'       => 'Kriuk di Luar, Lembut di Dalam',
-                'deskripsi'      => 'Risoles beku praktis siap goreng kapan saja (isi 5 & 10 pcs). Pilihan Varian Savory (Sayur, Rogout Ayam, Mayo, Mushroom, Beef Bolognese, Ayam Pedas) dan Sweet (Choco Cheese, Matcha, Jasuke, Ubi).',
-                'lokasi'         => 'Jl. Cibadak, Bandung',
-                'harga'          => 'Mulai Rp 10.000',
-                'wa'             => '6289602751277',
-                'wa_text'        => 'Halo Dapur Ummi, saya tertarik memesan Frozen Risoles yang saya lihat di Bestie InStaGi. Varian apa saja yang ready stock?',
-                'gambar'         => 'dapur-ummi-frozen-risoles.webp',
-            ],
-            [
-                'id'             => 'pd-puspita-minimarket',
-                'kategori'       => 'minimarket',
-                'kategori_label' => 'Minimarket',
-                'judul'          => 'PD Puspita - Kebutuhan Sehari-hari',
-                'subjudul'       => 'Toko Sembako & Minimarket Lengkap',
-                'deskripsi'      => 'Menyediakan aneka ragam kebutuhan pokok harian, sembako berkualitas, makanan ringan, aneka minuman kemasan, serta perlengkapan dapur dan rumah tangga secara grosir maupun eceran.',
-                'lokasi'         => 'Baros - Arjasari, Kab. Bandung',
-                'harga'          => 'Harga Grosir & Eceran Murah',
-                'wa'             => '6287718604058',
-                'wa_text'        => 'Halo PD Puspita, saya menemukan toko Anda melalui etalase Bestie InStaGi. Ingin menanyakan info pemesanan sembako/barang kebutuhan harian.',
-                'gambar'         => 'pd-puspita-minimarket.webp',
-            ],
-            [
-                'id'             => 'klinik-sunat-hd',
-                'kategori'       => 'kesehatan',
-                'kategori_label' => 'Layanan Kesehatan',
-                'judul'          => 'Klinik Sunat HD Care Center',
-                'subjudul'       => 'Sunat Modern & Profesional 5.G Plus',
-                'deskripsi'      => 'Solusi sunat nyaman untuk si kecil dengan metode mutakhir 5.G Plus: Tanpa suntik, tanpa jahit, tanpa perban, tanpa kontrol berbelit, dan minim trauma. Dapatkan bonus gratis mainan Mobil Remote Control.',
-                'lokasi'         => 'Cipagalo, Kec. Bojongsoang, Kab. Bandung',
-                'harga'          => 'Paket Lengkap & Nyaman',
-                'wa'             => '6281320469003',
-                'wa_text'        => 'Halo Klinik Sunat HD, saya ingin berkonsultasi mengenai layanan sunat modern 5.G Plus yang tertera di Bestie InStaGi. Mohon info biaya dan reservasinya.',
-                'gambar'         => 'klinik-sunat-hd.webp',
-            ],
         ];
     }
 }
@@ -217,4 +241,3 @@ if (!function_exists('instagi_bestie_list')) {
         return $list;
     }
 }
-
