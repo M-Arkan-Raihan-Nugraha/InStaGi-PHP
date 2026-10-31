@@ -702,9 +702,9 @@
 
 /* --- Bestie InStaGi (sponsorship, kemitraan, dan etalase flyer) ------------- */
 .bestie-section {
-    margin: 0 0 40px 0;
-    padding-bottom: 32px;
-    border-bottom: 2px dashed #d1dbe3;
+    margin: 0 0 24px 0;
+    padding-bottom: 0;
+    border-bottom: none;
 }
 
 .bestie-header {
@@ -1682,33 +1682,34 @@ body.bestie-modal-active {
         padding: 16px;
     }
 
+    /* Filter Kategori & Materi: Wrap rapi ke baris baru di mobile */
     .bestie-filter-wrapper,
     .info-filter-wrapper {
-        margin-bottom: 14px;
-        overflow-x: auto;
-        -webkit-overflow-scrolling: touch;
-        padding-bottom: 6px;
-        scrollbar-width: none;
-    }
-
-    .bestie-filter-wrapper::-webkit-scrollbar,
-    .info-filter-wrapper::-webkit-scrollbar {
-        display: none;
+        margin-bottom: 16px;
+        overflow-x: visible;
+        padding-bottom: 0;
+        width: 100%;
+        max-width: 100%;
+        box-sizing: border-box;
     }
 
     .bestie-filters,
     .info-filters {
         display: flex;
-        flex-wrap: nowrap;
-        gap: 6px;
-        width: max-content;
+        flex-wrap: wrap;
+        gap: 8px 6px;
+        width: 100%;
+        max-width: 100%;
+        box-sizing: border-box;
     }
 
     .bestie-filter-btn,
     .info-filter-btn {
-        flex: 0 0 auto;
-        padding: 6px 12px;
+        flex: 0 1 auto;
+        padding: 7px 11px;
         font-size: 0.82em;
+        white-space: nowrap;
+        box-sizing: border-box;
     }
 
     .bestie-carousel-track .bestie-card {
@@ -1822,6 +1823,19 @@ body.bestie-modal-active {
 }
 
 @media (max-width: 380px) {
+    .bestie-filter-btn,
+    .info-filter-btn {
+        padding: 6px 9px;
+        font-size: 0.78em;
+        gap: 4px;
+    }
+
+    .bestie-filter-count,
+    .info-filter-count {
+        padding: 1px 5px;
+        font-size: 0.8em;
+    }
+
     .info-grid {
         grid-template-columns: 1fr;
     }

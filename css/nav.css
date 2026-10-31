@@ -60,25 +60,106 @@
     display: inline-flex;
     align-items: center;
     gap: 6px;
-    padding: 8px 14px;
+    padding: 7px 14px;
     border-radius: 999px;
     text-decoration: none;
     color: var(--text-color, #333);
-    font-weight: 600;
-    font-size: 0.9em;
+    font-weight: 700;
+    font-size: 0.88em;
     text-transform: uppercase;
-    letter-spacing: 0.5px;
-    transition: background-color 0.2s, color 0.2s;
+    letter-spacing: 0.4px;
+    transition: background-color 0.2s, color 0.2s, border-color 0.2s, box-shadow 0.2s, transform 0.1s;
+    border: 1.5px solid transparent;
 }
 
 .site-nav-link:hover {
-    background-color: rgba(231, 76, 60, 0.10);
-    color: var(--primary-color, #e74c3c);
+    transform: translateY(-1px);
+}
+
+.site-nav-link:active {
+    transform: scale(0.98);
 }
 
 .site-nav-link.is-active {
     background-color: var(--primary-color, #e74c3c);
     color: #fff;
+}
+
+/* Warna tombol navbar sama persis dengan menu beranda */
+.site-nav-link-hitung {
+    background-color: #f1d8dd;
+    color: #541222;
+    border-color: #cd8a97;
+}
+
+.site-nav-link-hitung:hover {
+    background-color: #f8ecee;
+    border-color: #dfb6be;
+    color: #6b1d2f;
+}
+
+.site-nav-link-hitung.is-active {
+    background-color: #541222;
+    color: #ffffff;
+    border-color: #541222;
+    box-shadow: 0 2px 8px rgba(84, 18, 34, 0.25);
+}
+
+.site-nav-link-informasi {
+    background-color: #fef9c3;
+    color: #713f12;
+    border-color: #fde047;
+}
+
+.site-nav-link-informasi:hover {
+    background-color: #fefce8;
+    border-color: #fef08a;
+    color: #854d0e;
+}
+
+.site-nav-link-informasi.is-active {
+    background-color: #854d0e;
+    color: #ffffff;
+    border-color: #854d0e;
+    box-shadow: 0 2px 8px rgba(133, 77, 14, 0.25);
+}
+
+.site-nav-link-bestie {
+    background-color: #ffedd5;
+    color: #9a3412;
+    border-color: #fdba74;
+}
+
+.site-nav-link-bestie:hover {
+    background-color: #fff7ed;
+    border-color: #fed7aa;
+    color: #c2410c;
+}
+
+.site-nav-link-bestie.is-active {
+    background-color: #9a3412;
+    color: #ffffff;
+    border-color: #9a3412;
+    box-shadow: 0 2px 8px rgba(154, 52, 18, 0.25);
+}
+
+.site-nav-link-monitoring {
+    background-color: #dfece2;
+    color: #20452d;
+    border-color: #97b7a1;
+}
+
+.site-nav-link-monitoring:hover {
+    background-color: #e8f0eb;
+    border-color: #adc4b5;
+    color: #2d5a3c;
+}
+
+.site-nav-link-monitoring.is-active {
+    background-color: #20452d;
+    color: #ffffff;
+    border-color: #20452d;
+    box-shadow: 0 2px 8px rgba(32, 69, 45, 0.25);
 }
 
 .site-nav-ico {

@@ -69,7 +69,7 @@ require __DIR__ . '/includes/views/layout_head.php';
 
         <!-- ===== LAYANAN: KONSULTASI & KATERING GIZI ===== -->
         <section class="layanan-section" id="layanan">
-            <h2>Layanan Konsultasi & Katering Gizi</h2>
+            <h2>Layanan Konsultasi Gizi & Katering Diet</h2>
             <p class="layanan-intro">Butuh pendampingan langsung? Kami siap mendampingi pola makan sehat dan menyediakan menu katering sesuai kebutuhan kalori Anda.</p>
 
             <div class="layanan-grid layanan-grid-single">
@@ -79,7 +79,7 @@ require __DIR__ . '/includes/views/layout_head.php';
                         <span class="layanan-ico-plus" aria-hidden="true">+</span>
                         <span class="layanan-ico" aria-hidden="true"><?= instagi_ikon('katering') ?></span>
                     </div>
-                    <h3>Konsultasi & Katering Gizi Personal</h3>
+                    <h3>Konsultasi Gizi dan Katering Diet Personal</h3>
                     <p>Konsultasikan status gizi, pola makan, dan target kesehatan Anda bersama ahli gizi, serta nikmati menu katering harian yang dihitung tepat sesuai estimasi kebutuhan kalori Anda (program penurunan, kenaikan, atau pemeliharaan berat badan).</p>
                     <div class="layanan-actions">
                         <a class="layanan-btn layanan-btn-wa" href="<?= htmlspecialchars($wa_layanan, ENT_QUOTES, 'UTF-8') ?>" target="_blank" rel="noopener">

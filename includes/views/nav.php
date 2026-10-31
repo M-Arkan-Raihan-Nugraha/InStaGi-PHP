@@ -45,7 +45,7 @@ $nav_items  = instagi_nav_items();
         </a>
         <nav class="site-nav-links" aria-label="Navigasi utama">
             <?php foreach ($nav_items as $key => $item): ?>
-                <a class="site-nav-link<?= $key === $nav_active ? ' is-active' : '' ?>"
+                <a class="site-nav-link site-nav-link-<?= htmlspecialchars($key, ENT_QUOTES, 'UTF-8') ?><?= $key === $nav_active ? ' is-active' : '' ?>"
                    href="<?= htmlspecialchars($item['href'], ENT_QUOTES, 'UTF-8') ?>">
                     <span class="site-nav-ico" aria-hidden="true"><?= instagi_ikon($item['icon']) ?></span><?= htmlspecialchars($item['label'], ENT_QUOTES, 'UTF-8') ?>
                 </a>
