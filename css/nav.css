@@ -87,22 +87,22 @@
 
 /* Warna tombol navbar sama persis dengan menu beranda */
 .site-nav-link-hitung {
-    background-color: #f1d8dd;
-    color: #541222;
-    border-color: #cd8a97;
+    background-color: #fce7f3;
+    color: #9d174d;
+    border-color: #f472b6;
 }
 
 .site-nav-link-hitung:hover {
-    background-color: #f8ecee;
-    border-color: #dfb6be;
-    color: #6b1d2f;
+    background-color: #fdf2f8;
+    border-color: #f687b3;
+    color: #be185d;
 }
 
 .site-nav-link-hitung.is-active {
-    background-color: #541222;
+    background-color: #be185d;
     color: #ffffff;
-    border-color: #541222;
-    box-shadow: 0 2px 8px rgba(84, 18, 34, 0.25);
+    border-color: #be185d;
+    box-shadow: 0 2px 8px rgba(190, 24, 93, 0.25);
 }
 
 .site-nav-link-informasi {

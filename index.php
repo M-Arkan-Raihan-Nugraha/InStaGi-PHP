@@ -49,7 +49,7 @@ require __DIR__ . '/includes/views/layout_head.php';
 
         <!-- ===== PILIHAN MENU DI AWAL ===== -->
         <div class="home-menu-buttons">
-            <a class="home-btn home-btn-burgundy" href="/imt">
+            <a class="home-btn home-btn-soft-pink" href="/imt">
                 <span class="home-btn-ico" aria-hidden="true"><?= instagi_ikon('cek-gizi') ?></span>
                 <span>CEK STATUS GIZI</span>
             </a>

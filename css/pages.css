@@ -2,12 +2,15 @@
    InStaGi — Gaya halaman: menu beranda, akun responden, monitoring, informasi
    ============================================================================= */
 
-/* --- Tombol menu di beranda (merah, kuning, hijau soft) --------------------- */
+/* --- Tombol menu di beranda (soft pink, kuning, coral, hijau soft) ---------- */
 .home-menu-buttons {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
     gap: 16px;
-    margin: 28px 0;
+    margin: 28px auto;
+    max-width: 720px;
 }
 
 .home-btn {
@@ -25,6 +28,10 @@
     transition: all 0.2s ease;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
     box-sizing: border-box;
+    flex: 0 1 230px;
+    min-width: 210px;
+    max-width: 280px;
+    text-align: center;
 }
 
 .home-btn:hover {
@@ -43,19 +50,23 @@
     line-height: 1;
 }
 
-/* Warna tombol beranda: Burgundy, Yellow Baby, Sage Green (soft, elegan, dan kontras) */
+/* Warna tombol beranda: Soft Pink, Yellow Baby, Sage Green, Coral (soft, elegan, dan kontras) */
+.home-btn-pink,
+.home-btn-soft-pink,
 .home-btn-red,
 .home-btn-burgundy {
-    background-color: #f1d8dd;
-    color: #541222;
-    border: 1.5px solid #cd8a97;
+    background-color: #fce7f3;
+    color: #9d174d;
+    border: 1.5px solid #f472b6;
 }
 
+.home-btn-pink:hover,
+.home-btn-soft-pink:hover,
 .home-btn-red:hover,
 .home-btn-burgundy:hover {
-    background-color: #f8ecee;
-    border-color: #dfb6be;
-    color: #6b1d2f;
+    background-color: #fdf2f8;
+    border-color: #f687b3;
+    color: #be185d;
 }
 
 .home-btn-yellow,
@@ -1651,12 +1662,19 @@ body.bestie-modal-active {
 
 @media (max-width: 600px) {
     .home-menu-buttons {
-        grid-template-columns: 1fr;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
         gap: 10px;
-        margin: 18px 0;
+        margin: 18px auto;
+        width: 100%;
     }
 
     .home-btn {
+        width: 100%;
+        max-width: 340px;
+        flex: 1 1 auto;
         padding: 13px 16px;
         font-size: 0.88em;
     }
